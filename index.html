@@ -130,22 +130,25 @@
     margin: 0 0 40px;
   }
 
+  /* One row of six that shrinks with the window; 3 + 3 on phones. */
   .team {
-    display: flex; flex-wrap: wrap; justify-content: center;
-    gap: 36px 14px;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 32px clamp(6px, 1.4vw, 16px);
+    max-width: 1060px; margin: 0 auto;
   }
-  .person { text-align: center; width: 165px; }
-  @media (max-width: 440px) { .person { width: 150px; } .person img { width: 116px; height: 116px; } }
+  @media (max-width: 600px) { .team { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .person { text-align: center; min-width: 0; }
   .person img {
-    width: 136px; height: 136px;
+    width: min(136px, 82%); height: auto; aspect-ratio: 1;
     border-radius: 50%;
     object-fit: cover;
-    margin: 0 auto 14px;
+    margin: 0 auto 12px;
     border: 3px solid #fff;
     box-shadow: 0 0 0 1px var(--line), 0 10px 24px rgba(4,19,31,.12);
   }
-  .name { font-weight: 600; font-size: 1.05rem; margin: 0; }
-  .affil { color: var(--muted); font-size: .88rem; margin: 4px 0 0; line-height: 1.4; }
+  .name { font-weight: 600; font-size: clamp(.78rem, 1.45vw, 1.05rem); margin: 0; line-height: 1.3; }
+  .affil { color: var(--muted); font-size: clamp(.7rem, 1.2vw, .88rem); margin: 4px 0 0; line-height: 1.35; }
 
   .logos {
     display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
