@@ -7,7 +7,7 @@
 <meta name="description" content="Embodied at Sea — project page.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,900;1,9..144,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
     --abyss: #04131f;
@@ -31,71 +31,63 @@
     -webkit-font-smoothing: antialiased;
   }
   img { max-width: 100%; display: block; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  /* ---------- Hero ---------- */
-  .hero {
-    position: relative;
+  /* ---------- Intro: roll-out wall + cut-out title ---------- */
+  .intro { position: relative; height: 260vh; background: var(--abyss); }
+  .stage {
+    position: sticky; top: 0;
+    height: 100vh; height: 100svh;
     overflow: hidden;
-    color: var(--foam);
-    background:
-      radial-gradient(120% 80% at 50% -10%, rgba(43,179,192,.35), transparent 60%),
-      linear-gradient(180deg, var(--tide) 0%, var(--deep) 45%, var(--abyss) 100%);
-    padding: clamp(80px, 14vw, 150px) 20px clamp(90px, 12vw, 130px);
-    text-align: center;
+    --p: 0;           /* 0 = wall fully visible, 1 = only the letters show it */
   }
-  /* light rays */
-  .hero::before {
-    content: "";
-    position: absolute; inset: -20% -10% 30%;
-    background: repeating-linear-gradient(100deg,
-      rgba(255,255,255,0) 0 60px,
-      rgba(255,255,255,.045) 60px 95px,
-      rgba(255,255,255,0) 95px 170px);
-    mask-image: linear-gradient(180deg, #000, transparent);
-    -webkit-mask-image: linear-gradient(180deg, #000, transparent);
-    animation: sway 14s ease-in-out infinite alternate;
+  .stage video, .stage .poster {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: saturate(1.3) contrast(1.1);
+  }
+  .cutout {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: var(--p);
+  }
+  .cutout text {
+    font-family: "Fraunces", Georgia, serif;
+    font-weight: 900;
+    letter-spacing: -.01em;
+  }
+  .cutout .one-line { font-size: min(12.5vw, 24vh); }
+  .cutout .two-line { font-size: min(21vw, 20vh); display: none; }
+  @media (max-aspect-ratio: 1/1) {
+    .cutout .one-line { display: none; }
+    .cutout .two-line { display: inline; }
+  }
+  .note {
+    position: absolute; left: 0; right: 0;
+    top: calc(50% + min(8.5vw, 16vh));
+    margin: 0; text-align: center;
+    font-size: .8rem; letter-spacing: .28em; text-transform: uppercase;
+    color: rgba(232,243,246,.8);
+    opacity: var(--p);
+  }
+  @media (max-aspect-ratio: 1/1) { .note { top: calc(50% + min(22vw, 21vh)); } }
+  .hint {
+    position: absolute; left: 0; right: 0;
+    bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    color: #fff; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase;
+    text-shadow: 0 1px 8px rgba(0,0,0,.6);
+    opacity: calc(1 - var(--p) * 3);
     pointer-events: none;
   }
-  @keyframes sway { from { transform: translateX(-3%) skewX(-2deg); } to { transform: translateX(3%) skewX(2deg); } }
+  .hint svg { width: 18px; height: 18px; animation: bob 1.8s ease-in-out infinite; }
+  @keyframes bob { 50% { transform: translateY(5px); } }
+  @media (prefers-reduced-motion: reduce) { .hint svg { animation: none; } }
 
-  /* rising bubbles */
-  .bubbles span {
-    position: absolute; bottom: -20px;
-    border-radius: 50%;
-    border: 1px solid rgba(232,243,246,.35);
-    background: rgba(232,243,246,.06);
-    animation: rise linear infinite;
-  }
-  @keyframes rise {
-    from { transform: translate(0, 0); opacity: 0; }
-    10%  { opacity: 1; }
-    to   { transform: translate(18px, -110vh); opacity: 0; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero::before, .bubbles span { animation: none; }
-    .bubbles { display: none; }
-  }
-
-  .eyebrow {
-    position: relative;
-    font-size: .78rem; letter-spacing: .28em; text-transform: uppercase;
-    color: rgba(232,243,246,.7);
-    margin: 0 0 18px;
-  }
-  h1 {
-    position: relative;
-    font-family: "Fraunces", Georgia, serif;
-    font-weight: 600;
-    font-size: clamp(2.8rem, 9vw, 6rem);
-    line-height: 1;
-    letter-spacing: -.02em;
-    margin: 0;
-  }
-  h1 em { font-style: italic; font-weight: 500; color: #9fe3ea; padding: 0 .08em; }
-
-  /* wave divider */
-  .wave { position: absolute; left: 0; right: 0; bottom: -1px; line-height: 0; }
-  .wave svg { width: 100%; height: 70px; }
+  /* wave from the dark intro into the page */
+  .shore { position: relative; background: var(--abyss); height: 70px; line-height: 0; }
+  .shore svg { position: absolute; left: 0; bottom: -1px; width: 100%; height: 70px; }
 
   /* ---------- Links ---------- */
   .links {
@@ -172,14 +164,34 @@
 </head>
 <body>
 
-<header class="hero">
-  <div class="bubbles" aria-hidden="true"></div>
-  <p class="eyebrow">Project page</p>
-  <h1>Embodied <em>at</em> Sea</h1>
-  <div class="wave" aria-hidden="true">
-    <svg viewBox="0 0 1440 70" preserveAspectRatio="none"><path fill="#fbfcfc" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,36 L1440,70 L0,70 Z"/></svg>
+<header class="intro" id="intro">
+  <div class="stage" id="stage">
+    <img class="poster" src="assets/video/rollouts_poster.jpg" alt="">
+    <video id="wall" autoplay muted loop playsinline preload="auto" poster="assets/video/rollouts_poster.jpg"
+           aria-label="A 12 by 12 wall of successful autonomous roll-outs">
+      <source src="assets/video/rollouts_small.mp4" type="video/mp4" media="(max-width: 800px)">
+      <source src="assets/video/rollouts.mp4" type="video/mp4">
+    </video>
+    <svg class="cutout" aria-hidden="true">
+      <defs>
+        <mask id="letters" maskUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+          <rect width="100%" height="100%" fill="#fff"/>
+          <text class="one-line" x="50%" y="50%" text-anchor="middle" dominant-baseline="central" fill="#000">Embodied <tspan font-style="italic" font-weight="800">at</tspan> Sea</text>
+          <text class="two-line" x="50%" y="50%" text-anchor="middle" fill="#000"><tspan x="50%" dy="-.12em">Embodied</tspan><tspan x="50%" dy=".92em"><tspan font-style="italic" font-weight="800">at</tspan> Sea</tspan></text>
+        </mask>
+      </defs>
+      <rect width="100%" height="100%" fill="#04131f" mask="url(#letters)"/>
+    </svg>
+    <h1 class="sr-only">Embodied at Sea</h1>
+    <p class="note">All autonomous roll-outs</p>
+    <div class="hint" aria-hidden="true">Scroll
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
   </div>
 </header>
+<div class="shore" aria-hidden="true">
+  <svg viewBox="0 0 1440 70" preserveAspectRatio="none"><path fill="#fbfcfc" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,36 L1440,70 L0,70 Z"/></svg>
+</div>
 
 <nav class="links" aria-label="Project links">
   <!-- Replace each <span class="link"> with <a class="link" href="..."> and drop the "Coming soon" tag once live. -->
@@ -241,19 +253,26 @@
 <footer>© 2026 Embodied at Sea</footer>
 
 <script>
-  // A few slow bubbles in the hero.
+  // Fade the cut-out title in as the intro scrolls past.
   (function () {
-    var box = document.querySelector('.bubbles');
-    if (!box || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    for (var i = 0; i < 18; i++) {
-      var b = document.createElement('span');
-      var s = 4 + Math.random() * 12;
-      b.style.width = b.style.height = s + 'px';
-      b.style.left = Math.random() * 100 + '%';
-      b.style.animationDuration = 9 + Math.random() * 12 + 's';
-      b.style.animationDelay = -Math.random() * 20 + 's';
-      box.appendChild(b);
+    var intro = document.getElementById('intro');
+    var stage = document.getElementById('stage');
+    var ticking = false;
+    function smooth(a, b, x) { x = Math.min(1, Math.max(0, (x - a) / (b - a))); return x * x * (3 - 2 * x); }
+    function update() {
+      ticking = false;
+      var run = intro.offsetHeight - window.innerHeight;
+      var p = run > 0 ? (window.scrollY - intro.offsetTop) / run : 1;
+      stage.style.setProperty('--p', smooth(0.1, 0.7, p).toFixed(3));
     }
+    function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', onScroll);
+    update();
+
+    // Respect reduced motion: hold on the still frame instead of playing.
+    var wall = document.getElementById('wall');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { wall.removeAttribute('autoplay'); wall.pause(); }
   })();
 </script>
 </body>
