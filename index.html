@@ -34,7 +34,7 @@
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* ---------- Intro: roll-out wall + cut-out title ---------- */
-  .intro { position: relative; height: 260vh; background: var(--abyss); }
+  .intro { position: relative; height: 170vh; background: var(--abyss); }
   .stage {
     position: sticky; top: 0;
     height: 100vh; height: 100svh;
@@ -265,7 +265,7 @@
       ticking = false;
       var run = intro.offsetHeight - window.innerHeight;
       var p = run > 0 ? (window.scrollY - intro.offsetTop) / run : 1;
-      stage.style.setProperty('--p', smooth(0.1, 0.7, p).toFixed(3));
+      stage.style.setProperty('--p', smooth(0.05, 0.55, p).toFixed(3));
     }
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     addEventListener('scroll', onScroll, { passive: true });
