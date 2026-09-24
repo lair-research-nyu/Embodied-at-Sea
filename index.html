@@ -204,6 +204,13 @@
   .logos img { height: 58px; width: auto; object-fit: contain; }
   .logos img.tall { height: 76px; }
   .logos img.wide { height: 44px; }
+  .thanks {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+    gap: 6px 14px; margin: 44px 0 0; text-align: center;
+    font-family: "Tinos", "Times New Roman", "Nimbus Roman", Times, serif;
+    font-size: clamp(1rem, 1.6vw, 1.3rem); color: var(--muted);
+  }
+  .thanks img { height: 46px; width: auto; }
 
   footer {
     text-align: center; color: var(--muted); font-size: .82rem;
@@ -313,6 +320,7 @@
     <img src="assets/img/LAIRlogo.png" alt="LAIR — Lab for Autonomous and Intelligent Robotics">
     <img class="tall" src="assets/img/uniofmaltalogo.png" alt="University of Malta">
   </div>
+  <p class="thanks">Thank you to <img src="assets/img/heritagemaltalogo.png" alt="Heritage Malta"> for assisting in real-world underwater deployments!</p>
 </main>
 
 <footer>© 2026 Embodied at Sea</footer>
