@@ -65,7 +65,7 @@
 
   .materials {
     display: grid;
-    grid-template-columns: minmax(0, 5fr) minmax(0, 4fr);
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     gap: 24px;
     align-items: start;
   }
@@ -83,7 +83,7 @@
   .slot svg { width: 40px; height: 40px; color: #9aabb5; }
   .slot b { color: var(--ink); font-weight: 600; font-size: 1.05rem; }
   .slot small { font-size: .85rem; }
-  .poster { aspect-ratio: 841 / 1189; }   /* A0, portrait */
+  .poster { aspect-ratio: 1189 / 841; }   /* A0, landscape */
   .paper {
     display: block; text-decoration: none; color: inherit;
     background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
@@ -102,7 +102,7 @@
     border-radius: 999px; padding: 3px 9px;
   }
 
-  .video { margin-top: 40px; }
+  .video { margin-bottom: 40px; }
   .video h3, .materials h3 {
     font-size: .78rem; font-weight: 600; letter-spacing: .16em; text-transform: uppercase;
     color: var(--muted); margin: 0 0 12px;
@@ -128,12 +128,19 @@
   <section class="event">
     <h2>IROS 2026 - Robotics One Shot Exploration (ROSE) Workshop</h2>
 
+    <div class="video">
+      <h3>Workshop video</h3>
+      <video controls playsinline preload="metadata" poster="assets/archive/iros2026-rose-video-poster.jpg">
+        <source src="assets/archive/iros2026-rose-video.mp4" type="video/mp4">
+      </video>
+    </div>
+
     <div class="materials">
       <div>
         <h3>Poster</h3>
-        <!-- Placeholder: replace this div with <img src="assets/archive/iros2026-rose-poster.png" alt="..."> (A0, portrait). -->
+        <!-- Placeholder: replace this div with <img src="assets/archive/iros2026-rose-poster.png" alt="..."> (A0, landscape). -->
         <div class="slot poster">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="1.5"/><path d="M8 7h8M8 11h8M8 15h5"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="4" width="19" height="16" rx="1.5"/><path d="M6 8h5M6 12h5M6 16h3M14 8h4v8h-4z"/></svg>
           <b>A0 poster</b>
           <span class="soon">Coming soon</span>
         </div>
@@ -149,14 +156,6 @@
           </span>
         </a>
       </div>
-      </div>
-    </div>
-
-    <div class="video">
-      <h3>Workshop video</h3>
-      <video controls playsinline preload="metadata" poster="assets/archive/iros2026-rose-video-poster.jpg">
-        <source src="assets/archive/iros2026-rose-video.mp4" type="video/mp4">
-      </video>
     </div>
   </section>
 </main>
