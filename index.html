@@ -114,7 +114,28 @@
   @media (prefers-reduced-motion: reduce) { .hint svg { animation: none; } }
 
   /* wave from the dark intro into the page */
-  .shore { position: relative; background: #000; height: 70px; line-height: 0; }
+  .shore { position: relative; background: #000; padding: 18px 16px 86px; line-height: 1.4; text-align: center; }
+  .announce {
+    position: relative; z-index: 3;
+    display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
+    padding: 7px 18px 7px 7px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,.22);
+    background: rgba(255,255,255,.06);
+    color: #fff; text-decoration: none;
+    font-size: .92rem;
+    transition: background .15s, border-color .15s;
+  }
+  .announce:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.4); }
+  .announce .tag {
+    background: #2bb3c0; color: #04131f;
+    font-weight: 600; font-size: .72rem; letter-spacing: .08em;
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .announce .sep { color: rgba(255,255,255,.4); margin: 0 4px; }
+  .announce .cta { color: #9fe3ea; font-weight: 500; white-space: nowrap; }
+  .announce:hover .cta span { display: inline-block; transform: translateX(3px); transition: transform .15s; }
+  @media (max-width: 480px) { .announce { border-radius: 18px; padding: 8px 14px; } .announce .sep { display: none; } .announce .msg { display: flex; flex-direction: column; } }
   .shore svg { position: absolute; left: 0; bottom: -1px; width: 100%; height: 70px; }
 
   /* ---------- Links ---------- */
@@ -237,6 +258,7 @@
     text-align: center; color: var(--muted); font-size: .82rem;
     padding: 40px 20px 56px;
   }
+  footer a { color: inherit; }
 </style>
 </head>
 <body>
@@ -274,8 +296,12 @@
     </div>
   </div>
 </header>
-<div class="shore" aria-hidden="true">
-  <svg viewBox="0 0 1440 70" preserveAspectRatio="none"><path fill="#fbfcfc" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,36 L1440,70 L0,70 Z"/></svg>
+<div class="shore">
+  <a class="announce" href="archive.html">
+    <span class="tag">IROS 2026</span>
+    <span class="msg">ROSE Workshop contributor <span class="sep">·</span> <span class="cta">See our presentation <span aria-hidden="true">→</span></span></span>
+  </a>
+  <svg aria-hidden="true" viewBox="0 0 1440 70" preserveAspectRatio="none"><path fill="#fbfcfc" d="M0,40 C240,80 480,0 720,30 C960,60 1200,10 1440,36 L1440,70 L0,70 Z"/></svg>
 </div>
 
 <nav class="links" aria-label="Project links">
@@ -296,10 +322,6 @@
     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6z"/></svg>
     Video (YouTube) <span class="soon">Coming soon</span>
   </span>
-  <a class="link live" href="archive.html">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="4" rx="1"/><path d="M5 8v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V8M10 12h4"/></svg>
-    Archive
-  </a>
 </nav>
 
 <main>
@@ -351,7 +373,7 @@
   <p class="thanks">Thank you to <img src="assets/img/heritagemaltalogo.png" alt="Heritage Malta"> for assisting in real-world underwater deployments!</p>
 </main>
 
-<footer>© 2026 Embodied at Sea</footer>
+<footer>© 2026 Embodied at Sea &nbsp;·&nbsp; <a href="archive.html">Archive</a></footer>
 
 <script>
   // Fade the cut-out title in as the intro scrolls past.

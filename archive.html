@@ -84,7 +84,18 @@
   .slot b { color: var(--ink); font-weight: 600; font-size: 1.05rem; }
   .slot small { font-size: .85rem; }
   .poster { aspect-ratio: 841 / 1189; }   /* A0, portrait */
-  .pdf { min-height: 220px; }
+  .paper {
+    display: block; text-decoration: none; color: inherit;
+    background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+    box-shadow: 0 8px 24px rgba(4,19,31,.08);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .paper:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(4,19,31,.14); }
+  .paper img { display: block; width: 100%; height: auto; border-bottom: 1px solid var(--line); }
+  .paper-meta { display: block; padding: 14px 16px 16px; }
+  .paper-meta b { display: block; font-size: .95rem; line-height: 1.35; }
+  .paper-meta span { display: block; font-size: .82rem; color: var(--muted); margin-top: 4px; }
+  .paper-meta .open { color: var(--tide); font-weight: 600; margin-top: 10px; }
   .soon {
     font-size: .68rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
     color: var(--tide); background: var(--foam);
@@ -129,12 +140,15 @@
       </div>
       <div>
         <h3>Paper</h3>
-        <!-- Placeholder: replace this div with <a href="assets/archive/iros2026-rose.pdf">...</a>. -->
-        <div class="slot pdf">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><path d="M14 3v6h6"/><path d="M8 17v-4h1.5a1.5 1.5 0 0 1 0 3H8M13 13v4h1a2 2 0 0 0 0-4zM18 13h-2v4M16 15h1.5"/></svg>
-          <b>Paper (PDF)</b>
-          <span class="soon">Coming soon</span>
-        </div>
+        <a class="paper" href="assets/archive/iros2026-rose-paper.pdf" target="_blank" rel="noopener">
+          <img src="assets/archive/iros2026-rose-paper-p1.jpg" alt="First page of the workshop paper">
+          <span class="paper-meta">
+            <b>Embodied At Sea: Behavior Cloning for Marine Archaeology and Wildlife Conservation</b>
+            <span>Workshop paper · 3 pages · PDF</span>
+            <span class="open">Open PDF →</span>
+          </span>
+        </a>
+      </div>
       </div>
     </div>
 
