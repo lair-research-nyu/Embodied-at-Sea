@@ -277,7 +277,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=4">
+<link rel="stylesheet" href="assets/paper/paper.css?v=5">
 </head>
 <body>
 
@@ -369,31 +369,11 @@
       <span class="pp-progress" aria-hidden="true"></span>
     </nav>
 
-    <div class="pp-stats rv" aria-label="Key numbers">
-      <div class="grp">
-        <p class="brk">In a controlled underwater environment</p>
-        <div class="boxes">
-          <div class="stat"><b data-count="1616">1,616</b><span>pool episodes</span></div>
-          <div class="stat"><b data-count="1260">1,260</b><span>gradable pool rollouts</span></div>
-        </div>
-      </div>
-      <div class="grp">
-        <p class="brk">In the wild marine deployment</p>
-        <div class="boxes">
-          <div class="stat"><b data-count="748">748</b><span>episodes in Malta</span></div>
-          <div class="stat"><b data-count="508">508</b><span>gradable rollouts in Malta</span></div>
-        </div>
-      </div>
-    </div>
-
     <!-- ---------- I. Introduction ---------- -->
     <article class="pp-chapter" id="p-intro">
       <p class="pp-num rv">Section I</p>
       <h3 class="rv">Can land-trained VLAs be adapted to the sea?</h3>
-      <p class="rv">Marine conservationists and archaeologists routinely perform tasks such as environmental monitoring and specimen retrieval, constrained by poor visibility, dynamic currents, and the physiological limits of human divers. Automating these operations, e.g. via robots, could accelerate scientific research and reduce diver risk.</p>
-      <p class="rv">Recent advances in Behavior Cloning (BC) <a class="cite" href="#ref-2">[2]</a> have enabled robust single-task robot policies from relatively little data. While prior works explore the performance of these approaches in aquatic robotics <a class="cite" href="#ref-3">[3]</a>, <a class="cite" href="#ref-4">[4]</a>, deployment in real marine archaeology and conservation missions remains largely unexplored.</p>
-
-      <figure class="wide-fig f1-fig" id="fig1">
+      <figure class="f1-fig" id="fig1">
         <div class="f1" aria-label="Fig. 1, rebuilt with live video">
           <div class="f1-skill s1"><span>Target Skill: "Moor"</span></div>
           <div class="f1-pre s2">
@@ -417,16 +397,19 @@
         </div>
         <figcaption><b>Fig. 1. Overview of Autonomous Underwater Mooring using Action Chunking Transformers (ACT).</b> <b>(Left)</b> Training data collected across shipwreck and marina environments incorporating multi-modal observations and real-world disturbances. These include marine life distractors, tether drag, ocean currents, visual occlusion from water particulate, variable lighting based on depth or time of day, and thruster sway inherent to fluid dynamics. <b>(Right)</b> Autonomous policy execution showing closed-loop mooring trajectory on the <i>Coralita X127</i> shipwreck.</figcaption>
       </figure>
+      <p class="rv">Marine conservationists and archaeologists routinely perform tasks such as environmental monitoring and specimen retrieval, constrained by poor visibility, dynamic currents, and the physiological limits of human divers. Automating these operations, e.g. via robots, could accelerate scientific research and reduce diver risk.</p>
+      <p class="rv">Recent advances in Behavior Cloning (BC) <a class="cite" href="#ref-2">[2]</a> have enabled robust single-task robot policies from relatively little data. While prior works explore the performance of these approaches in aquatic robotics <a class="cite" href="#ref-3">[3]</a>, <a class="cite" href="#ref-4">[4]</a>, deployment in real marine archaeology and conservation missions remains largely unexplored.</p>
+
 
       <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1).</p>
-      <p class="pp-big rv">Can we adapt a land-based BC approach to successfully perform common marine archaeology and conservation tasks underwater?</p>
+      <p class="pp-big rv"><span>Can we adapt a land-based BC approach to successfully perform common marine archaeology and conservation tasks underwater?</span></p>
       <p class="pp-tldr rv">TLDR;</p>
 
       <ol class="pp-contrib">
-        <li class="rv"><span>1</span><span class="tx">To our knowledge, the world's first instance of successfully implementing a multi-task VLA underwater on real hardware.</span></li>
-        <li class="rv"><span>2</span><span class="tx">A real-world case study of BC manipulation models deployed on an underwater Remotely Operated Vehicle (ROV) at a Mediterranean shipwreck for archaeology and conservation tasks.</span></li>
-        <li class="rv"><span>3</span><span class="tx">A thorough investigation into how different proprioception configurations and underwater sensor modalities in a model's observation and action spaces affect generalist model behavior underwater.</span></li>
-        <li class="rv"><span>4</span><span class="tx">Introducing the <span class="sc">BluEmbodied Kit</span> as an open source repository that enables users to collect underwater teleoperation data, train single (ACT) and multi-task models (DynamicVLA, SmolVLA), and run inference on Blue Robotics' BlueROV2 while staying compatible with BlueOS.</span></li>
+        <li class="rv"><span>1</span><span class="tx">To our knowledge, we introduce the world's first instance of successfully implementing a multi-task VLA underwater on real hardware.</span></li>
+        <li class="rv"><span>2</span><span class="tx">We implemented a real-world case study of BC manipulation models deployed on an underwater Remotely Operated Vehicle (ROV) at a Mediterranean shipwreck for archaeology and conservation tasks.</span></li>
+        <li class="rv"><span>3</span><span class="tx">We conducted a thorough investigation into how different proprioception configurations and underwater sensor modalities in a model's observation and action spaces affect generalist model behavior underwater.</span></li>
+        <li class="rv"><span>4</span><span class="tx">We introduce the <span class="sc">BluEmbodied Kit</span> as an open source repository that enables users to collect underwater teleoperation data, train single (ACT) and multi-task models (DynamicVLA, SmolVLA), and run inference on Blue Robotics' BlueROV2 while staying compatible with BlueOS.</span></li>
       </ol>
     </article>
 
@@ -435,6 +418,24 @@
       <p class="pp-num rv">Section III-A</p>
       <h3 class="rv">Data Collection</h3>
       <p class="rv">Robot demonstrations were collected across 3 tasks in an in-lab pool, as well as 2 tasks in an ocean setting.</p>
+
+    <div class="pp-stats rv" aria-label="Key numbers">
+      <div class="grp">
+        <p class="brk">In a controlled underwater environment</p>
+        <div class="boxes">
+          <div class="stat"><b data-count="1616">1,616</b><span>pool episodes</span></div>
+          <div class="stat"><b data-count="1260">1,260</b><span>gradable pool rollouts</span></div>
+        </div>
+      </div>
+      <div class="grp">
+        <p class="brk">In the wild marine deployment</p>
+        <div class="boxes">
+          <div class="stat"><b data-count="748">748</b><span>episodes in Malta</span></div>
+          <div class="stat"><b data-count="508">508</b><span>gradable rollouts in Malta</span></div>
+        </div>
+      </div>
+    </div>
+
 
       <h4 class="rv">1) Pool Deployment</h4>
       <p class="rv">To investigate how BC-based policies perform underwater in a controlled environment, three task families were explored (see Fig. 2): <i>grab</i>, approaching an object and grasping it with the end-effector to simulate sampling a specimen, <i>moor</i>, approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure, and <i>remove</i>, approaching a ring on a post and unhooking it to simulate a rope line release procedure.</p>
