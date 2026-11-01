@@ -157,56 +157,78 @@
     });
   });
 
-  /* ---------- Fig. 3 rebuilt: donut draws itself ---------- */
+  /* ---------- Fig. 3 rebuilt: "In total, [donut] were collected." — slices draw in, arrows label each task ---------- */
   (function () {
     var fig = $('#fig3'); if (!fig) return;
-    var svg = $('svg.donut', fig), defs = $('defs', svg), g = $('.segs', svg), ns = 'http://www.w3.org/2000/svg';
-    var K = { green: ['Green rod', '#3E9B4F', '#1E5A2A'], red: ['Red rod', '#C8322F', '#6E1412'], white: ['White rod', '#F4F4F2', '#8A9BA3'],
+    var svg = $('svg.donut', fig), defs = $('defs', svg), g = $('.segs', svg), calls = $('.calls', svg), ns = 'http://www.w3.org/2000/svg';
+    var K = { green: ['Grab green rod', '#3E9B4F', '#1E5A2A'], red: ['Grab red rod', '#C8322F', '#6E1412'], white: ['Grab white rod', '#F4F4F2', '#8A9BA3'],
               moor: ['Moor on post', '#7FB8D6', '#1D5F82'], ring: ['Unhook ring', '#F3D36B', '#8A6D0B'] };
     var D = [['green', 101, 161], ['red', 101, 153], ['white', 102, 151], ['moor', 125, 301], ['ring', 100, 321]];
-    var TOT = 1616, GAP = 5, R = 90, segs = [], at = 0;
+    var TOT = 1616, GAP = 5, CX = 385, CY = 180, R = 100, SW = 48, segs = [], at = 0, tasks = [];
     function mk(tag, attrs, parent) { var e = document.createElementNS(ns, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || g).appendChild(e); return e; }
     D.forEach(function (d) {
-      var k = d[0], c = K[k];
-      var pat = mk('pattern', { id: 'h-' + k, patternUnits: 'userSpaceOnUse', width: 6, height: 6, patternTransform: 'rotate(45 120 120)' }, defs);
+      var k = d[0], c = K[k], start = at;
+      var pat = mk('pattern', { id: 'h-' + k, patternUnits: 'userSpaceOnUse', width: 6, height: 6, patternTransform: 'rotate(45 ' + CX + ' ' + CY + ')' }, defs);
       mk('rect', { width: 6, height: 6, fill: c[1] }, pat); mk('line', { x1: 0, y1: 0, x2: 0, y2: 6, stroke: c[2], 'stroke-width': 1.6 }, pat);
-      [['control', d[1], c[1]], ['turbulent', d[2], 'url(#h-' + k + ')']].forEach(function (p) {
-        var len = p[1], start = at; at += len;
-        var circ = mk('circle', { cx: 120, cy: 120, r: R, pathLength: TOT, class: 'seg', stroke: p[2], 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -start });
+      [['calm', d[1], c[1]], ['turbulent', d[2], 'url(#h-' + k + ')']].forEach(function (p) {
+        var len = p[1], s0 = at; at += len;
+        var circ = mk('circle', { cx: CX, cy: CY, r: R, pathLength: TOT, class: 'seg', stroke: p[2], 'stroke-width': SW, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -s0 });
         circ.setAttribute('data-k', k);
         circ.setAttribute('data-tip', '<b>' + c[0] + ' · ' + p[0] + '</b><br>' + len + ' episodes');
         var edges = [];
-        if (k === 'white') [R - 23, R + 23].forEach(function (rr) {
-          edges.push(mk('circle', { cx: 120, cy: 120, r: rr, pathLength: TOT, fill: 'none', stroke: '#9AA5AB', 'stroke-width': .8, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -start, style: 'transition: stroke-dasharray .7s cubic-bezier(.3,.6,.2,1); pointer-events:none' }));
+        if (k === 'white') [R - SW / 2, R + SW / 2].forEach(function (rr) {
+          edges.push(mk('circle', { cx: CX, cy: CY, r: rr, pathLength: TOT, fill: 'none', stroke: '#9AA5AB', 'stroke-width': .8, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -s0, style: 'transition: stroke-dasharray .7s cubic-bezier(.3,.6,.2,1); pointer-events:none' }));
         });
         segs.push({ el: circ, edges: edges, len: len, k: k });
       });
+      tasks.push({ k: k, mid: (start + at) / 2 / TOT * 2 * Math.PI, calm: d[1], turb: d[2], last: segs.length - 1 });
     });
-    var ctr = $('.ctr-n', svg), lgs = $$('.donut-legend .lg', fig);
+
+    // callouts: an arrow from a label to the middle of each task's slices
+    var ro = R + SW / 2 + 6, LX = 188;                                   // arrow tip radius; label column offset from centre
+    tasks.forEach(function (t) { t.side = Math.sin(t.mid) >= 0 ? 1 : -1; t.ly = CY - (R + 70) * Math.cos(t.mid); });
+    [1, -1].forEach(function (side) {                                     // spread labels on each side so they never overlap
+      var L = tasks.filter(function (t) { return t.side === side; }).sort(function (a, b) { return a.ly - b.ly; });
+      for (var i = 1; i < L.length; i++) if (L[i].ly - L[i - 1].ly < 52) L[i].ly = L[i - 1].ly + 52;
+      var over = L.length ? L[L.length - 1].ly - 352 : 0; if (over > 0) L.forEach(function (t) { t.ly -= over; });
+      for (i = 0; i < L.length; i++) if (L[i].ly < 28) L[i].ly = 28;
+    });
+    tasks.forEach(function (t) {
+      var tx = CX + ro * Math.sin(t.mid), ty = CY - ro * Math.cos(t.mid);
+      var ex = CX + t.side * (R + SW / 2 + 40), lx = CX + t.side * LX;
+      var grp = mk('g', { class: 'call', 'data-k': t.k }, calls);
+      mk('path', { d: 'M' + (lx - t.side * 6) + ',' + t.ly + ' L' + ex + ',' + t.ly + ' L' + tx.toFixed(1) + ',' + ty.toFixed(1), 'marker-end': 'url(#f3-arrow)', class: 'lead', pathLength: 1 }, grp);
+      var tx1 = mk('text', { x: lx, y: t.ly - 3, 'text-anchor': t.side > 0 ? 'start' : 'end', class: 'cl-h' }, grp); tx1.textContent = K[t.k][0];
+      var tx2 = mk('text', { x: lx, y: t.ly + 15, 'text-anchor': t.side > 0 ? 'start' : 'end', class: 'cl-n' }, grp); tx2.textContent = t.calm + ' calm · ' + t.turb + ' turbulent';
+      t.g = grp;
+    });
+
+    // phones: the labels are replaced by a list, so zoom the drawing to the ring itself
+    var narrow = window.matchMedia('(max-width: 700px)');
+    function fitView() { svg.setAttribute('viewBox', narrow.matches ? (CX - 140) + ' ' + (CY - 140) + ' 280 280' : '0 0 770 380'); }
+    fitView(); if (narrow.addEventListener) narrow.addEventListener('change', fitView);
+    var ctr = $('.ctr-n', svg);
     function draw() {
-      var t = reduce ? 0 : 180, sum = 0;
+      var step = reduce ? 0 : 170, sum = 0;
       segs.forEach(function (s, i) {
         setTimeout(function () {
           var dash = (s.len - GAP) + ' ' + (TOT - s.len + GAP);
           s.el.setAttribute('stroke-dasharray', dash); s.el.style.strokeDasharray = dash;
           s.edges.forEach(function (e) { e.setAttribute('stroke-dasharray', dash); e.style.strokeDasharray = dash; });
           sum += s.len; ctr.textContent = sum;
-          var lg = fig.querySelector('.lg[data-k="' + s.k + '"]'); if (lg) lg.classList.add('on');
-        }, i * t);
+          tasks.forEach(function (t) { if (t.last === i) setTimeout(function () { t.g.classList.add('on'); }, reduce ? 0 : 350); });
+        }, i * step);
       });
-      setTimeout(function () { lgs.forEach(function (l) { l.classList.add('on'); }); ctr.textContent = TOT; }, segs.length * t);
+      setTimeout(function () { ctr.textContent = TOT; }, segs.length * step);
     }
     onReveal.push(function (e) { if (e === fig) draw(); });
     if (!hasIO || reduce) draw();
-    function hl(k) { segs.forEach(function (s) { s.el.classList.toggle('dim', !!k && s.k !== k); s.el.classList.toggle('hi', s.k === k); }); }
-    $$('.lg[data-k]', fig).forEach(function (l) {
-      l.addEventListener('mouseenter', function () { hl(l.getAttribute('data-k')); });
-      l.addEventListener('mouseleave', function () { hl(null); });
-    });
-    segs.forEach(function (s) {
-      s.el.addEventListener('mouseenter', function () { hl(s.k); });
-      s.el.addEventListener('mouseleave', function () { hl(null); });
-    });
+    function hl(k) {
+      segs.forEach(function (s) { s.el.classList.toggle('dim', !!k && s.k !== k); s.el.classList.toggle('hi', s.k === k); });
+      tasks.forEach(function (t) { t.g.classList.toggle('dim', !!k && t.k !== k); });
+    }
+    segs.forEach(function (s) { s.el.addEventListener('mouseenter', function () { hl(s.k); }); s.el.addEventListener('mouseleave', function () { hl(null); }); });
+    tasks.forEach(function (t) { t.g.addEventListener('mouseenter', function () { hl(t.k); }); t.g.addEventListener('mouseleave', function () { hl(null); }); });
   })();
 
   /* ---------- Fig. 1 rebuilt: assembles, then its photos play as video ---------- */

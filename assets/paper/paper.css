@@ -530,3 +530,27 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 .f5-note { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .f5 .wipe { transform: none; transition: none; } .f5-t b { opacity: 1; transform: none; } }
 @media (max-width: 560px) { .f5 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* ---------- Fig. 3 v2: "In total, [donut] were collected." with arrow callouts ---------- */
+#fig3 .f3-row { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 4px; background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 10px 18px; }
+#fig3 .f3-word { margin: 0 !important; font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: clamp(1.2rem, 2.4vw, 1.6rem); color: var(--tide); white-space: nowrap; }
+#fig3 svg.donut { max-width: none; width: 100%; }
+#fig3 .call { opacity: 0; transition: opacity .5s ease; cursor: default; }
+#fig3 .call.on { opacity: 1; }
+#fig3 .call.dim { opacity: .25; }
+#fig3 .call .lead { fill: none; stroke: #4a5a63; stroke-width: 1.4; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .6s ease; }
+#fig3 .call.on .lead { stroke-dashoffset: 0; }
+#fig3 .cl-h { font: 700 16px "Tinos", "Times New Roman", serif; fill: var(--ink); }
+#fig3 .cl-n { font: 14px Inter, system-ui, sans-serif; fill: var(--muted); font-variant-numeric: tabular-nums; }
+#fig3 .ctr-n { font-size: 36px; } #fig3 .ctr-l { font-size: 18px; }
+#fig3 .f3-key { display: flex; justify-content: center; align-items: center; gap: 6px 10px; flex-wrap: wrap; font-size: .82rem; color: var(--muted); margin: 10px 0 0 !important; }
+#fig3 .f3-key i { display: inline-block; width: 22px; height: 13px; border-radius: 2px; margin-left: 8px; }
+#fig3 .f3-key i.solid { background: #b9c3c8; } #fig3 .f3-key i.hatch { background: repeating-linear-gradient(-45deg, #E3E8EA 0 3px, #5F6B70 3px 4px); }
+#fig3 .f3-phone { display: none; }
+@media (max-width: 700px) {
+  #fig3 .f3-row { grid-template-columns: 1fr; justify-items: center; text-align: center; }
+  #fig3 .calls { display: none; }
+  #fig3 svg.donut { max-width: 260px; margin: 6px 0; }
+  #fig3 .f3-phone { display: block; margin-top: 12px; }
+  #fig3 .f3-phone .lg { opacity: 1; transform: none; }
+}

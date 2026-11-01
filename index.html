@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=9">
+<link rel="stylesheet" href="assets/paper/paper.css?v=10">
 </head>
 <body>
 
@@ -415,12 +415,6 @@
         <li class="rv"><span>3</span><span class="tx">We conducted a thorough investigation into how different proprioception configurations and underwater sensor modalities in a model's observation and action spaces affect generalist model behavior underwater.</span></li>
         <li class="rv"><span>4</span><span class="tx">We introduce the <span class="sc">BluEmbodied Kit</span> as an open source repository that enables users to collect underwater teleoperation data, train single (ACT) and multi-task models (DynamicVLA, SmolVLA), and run inference on Blue Robotics' BlueROV2 while staying compatible with BlueOS.</span></li>
       </ol>
-    </article>
-
-    <!-- ---------- III-A. Data Collection ---------- -->
-    <article class="pp-chapter" id="p-data">
-      <p class="pp-num rv">Section III-A</p>
-      <h3 class="rv">Data collection (on and off the field)</h3>
 
     <div class="pp-stats rv" aria-label="Key numbers">
       <div class="grp">
@@ -438,10 +432,14 @@
         </div>
       </div>
     </div>
+    </article>
 
+    <!-- ---------- III-A. Data Collection ---------- -->
+    <article class="pp-chapter" id="p-data">
+      <p class="pp-num rv">Section III-A</p>
+      <h3 class="rv">Data collection (on and off the field)</h3>
 
       <h4 class="rv">1) Pool Deployment</h4>
-      <p class="rv">Three task families were explored (see Fig. 2) in both calm and turbulent waters (agitated by a human volunteer) in a pool.</p>
 
       <div class="pp-taskhead rv"><span class="pp-hint">Hover or tap a photo to flip between its initial state and its goal.</span><button class="pp-flipall" type="button" aria-pressed="false">Show goal states</button></div>
       <div class="pp-tasks five">
@@ -452,22 +450,27 @@
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/pool-ring-start.webp" alt="Remove ring from post, pool: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/pool-ring-goal.webp" alt="Remove ring from post, pool: goal" width="720" height="405"><span class="state"></span><b>Remove Ring from Post</b><small>Pool</small></button>
       </div>
       <p class="pp-cap rv"><b>Fig. 2. Pool Deployment: Experimental tasks evaluated in a controlled environment.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split (see Fig. 3) between calm and turbulent waters created by a human volunteer (see Fig. 5). Rod locations and color order were randomized between episodes. Post location stayed relatively the same, but initial robot and ring configurations varied between episodes as well.</p>
+      <p class="rv">Three task families were explored (see Fig. 2) in both calm and turbulent waters (agitated by a human volunteer) in a pool.</p>
       <ul class="pp-tasklist rv">
         <li><b>Grab</b>: approaching an object and grasping it with the end-effector to simulate sampling a specimen.</li>
         <li><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</li>
         <li><b>Remove</b>: approaching a ring on a post and unhooking it to simulate a rope line release procedure.</li>
       </ul>
 
-      <p class="pp-flow rv">In total…</p>
       <figure class="pp-fig rv" id="fig3">
-        <div class="donut-wrap">
-          <svg class="donut" viewBox="0 0 240 240" role="img" aria-label="Donut chart of the 1616 pool episodes by task and condition. Grab the rod: green 101 control and 161 turbulent; red 101 and 153; white 102 and 151. Moor on post: 125 and 301. Unhook ring: 100 and 321.">
-            <defs></defs>
-            <g class="segs" transform="rotate(-90 120 120)"></g>
-            <text class="ctr-n" x="120" y="122" text-anchor="middle">0</text>
-            <text class="ctr-l" x="120" y="146" text-anchor="middle">episodes</text>
+        <div class="f3-row">
+          <p class="f3-word">In total,</p>
+          <svg class="donut" viewBox="0 0 770 380" role="img" aria-label="1616 pool episodes were collected. Grab green rod: 101 calm, 161 turbulent. Grab red rod: 101 calm, 153 turbulent. Grab white rod: 102 calm, 151 turbulent. Moor on post: 125 calm, 301 turbulent. Unhook ring: 100 calm, 321 turbulent.">
+            <defs><marker id="f3-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#4a5a63"/></marker></defs>
+            <g class="segs" transform="rotate(-90 385 180)"></g>
+            <g class="calls"></g>
+            <text class="ctr-n" x="385" y="184" text-anchor="middle">0</text>
+            <text class="ctr-l" x="385" y="210" text-anchor="middle">episodes</text>
           </svg>
-          <div class="donut-legend">
+          <p class="f3-word">were collected.</p>
+        </div>
+        <p class="f3-key"><i class="solid"></i>solid = calm (control) <i class="hatch"></i>hatched = turbulent</p>
+        <div class="donut-legend f3-phone">
             <p class="lg-h"><b>Grab the rod</b> <span>(304 control, 465 turbulent)</span></p>
             <p class="lg" data-k="green"><i style="--c:#3E9B4F"></i>Green — 101 control, 161 turbulent</p>
             <p class="lg" data-k="red"><i style="--c:#C8322F"></i>Red — 101 control, 153 turbulent</p>
@@ -479,8 +482,6 @@
             <p class="lg cond"><i style="--c:#E3E8EA"></i>Control</p>
             <p class="lg cond"><i class="hatch"></i>Turbulent</p>
           </div>
-        </div>
-        <p class="pp-flow end">…were collected.</p>
         <figcaption><b>Fig. 3. Pool Deployment: Dataset split.</b> Training data collected in the pool environment incorporates multi-modal observations and human-made turbulent waters. The dataset is broken down into two conditions: a control condition (calm waters) and a turbulent condition.</figcaption>
       </figure>
 
@@ -894,7 +895,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=5"></script>
+<script src="assets/paper/paper.js?v=6"></script>
 <script src="assets/paper/rov-journey.js?v=2"></script>
 </body>
 </html>
