@@ -359,7 +359,7 @@
   <!-- ======================= THE PAPER, INTERACTIVE ======================= -->
   <section class="paper" id="paper" aria-label="The paper">
     <nav class="pp-chapters" aria-label="Paper sections">
-      <a href="#p-intro">Can land-trained VLAs be adapted to the deep?</a>
+      <a href="#p-intro">Can land-trained VLAs be adapted to the sea?</a>
       <a href="#p-data">Data Collection</a>
       <a href="#p-models">Model Descriptions</a>
       <a href="#p-pool">Pool Deployment Results</a>
@@ -389,7 +389,7 @@
     <!-- ---------- I. Introduction ---------- -->
     <article class="pp-chapter" id="p-intro">
       <p class="pp-num rv">Section I</p>
-      <h3 class="rv">Can land-trained VLAs be adapted to the deep?</h3>
+      <h3 class="rv">Can land-trained VLAs be adapted to the sea?</h3>
       <p class="rv">Marine conservationists and archaeologists routinely perform tasks such as environmental monitoring and specimen retrieval, constrained by poor visibility, dynamic currents, and the physiological limits of human divers. Automating these operations, e.g. via robots, could accelerate scientific research and reduce diver risk.</p>
       <p class="rv">Recent advances in Behavior Cloning (BC) <a class="cite" href="#ref-2">[2]</a> have enabled robust single-task robot policies from relatively little data. While prior works explore the performance of these approaches in aquatic robotics <a class="cite" href="#ref-3">[3]</a>, <a class="cite" href="#ref-4">[4]</a>, deployment in real marine archaeology and conservation missions remains largely unexplored.</p>
 
@@ -418,7 +418,7 @@
         <figcaption><b>Fig. 1. Overview of Autonomous Underwater Mooring using Action Chunking Transformers (ACT).</b> <b>(Left)</b> Training data collected across shipwreck and marina environments incorporating multi-modal observations and real-world disturbances. These include marine life distractors, tether drag, ocean currents, visual occlusion from water particulate, variable lighting based on depth or time of day, and thruster sway inherent to fluid dynamics. <b>(Right)</b> Autonomous policy execution showing closed-loop mooring trajectory on the <i>Coralita X127</i> shipwreck.</figcaption>
       </figure>
 
-      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1).</p>
+      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1). Can we adapt a land-based BC approach to successfully perform common marine archaeology and conservation tasks underwater?</p>
       <blockquote class="pp-quote rv">How can the recent advances in terrestrial behavior cloning be leveraged for underwater environments?</blockquote>
 
       <ol class="pp-contrib">
