@@ -209,6 +209,37 @@
     });
   })();
 
+  /* ---------- Fig. 1 rebuilt: assembles, then its photos play as video ---------- */
+  (function () {
+    var f1 = $('.f1'); if (!f1) return;
+    var vids = $$('video', f1), started = false, visible = false;
+    function playAll() { vids.forEach(function (v) { if (v._ready) { var r = v.play(); if (r && r.catch) r.catch(function () {}); } }); }
+    function pauseAll() { vids.forEach(function (v) { v.pause(); }); }
+    function arm(v, delay) {
+      v.src = v.getAttribute('data-src'); v.removeAttribute('data-src');
+      var off = v.getAttribute('data-off');
+      v.addEventListener('loadedmetadata', function () { if (off) v.currentTime = (+off) * v.duration / 4; }, { once: true });
+      setTimeout(function () { v._ready = true; if (visible) { var r = v.play(); if (r && r.catch) r.catch(function () {}); } }, reduce ? 0 : delay);
+    }
+    function start() {
+      if (started) return; started = true; f1.classList.add('in');
+      vids.forEach(function (v) {
+        // same timing as the figure build: tiles with the pre-training box, the trajectory from its first frame when its panel appears, then the POV strip
+        var d = v.classList.contains('traj') ? 2300 : v.hasAttribute('data-off') ? 2800 : 450;
+        arm(v, d);
+      });
+    }
+    if (hasIO) {
+      new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          visible = e.isIntersecting;
+          if (visible && e.intersectionRatio >= 0.2) start();
+          if (started) { if (visible) playAll(); else pauseAll(); }
+        });
+      }, { threshold: [0, 0.2] }).observe(f1);
+    } else { visible = true; start(); }
+  })();
+
   /* ---------- Fig. 6 rebuilt: assembles when scrolled into view ---------- */
   (function () {
     var arch = $('.arch'); if (!arch) return;

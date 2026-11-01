@@ -143,7 +143,7 @@
   /* ---------- Links ---------- */
   .links {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 12px;
-    margin: -34px auto 0; padding: 0 20px;
+    margin: 22px auto 0; padding: 0 20px;
     position: relative; z-index: 2;
     max-width: 900px;
   }
@@ -277,7 +277,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=2">
+<link rel="stylesheet" href="assets/paper/paper.css?v=3">
 </head>
 <body>
 
@@ -390,18 +390,37 @@
     <article class="pp-chapter" id="p-intro">
       <p class="pp-num rv">Section I</p>
       <h3 class="rv">Introduction</h3>
-      <p class="rv">Marine conservationists and archaeologists routinely perform tasks such as environmental monitoring and specimen retrieval, constrained by poor visibility, dynamic currents, and the physiological limits of human divers. At deeper depths, monitoring requires repeated dives that are slow, costly, and risky due to lengthy decompression procedures <a class="cite" href="#ref-1">[1]</a>. Automating these operations, e.g. via robots, could accelerate scientific research and reduce diver risk.</p>
+      <p class="rv">Marine conservationists and archaeologists routinely perform tasks such as environmental monitoring and specimen retrieval, constrained by poor visibility, dynamic currents, and the physiological limits of human divers. Automating these operations, e.g. via robots, could accelerate scientific research and reduce diver risk.</p>
       <p class="rv">Recent advances in Behavior Cloning (BC) <a class="cite" href="#ref-2">[2]</a> have enabled robust single-task robot policies from relatively little data. While prior works explore the performance of these approaches in aquatic robotics <a class="cite" href="#ref-3">[3]</a>, <a class="cite" href="#ref-4">[4]</a>, deployment in real marine archaeology and conservation missions remains largely unexplored.</p>
 
-      <figure class="pp-fig wide rv">
-        <img class="zoomable" data-src="assets/paper/fig/fig1-overview.webp" width="2200" height="825" alt="Fig. 1: overview of autonomous underwater mooring with ACT — training data from shipwreck and marina, observations and disturbances, and a successful mooring trajectory on the Coralita X127 wreck.">
+      <figure class="wide-fig f1-fig" id="fig1">
+        <div class="f1" aria-label="Fig. 1, rebuilt with live video">
+          <div class="f1-skill s1"><span>Target Skill: "Moor"</span></div>
+          <div class="f1-pre s2">
+            <h5>Pre-training Data</h5>
+            <div class="f1-sites">
+              <div class="site"><h6>Shipwreck</h6><div class="tiles"><figure class="tile"><video muted loop playsinline preload="none" poster="assets/paper/fig1/post.jpg" data-src="assets/paper/fig1/post.mp4"></video><figcaption>Moor on Post <span class="sun" aria-label="daytime">☀</span></figcaption></figure><figure class="tile"><video muted loop playsinline preload="none" poster="assets/paper/fig1/rope.jpg" data-src="assets/paper/fig1/rope.mp4"></video><figcaption>Moor on Rope <span class="sun" aria-label="daytime">☀</span></figcaption></figure></div></div>
+              <div class="site"><h6>Marina</h6><div class="tiles"><figure class="tile"><video muted loop playsinline preload="none" poster="assets/paper/fig1/ladder-day.jpg" data-src="assets/paper/fig1/ladder-day.mp4"></video><figcaption>Moor on Ladder <span class="sun" aria-label="daytime">☀</span></figcaption></figure><figure class="tile"><video muted loop playsinline preload="none" poster="assets/paper/fig1/ladder-night.jpg" data-src="assets/paper/fig1/ladder-night.mp4"></video><figcaption>Moor on Ladder <span class="moon" aria-label="night">☾</span></figcaption></figure></div></div>
+            </div>
+          </div>
+          <div class="f1-low">
+            <div class="f1-obs s3"><h5>Observations</h5><ul><li>Roll</li><li>Pitch</li><li>Yaw</li><li>RGB Video</li><li>Current Depth</li><li>Depth Set-Point</li></ul></div>
+            <div class="f1-dis s4"><h5>Disturbances</h5><ul><li>Distractors</li><li>Tether Drag</li><li>Currents</li><li>Occlusion</li><li>Variable Lighting</li><li>Thruster Sway</li></ul></div>
+          </div>
+          <div class="f1-arr a1 s5" aria-hidden="true"></div>
+          <div class="f1-arr a2 s5" aria-hidden="true"></div>
+          <div class="f1-act s6"><span>Action Chunking Transformer</span></div>
+          <div class="f1-right">
+          <div class="f1-traj s7"><h5>Successful Trajectory</h5><video class="traj" muted loop playsinline preload="none" poster="assets/paper/fig1/trajectory.jpg" data-src="assets/paper/fig1/trajectory.mp4"></video></div>
+          <div class="f1-pov s8"><span class="lbl">ROV POV</span><div class="film"><video muted loop playsinline preload="none" poster="assets/paper/fig1/post.jpg" data-src="assets/paper/fig1/post.mp4" data-off="0"></video><video muted loop playsinline preload="none" poster="assets/paper/fig1/post.jpg" data-src="assets/paper/fig1/post.mp4" data-off="1"></video><video muted loop playsinline preload="none" poster="assets/paper/fig1/post.jpg" data-src="assets/paper/fig1/post.mp4" data-off="2"></video><video muted loop playsinline preload="none" poster="assets/paper/fig1/post.jpg" data-src="assets/paper/fig1/post.mp4" data-off="3"></video></div></div>
+          </div>
+        </div>
         <figcaption><b>Fig. 1. Overview of Autonomous Underwater Mooring using Action Chunking Transformers (ACT).</b> <b>(Left)</b> Training data collected across shipwreck and marina environments incorporating multi-modal observations and real-world disturbances. These include marine life distractors, tether drag, ocean currents, visual occlusion from water particulate, variable lighting based on depth or time of day, and thruster sway inherent to fluid dynamics. <b>(Right)</b> Autonomous policy execution showing closed-loop mooring trajectory on the <i>Coralita X127</i> shipwreck.</figcaption>
       </figure>
 
-      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, have shown remarkable generalization to novel tasks and objects, making them an appealing candidate for underwater manipulation. However, they are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1). Whether these policies retain their generalization capabilities under such conditions and across diverse archaeological sites remains an open question.</p>
-      <p class="rv">By enabling increased levels of autonomy for underwater robotic manipulation tasks, there will be scientific value not just within the field of robotics, but as well in the fields of marine archaeology, oceanography, geology, biology, and environmental conservation. This leads to a motivating question: <i>how can the recent advances in terrestrial behavior cloning be leveraged for underwater environments?</i></p>
+      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1).</p>
+      <blockquote class="pp-quote rv">How can the recent advances in terrestrial behavior cloning be leveraged for underwater environments?</blockquote>
 
-      <p class="rv">In addressing this driving question, the work presented below yields the following contributions:</p>
       <ol class="pp-contrib">
         <li class="rv"><span>1</span>To our knowledge, the world's first instance of successfully implementing a multi-task VLA underwater on real hardware, where a VLA is defined as a single Vision-Language-Action model that can execute multiple tasks and be commanded to execute a specific task via language based inputs.</li>
         <li class="rv"><span>2</span>A real-world case study of BC manipulation models deployed on an underwater Remotely Operated Vehicle (ROV) at a Mediterranean shipwreck for archaeology and conservation tasks.</li>
@@ -825,6 +844,6 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=2"></script>
+<script src="assets/paper/paper.js?v=3"></script>
 </body>
 </html>
