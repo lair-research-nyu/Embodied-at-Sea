@@ -277,7 +277,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=3">
+<link rel="stylesheet" href="assets/paper/paper.css?v=4">
 </head>
 <body>
 
@@ -418,14 +418,15 @@
         <figcaption><b>Fig. 1. Overview of Autonomous Underwater Mooring using Action Chunking Transformers (ACT).</b> <b>(Left)</b> Training data collected across shipwreck and marina environments incorporating multi-modal observations and real-world disturbances. These include marine life distractors, tether drag, ocean currents, visual occlusion from water particulate, variable lighting based on depth or time of day, and thruster sway inherent to fluid dynamics. <b>(Right)</b> Autonomous policy execution showing closed-loop mooring trajectory on the <i>Coralita X127</i> shipwreck.</figcaption>
       </figure>
 
-      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1). Can we adapt a land-based BC approach to successfully perform common marine archaeology and conservation tasks underwater?</p>
-      <blockquote class="pp-quote rv">How can the recent advances in terrestrial behavior cloning be leveraged for underwater environments?</blockquote>
+      <p class="rv">BC-based policies, particularly Vision-Language-Action (VLA) models, are trained almost exclusively on terrestrial datasets featuring stable lighting and fixed-base manipulators, while underwater vehicles operating in marine environments experience unconstrained 6-DOF motion, drag, turbidity, visual distortion, occlusion, and distractors (see Fig. 1).</p>
+      <p class="pp-big rv">Can we adapt a land-based BC approach to successfully perform common marine archaeology and conservation tasks underwater?</p>
+      <p class="pp-tldr rv">TLDR;</p>
 
       <ol class="pp-contrib">
-        <li class="rv"><span>1</span>To our knowledge, the world's first instance of successfully implementing a multi-task VLA underwater on real hardware, where a VLA is defined as a single Vision-Language-Action model that can execute multiple tasks and be commanded to execute a specific task via language based inputs.</li>
-        <li class="rv"><span>2</span>A real-world case study of BC manipulation models deployed on an underwater Remotely Operated Vehicle (ROV) at a Mediterranean shipwreck for archaeology and conservation tasks.</li>
-        <li class="rv"><span>3</span>A thorough investigation into how different proprioception configurations and underwater sensor modalities in a model's observation and action spaces affect generalist model behavior underwater, including a new action space that leverages an underwater robot depth sensor and feedback control for stable motion in the vertical direction.</li>
-        <li class="rv"><span>4</span>Introducing the <span class="sc">BluEmbodied Kit</span> as an open source repository that enables users to collect underwater teleoperation data, train single (ACT) and multi-task models (DynamicVLA, SmolVLA), and run inference on Blue Robotics' BlueROV2 while staying compatible with BlueOS.</li>
+        <li class="rv"><span>1</span><span class="tx">To our knowledge, the world's first instance of successfully implementing a multi-task VLA underwater on real hardware.</span></li>
+        <li class="rv"><span>2</span><span class="tx">A real-world case study of BC manipulation models deployed on an underwater Remotely Operated Vehicle (ROV) at a Mediterranean shipwreck for archaeology and conservation tasks.</span></li>
+        <li class="rv"><span>3</span><span class="tx">A thorough investigation into how different proprioception configurations and underwater sensor modalities in a model's observation and action spaces affect generalist model behavior underwater.</span></li>
+        <li class="rv"><span>4</span><span class="tx">Introducing the <span class="sc">BluEmbodied Kit</span> as an open source repository that enables users to collect underwater teleoperation data, train single (ACT) and multi-task models (DynamicVLA, SmolVLA), and run inference on Blue Robotics' BlueROV2 while staying compatible with BlueOS.</span></li>
       </ol>
     </article>
 
