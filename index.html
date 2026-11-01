@@ -106,7 +106,7 @@
     display: flex; flex-direction: column; align-items: center; gap: 6px;
     color: #fff; font-size: .72rem; letter-spacing: .24em; text-transform: uppercase;
     text-shadow: 0 1px 8px rgba(0,0,0,.6);
-    opacity: calc(1 - var(--p) * 3);
+    opacity: calc(1 - var(--ph, 0) * 3);
     pointer-events: none;
   }
   .hint svg { width: 18px; height: 18px; animation: bob 1.8s ease-in-out infinite; }
@@ -858,8 +858,21 @@
       ticking = false;
       var run = intro.offsetHeight - window.innerHeight;
       var p = run > 0 ? (window.scrollY - intro.offsetTop) / run : 1;
-      stage.style.setProperty('--p', smooth(0.05, 0.55, p).toFixed(3));
+      var ps = smooth(0.05, 0.55, p);
+      stage.style.setProperty('--p', Math.max(ps, auto).toFixed(3));   // scroll, or the timed fade-in, whichever is further
+      stage.style.setProperty('--ph', ps.toFixed(3));                   // the "Scroll" hint follows scrolling only
     }
+    // After 2 s the cut-out title fades in on its own (no scrolling needed).
+    var auto = 0;
+    setTimeout(function () {
+      var t0 = null, dur = matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 1400;
+      (function step(t) {
+        if (t0 === null) t0 = t;
+        var k = Math.min(1, (t - t0) / dur); auto = k * k * (3 - 2 * k);
+        update();
+        if (k < 1) requestAnimationFrame(step);
+      })(performance.now());
+    }, 2000);
     function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll);
