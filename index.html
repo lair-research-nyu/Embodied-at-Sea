@@ -114,7 +114,7 @@
   @media (prefers-reduced-motion: reduce) { .hint svg { animation: none; } }
 
   /* wave from the dark intro into the page */
-  .shore { position: relative; background: #000; padding: 18px 16px 86px; line-height: 1.4; text-align: center; }
+  .shore { position: relative; z-index: 2; background: #000; padding: 18px 16px 76px; line-height: 1.4; text-align: center; }
   .announce {
     position: relative; z-index: 3;
     display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center;
@@ -137,6 +137,8 @@
   .announce:hover .cta span { display: inline-block; transform: translateX(3px); transition: transform .15s; }
   @media (max-width: 480px) { .announce { border-radius: 18px; padding: 8px 14px; } .announce .sep { display: none; } .announce .msg { display: flex; flex-direction: column; } }
   .shore svg { position: absolute; left: 0; bottom: -1px; width: 100%; height: 70px; }
+  /* covers the rest of the title card that the pulled-up shore no longer hides (height set in JS) */
+  .shore::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: var(--under, 0px); background: var(--paper); }
 
   /* ---------- Links ---------- */
   .links {
@@ -433,6 +435,20 @@
     addEventListener('scroll', onScroll, { passive: true });
     addEventListener('resize', onScroll);
     update();
+
+    // Pull the IROS link + wave up into the empty black below the title card,
+    // leaving a small gap under the caption (measured, so it fits any screen).
+    var shore = document.querySelector('.shore');
+    var note = stage.querySelector('.note');
+    function fitShore() {
+      var empty = stage.offsetHeight - (note.offsetTop + note.offsetHeight);
+      var pull = Math.max(0, empty - 40);
+      shore.style.marginTop = -pull + 'px';
+      shore.style.setProperty('--under', pull + 'px');
+    }
+    fitShore();
+    addEventListener('resize', fitShore);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitShore);
 
     // Make sure the wall plays. Some browsers block autoplay (battery saver,
     // strict settings); if so, start it on the first scroll, tap or key press.
