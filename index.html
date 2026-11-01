@@ -193,6 +193,9 @@
   .yt:hover .play, .yt:focus-visible .play { opacity: 1; transform: translate(-50%,-50%) scale(1.08); }
   .abstract { max-width: 820px; margin: 0 auto 72px; }
   .abstract h2 { margin-bottom: 20px; }
+  .rov-mini { display: inline-block; height: 1.4em; width: auto; vertical-align: -0.28em; margin-left: .3em; animation: rovbob 3.2s ease-in-out infinite; }
+  @keyframes rovbob { 50% { transform: translateY(-4px) rotate(-3deg); } }
+  @media (prefers-reduced-motion: reduce) { .rov-mini { animation: none; } }
   .abstract p { margin: 0; font-size: 1.05rem; line-height: 1.65; text-align: justify; hyphens: auto; }
   @media (max-width: 600px) { .abstract p { text-align: left; font-size: 1rem; } }
 
@@ -352,7 +355,7 @@
   </section>
 
   <section class="abstract">
-    <h2>Abstract</h2>
+    <h2>Abstract <img class="rov-mini" src="assets/img/bluerov.png" width="120" height="88" alt=""></h2>
     <p>Behavior Cloning has demonstrated promising generalization capabilities for robotic manipulation in terrestrial environments. However, marine visual distortions and dynamic currents create a severe domain shift that remains a key bottleneck in adapting generalist architectures to underwater field manipulation. To address this, 1616 episodes of underwater manipulation data were collected in calm and turbulent waters and were used to train 14 generalist Vision-Language-Action (VLA) models (DynamicVLA) with varying proprioception observation configurations. Across three tasks on 1260 gradable on-hardware rollouts in a pool, 10 models outperformed the baseline, with the highest-performing model achieving a 93.3% overall success rate, including partial successes. Results are also introduced from a case study evaluating the performance of a single-task Action Chunking Transformer (ACT) and a generalist VLA (SmolVLA) policy for two tasks in marine archaeology and conservation: grasping and mooring. Experiments are performed on an ROV on and around the WWII wreck Coralita X127 and at Manoel Island Marina, Malta. Across 748 collected episodes and 508 gradable on-hardware rollouts, the ACT policy substantially outperformed SmolVLA (47.9% vs. 7.9% pooled success rate), earning a 66.7% success rate on the most successful task at the marine archaeological site. To enable further contributions to embodied intelligence in marine field robotics, the BLUEMBODIED KIT used to collect data, train models, and deploy policies on the ROV has been open sourced.</p>
   </section>
 
