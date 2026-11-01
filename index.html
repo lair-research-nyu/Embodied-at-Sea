@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=10">
+<link rel="stylesheet" href="assets/paper/paper.css?v=11">
 </head>
 <body>
 
@@ -451,11 +451,11 @@
       </div>
       <p class="pp-cap rv"><b>Fig. 2. Pool Deployment: Experimental tasks evaluated in a controlled environment.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split (see Fig. 3) between calm and turbulent waters created by a human volunteer (see Fig. 5). Rod locations and color order were randomized between episodes. Post location stayed relatively the same, but initial robot and ring configurations varied between episodes as well.</p>
       <p class="rv">Three task families were explored (see Fig. 2) in both calm and turbulent waters (agitated by a human volunteer) in a pool.</p>
-      <ul class="pp-tasklist rv">
-        <li><b>Grab</b>: approaching an object and grasping it with the end-effector to simulate sampling a specimen.</li>
-        <li><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</li>
-        <li><b>Remove</b>: approaching a ring on a post and unhooking it to simulate a rope line release procedure.</li>
-      </ul>
+      <ol class="pp-contrib pp-tasks-boxed">
+        <li class="rv"><span>1</span><span class="tx"><b>Grab</b>: approaching an object and grasping it with the end-effector to simulate sampling a specimen.</span></li>
+        <li class="rv"><span>2</span><span class="tx"><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</span></li>
+        <li class="rv"><span>3</span><span class="tx"><b>Remove</b>: approaching a ring on a post and unhooking it to simulate a rope line release procedure.</span></li>
+      </ol>
 
       <figure class="pp-fig rv" id="fig3">
         <div class="f3-row">
@@ -485,7 +485,7 @@
         <figcaption><b>Fig. 3. Pool Deployment: Dataset split.</b> Training data collected in the pool environment incorporates multi-modal observations and human-made turbulent waters. The dataset is broken down into two conditions: a control condition (calm waters) and a turbulent condition.</figcaption>
       </figure>
 
-      <p class="rv">Turbulence shows up directly in what the robot senses: its average roll, pitch and yaw barely change, but in turbulent water they swing much more. In a typical episode, roll varies about 1.9× as much as in calm water, and vertical acceleration about 2.7× as much (Fig. 5).</p>
+      <p class="pp-callout rv">Turbulence shows up directly in what the robot senses.</p>
 
       <figure class="pp-fig rv" id="fig5">
         <div class="f5" role="img" aria-label="Fig. 5: nine small charts of roll, pitch, yaw, their rates and linear accelerations over episode progress. Turbulent bands are wider than calm bands in eight of nine channels; the means stay close."></div>
@@ -494,7 +494,6 @@
       </figure>
 
       <h4 class="rv">2) Marine Deployment</h4>
-      <p class="rv">Two task families were explored (see Fig. 4) in real ocean conditions.</p>
 
       <div class="pp-taskhead rv"><span class="pp-hint">Hover or tap a photo to flip between its initial state and its goal.</span><button class="pp-flipall" type="button" aria-pressed="false">Show goal states</button></div>
       <div class="pp-tasks six">
@@ -506,10 +505,11 @@
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/sea-moor-rope-start.webp" alt="Moor on rope, shipwreck: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/sea-moor-rope-goal.webp" alt="Moor on rope, shipwreck: goal" width="720" height="405"><span class="state"></span><b>Moor on Rope</b><small>Shipwreck</small></button>
       </div>
       <p class="pp-cap rv"><b>Fig. 4. Marine Deployment: Experimental tasks evaluated across different underwater environments.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split between calm (Control Condition) and turbulent waters. Data collection at the Marina and Coralita X127 shipwreck took place during both day and night, featuring varying disturbances (see Fig. 1).</p>
-      <ul class="pp-tasklist rv">
-        <li><b>Grab</b>: approaching an object and grasping it with the end-effector.</li>
-        <li><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</li>
-      </ul>
+      <p class="rv">Two task families were explored (see Fig. 4) in real ocean conditions.</p>
+      <ol class="pp-contrib pp-tasks-boxed">
+        <li class="rv"><span>1</span><span class="tx"><b>Grab</b>: approaching an object and grasping it with the end-effector.</span></li>
+        <li class="rv"><span>2</span><span class="tx"><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</span></li>
+      </ol>
 
       <p class="rv">In total, 748 human-teleoperated episodes were collected across three sites, progressing from a preliminary controlled test pool set (79 episodes, which is excluded from the Pool Study) to the <i>Coralita X127</i> shipwreck (335 episodes total) and finally to Manoel Island Marina, Malta (334 episodes total). To improve dataset robustness, our collection pipeline includes recovery trajectories obtained by resampling directly from failure states. To make our policies more robust for field deployment, both data collection and testing rollouts occurred in the daytime and nighttime (see Fig. 4).</p>
     </article>
@@ -908,7 +908,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=6"></script>
+<script src="assets/paper/paper.js?v=7"></script>
 <script src="assets/paper/rov-journey.js?v=2"></script>
 </body>
 </html>

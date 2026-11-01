@@ -554,3 +554,11 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
   #fig3 .f3-phone { display: block; margin-top: 12px; }
   #fig3 .f3-phone .lg { opacity: 1; transform: none; }
 }
+
+/* task lists boxed and numbered like the TLDR */
+.pp-tasks-boxed { margin: 4px 0 28px; }
+.pp-tasks-boxed li b { color: var(--tide); }
+/* the short blue lead-in before Fig. 5 */
+.paper .pp-callout { font-family: "Fraunces", Georgia, serif; font-weight: 700; font-size: clamp(1.3rem, 2.8vw, 1.75rem); line-height: 1.3; color: var(--act); margin: 40px 0 6px; }
+#fig3 circle.seg { transition: opacity .2s, stroke-width .2s; }
+#fig3 svg circle { transition: none; }

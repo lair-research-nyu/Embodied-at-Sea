@@ -177,7 +177,7 @@
         circ.setAttribute('data-tip', '<b>' + c[0] + ' · ' + p[0] + '</b><br>' + len + ' episodes');
         var edges = [];
         if (k === 'white') [R - SW / 2, R + SW / 2].forEach(function (rr) {
-          edges.push(mk('circle', { cx: CX, cy: CY, r: rr, pathLength: TOT, fill: 'none', stroke: '#9AA5AB', 'stroke-width': .8, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -s0, style: 'transition: stroke-dasharray .7s cubic-bezier(.3,.6,.2,1); pointer-events:none' }));
+          edges.push(mk('circle', { cx: CX, cy: CY, r: rr, pathLength: TOT, fill: 'none', stroke: '#9AA5AB', 'stroke-width': .8, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -s0, style: 'pointer-events:none' }));
         });
         segs.push({ el: circ, edges: edges, len: len, k: k });
       });
@@ -208,21 +208,28 @@
     function fitView() { svg.setAttribute('viewBox', narrow.matches ? (CX - 140) + ' ' + (CY - 140) + ' 280 280' : '0 0 770 380'); }
     fitView(); if (narrow.addEventListener) narrow.addEventListener('change', fitView);
     var ctr = $('.ctr-n', svg);
-    function draw() {
-      var step = reduce ? 0 : 170, sum = 0;
-      segs.forEach(function (s, i) {
-        setTimeout(function () {
-          var dash = (s.len - GAP) + ' ' + (TOT - s.len + GAP);
-          s.el.setAttribute('stroke-dasharray', dash); s.el.style.strokeDasharray = dash;
-          s.edges.forEach(function (e) { e.setAttribute('stroke-dasharray', dash); e.style.strokeDasharray = dash; });
-          sum += s.len; ctr.textContent = sum;
-          tasks.forEach(function (t) { if (t.last === i) setTimeout(function () { t.g.classList.add('on'); }, reduce ? 0 : 350); });
-        }, i * step);
+    // fills clockwise in step with scrolling (and un-fills going back up)
+    function paint() {
+      var r = fig.getBoundingClientRect(), H = innerHeight;
+      var q = reduce ? 1 : Math.max(0, Math.min(1, (H * 0.92 - r.top) / (H * 0.42)));
+      var fill = q * TOT, at = 0;
+      segs.forEach(function (sg) {
+        var vis = Math.max(0, Math.min(sg.len, fill - at)), shown = Math.max(0, vis - GAP);
+        var dash = shown + ' ' + (TOT - shown);
+        sg.el.setAttribute('stroke-dasharray', dash);
+        sg.edges.forEach(function (e) { e.setAttribute('stroke-dasharray', dash); });
+        at += sg.len;
       });
-      setTimeout(function () { ctr.textContent = TOT; }, segs.length * step);
+      tasks.forEach(function (t) {
+        var end = 0; for (var i = 0; i <= t.last; i++) end += segs[i].len;
+        t.g.classList.toggle('on', fill >= end - 1);
+      });
+      ctr.textContent = Math.round(fill);
     }
-    onReveal.push(function (e) { if (e === fig) draw(); });
-    if (!hasIO || reduce) draw();
+    var ticking = false;
+    addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; paint(); }); } }, { passive: true });
+    addEventListener('resize', paint);
+    paint();
     function hl(k) {
       segs.forEach(function (s) { s.el.classList.toggle('dim', !!k && s.k !== k); s.el.classList.toggle('hi', s.k === k); });
       tasks.forEach(function (t) { t.g.classList.toggle('dim', !!k && t.k !== k); });
