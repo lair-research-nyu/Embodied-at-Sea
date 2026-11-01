@@ -456,3 +456,36 @@ img.loaded { opacity: 1; transition: opacity .6s ease; }
 @media (prefers-reduced-motion: reduce) { .f1 .s9 { opacity: 1; transform: none; transition: none; } }
 @media (max-width: 760px) { .f1-acts { margin-left: 0; grid-template-columns: 1fr; } .f1-acts .arr { display: none; } .f1-acts .bar { justify-content: center; } }
 .f1 .tile figcaption span { white-space: nowrap; }
+
+/* ---------- Emerging behaviors (from the IROS poster) ---------- */
+.beh { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin: 18px 0 22px; }
+.beh-h { font-family: "Fraunces", Georgia, serif; font-weight: 600; font-size: 1.15rem; margin: 0 0 14px !important; }
+.beh-h span { display: inline-block; font-family: Inter, system-ui, sans-serif; font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: #fff; background: var(--tide); border-radius: 999px; padding: 3px 10px; margin-right: 8px; vertical-align: 3px; }
+.beh-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: center; }
+.beh-two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.beh-vid { position: relative; }
+.beh-vid video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 10px; background: #0b2230; }
+.beh-vid .clock { position: absolute; right: 8px; bottom: 8px; background: rgba(4,19,31,.72); color: #fff; font-size: .72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; font-variant-numeric: tabular-nums; }
+.beh .rowlab { font-size: .85rem; font-weight: 600; margin: 0 0 8px !important; }
+.beh-chips { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
+.beh-chips button {
+  font: inherit; cursor: pointer; text-align: left; padding: 7px 9px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--ink);
+  transition: background .25s, border-color .25s, color .25s;
+}
+.beh-chips button b { display: block; font-size: .8rem; }
+.beh-chips button small { display: block; font-size: .7rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.beh-chips button.past { border-color: #b7dbe3; background: var(--foam); }
+.beh-chips button.on { border-color: var(--tide); background: var(--tide); color: #fff; }
+.beh-chips button.on small { color: rgba(255,255,255,.8); }
+.beh-cap { font-size: .86rem; color: var(--muted); margin: 14px 0 0 !important; line-height: 1.6 !important; }
+.beh-chart .pp-label { margin-bottom: 4px; }
+svg.depth { width: 100%; height: auto; display: block; overflow: visible; }
+svg.depth .grid { stroke: var(--line); stroke-width: 1; }
+svg.depth .ax { font: 12px Inter, system-ui, sans-serif; fill: var(--muted); }
+svg.depth .ghost { fill: none; stroke: #c9d6dc; stroke-width: 2; }
+svg.depth .live { fill: none; stroke: var(--act); stroke-width: 2.5; stroke-linejoin: round; }
+svg.depth .mk { fill: #fff; stroke: var(--act); stroke-width: 2; }
+svg.depth .mkl { font: 600 12px Inter, system-ui, sans-serif; fill: var(--ink); }
+svg.depth .head { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; opacity: .45; }
+svg.depth .dot { fill: var(--act); stroke: #fff; stroke-width: 2.5; }
+@media (max-width: 700px) { .beh-grid, .beh-two { grid-template-columns: 1fr; } .beh-chips { grid-template-columns: repeat(2, 1fr); } }

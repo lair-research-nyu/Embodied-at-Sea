@@ -240,6 +240,71 @@
     } else { visible = true; start(); }
   })();
 
+  /* ---------- Emerging behaviors: videos with live step chips; dive synced to a depth trace ---------- */
+  (function () {
+    var DIVE = {"t":[0.0,0.06,0.12,0.18,0.24,0.3,0.36,0.42,0.48,0.54,0.6,0.66,0.72,0.78,0.84,0.9,0.96,1.02,1.08,1.14,1.2,1.26,1.32,1.38,1.44,1.5,1.56,1.62,1.68,1.74,1.8,1.86,1.92,1.98,2.04,2.1,2.16,2.22,2.28,2.34,2.4,2.46,2.52,2.58,2.64,2.7,2.76,2.82,2.88,2.94,3.0,3.06,3.12,3.18,3.24,3.3,3.36,3.42,3.48,3.54,3.6,3.66,3.72,3.78,3.84,3.9,3.96,4.02,4.08,4.14,4.2,4.26,4.32,4.38,4.44,4.5,4.56,4.62,4.68,4.74,4.8,4.86,4.92,4.98,5.04,5.1,5.16,5.22,5.28,5.34,5.4,5.46,5.52,5.58,5.64,5.7,5.76,5.82,5.88,5.94,6.0,6.06,6.12,6.18,6.24,6.3,6.36,6.42,6.48,6.54,6.6,6.66,6.72,6.78,6.84,6.9,6.96,7.02,7.08,7.14,7.2,7.26,7.32,7.38,7.44,7.5,7.56,7.62,7.68,7.74,7.78],"d":[4.709,4.709,4.73,4.73,4.73,4.73,4.73,4.73,4.73,4.73,4.737,4.737,4.737,4.737,4.737,4.746,4.746,4.746,4.746,4.746,4.753,4.753,4.753,4.753,4.753,4.748,4.748,4.748,4.748,4.748,4.741,4.741,4.741,4.741,4.741,4.741,4.729,4.729,4.729,4.729,4.729,4.729,4.737,4.737,4.737,4.737,4.737,4.774,4.774,4.774,4.774,4.774,4.774,4.849,4.849,4.849,4.849,4.849,4.849,4.927,4.927,4.927,4.927,4.927,4.977,4.977,4.977,4.977,4.977,4.977,5.018,5.018,5.018,5.018,5.018,5.075,5.075,5.075,5.075,5.075,5.075,5.152,5.152,5.152,5.152,5.152,5.152,5.152,5.248,5.248,5.248,5.248,5.248,5.354,5.354,5.354,5.354,5.354,5.455,5.455,5.455,5.455,5.455,5.455,5.506,5.506,5.506,5.506,5.506,5.552,5.552,5.552,5.552,5.552,5.57,5.57,5.57,5.57,5.57,5.57,5.57,5.569,5.569,5.569,5.569,5.569,5.544,5.544,5.544,5.544,5.544],"marks":[0.4,3.1,6.0,7.6],"mdepth":[4.73,4.77,5.45,5.54]};
+    $$('.beh').forEach(function (box) {
+      var vids = $$('video', box), armed = false, visible = false;
+      function play(v) { var r = v.play(); if (r && r.catch) r.catch(function () {}); }
+      function arm() {
+        if (armed) return; armed = true;
+        vids.forEach(function (v) { v.src = v.getAttribute('data-src'); v.removeAttribute('data-src'); if (visible) play(v); });
+      }
+      if (hasIO) new IntersectionObserver(function (es) {
+        es.forEach(function (e) { visible = e.isIntersecting; if (visible) { arm(); vids.forEach(play); } else vids.forEach(function (v) { v.pause(); }); });
+      }, { threshold: 0.25 }).observe(box);
+      else { visible = true; arm(); }
+      // each video drives its own clock + chips
+      vids.forEach(function (v) {
+        var wrap = v.closest('.beh-one') || box;
+        var chips = $$('.beh-chips button', wrap), clock = $('.clock', v.parentElement);
+        chips.forEach(function (c) { c.addEventListener('click', function () { v.currentTime = +c.getAttribute('data-t'); play(v); }); });
+        function tick() {
+          var t = v.currentTime || 0, on = -1;
+          chips.forEach(function (c, i) { if (t >= +c.getAttribute('data-t') - 0.05) on = i; });
+          chips.forEach(function (c, i) { c.classList.toggle('on', i === on); c.classList.toggle('past', i < on); });
+          if (clock) clock.textContent = t.toFixed(1) + ' s';
+          if (v === vids[0] && box.id === 'beh-dive') drawHead(t);
+          if (!v.paused) requestAnimationFrame(tick);
+        }
+        v.addEventListener('play', function () { requestAnimationFrame(tick); });
+        v.addEventListener('seeked', tick);
+      });
+    });
+
+    // depth chart (deeper is lower), playhead follows the video
+    var svg = $('#beh-dive svg.depth'); if (!svg) return;
+    var X0 = 58, X1 = 505, Y0 = 18, Y1 = 238, T = DIVE.t[DIVE.t.length - 1], ZMIN = 4.5, ZMAX = 5.7;
+    var x = function (t) { return X0 + (X1 - X0) * t / T; }, y = function (z) { return Y0 + (Y1 - Y0) * (z - ZMIN) / (ZMAX - ZMIN); };
+    var pts = DIVE.t.map(function (t, i) { return x(t).toFixed(1) + ',' + y(DIVE.d[i]).toFixed(1); }).join(' ');
+    var h = '';
+    [4.6, 5.0, 5.4].forEach(function (z) { h += '<line class="grid" x1="' + X0 + '" x2="' + X1 + '" y1="' + y(z) + '" y2="' + y(z) + '"/><text class="ax" x="' + (X0 - 8) + '" y="' + (y(z) + 4) + '" text-anchor="end">' + z.toFixed(1) + ' m</text>'; });
+    [0, 2, 4, 6].forEach(function (t) { h += '<text class="ax" x="' + x(t) + '" y="' + (Y1 + 26) + '" text-anchor="middle">' + t + ' s</text>'; });
+    h += '<polyline class="ghost" points="' + pts + '"/><polyline class="live" points="' + pts + '"/>';
+    DIVE.marks.forEach(function (t, i) {
+      var z = DIVE.mdepth[i];
+      h += '<circle class="mk" cx="' + x(t) + '" cy="' + y(z) + '" r="5"/><text class="mkl" x="' + x(t) + '" y="' + (y(z) - 11) + '" text-anchor="middle">' + z.toFixed(2) + ' m</text>';
+    });
+    h += '<line class="head" x1="0" x2="0" y1="' + Y0 + '" y2="' + Y1 + '"/><circle class="dot" r="7"/>';
+    svg.innerHTML = h;
+    var live = $('polyline.live', svg), head = $('line.head', svg), dot = $('circle.dot', svg);
+    var len = 0; try { len = live.getTotalLength(); } catch (e) {}
+    function depthAt(t) {
+      var i = 0; while (i < DIVE.t.length - 1 && DIVE.t[i + 1] < t) i++;
+      var a = DIVE.t[i], b = DIVE.t[Math.min(i + 1, DIVE.t.length - 1)], f = b > a ? (t - a) / (b - a) : 0;
+      return DIVE.d[i] + (DIVE.d[Math.min(i + 1, DIVE.d.length - 1)] - DIVE.d[i]) * Math.max(0, Math.min(1, f));
+    }
+    function drawHead(t) {
+      t = Math.min(T, Math.max(0, t));
+      var X = x(t), Y = y(depthAt(t));
+      head.setAttribute('x1', X); head.setAttribute('x2', X);
+      dot.setAttribute('cx', X); dot.setAttribute('cy', Y);
+      dot.setAttribute('data-tip', t.toFixed(1) + ' s · ' + depthAt(t).toFixed(2) + ' m deep');
+      if (len) { live.style.strokeDasharray = len; live.style.strokeDashoffset = len * (1 - t / T); }
+    }
+    drawHead(0);
+  })();
+
   /* ---------- Fig. 6 rebuilt: assembles when scrolled into view ---------- */
   (function () {
     var arch = $('.arch'); if (!arch) return;

@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=6">
+<link rel="stylesheet" href="assets/paper/paper.css?v=7">
 </head>
 <body>
 
@@ -670,6 +670,39 @@
         </div>
         <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The <i>moor on ladder</i> success rate fell from 63.9% (n=97) in the daytime to 49.5% (n=109) at night, and the <i>grab red rod</i> success rate fell from 42.4% (n=66) to 26.2% (n=84) respectively. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of nighttime.</p>
       </div>
+
+      <!-- Emerging behaviors (from the IROS ROSE workshop poster) -->
+      <h4 class="rv" id="p-behaviors">Emerging behaviors</h4>
+
+      <div class="beh rv" id="beh-dive">
+        <p class="beh-h"><span>Behavior #1</span> Diving to the target</p>
+        <div class="beh-grid">
+          <div class="beh-vid"><video muted loop playsinline preload="none" poster="assets/paper/behaviors/dive.jpg" data-src="assets/paper/behaviors/dive.mp4"></video><span class="clock">0.0 s</span></div>
+          <div class="beh-chart">
+            <p class="pp-label">Depth below the surface</p>
+            <svg class="depth" viewBox="0 0 520 280" role="img" aria-label="Depth over the episode: from 4.73 m at 0.4 s to 5.54 m at 7.6 s."></svg>
+          </div>
+        </div>
+        <div class="beh-chips" role="group" aria-label="Jump to a moment"><button type="button" data-t="0.4"><b>0.4 s</b><small>4.73 m deep</small></button><button type="button" data-t="3.1"><b>3.1 s</b><small>4.77 m deep</small></button><button type="button" data-t="6.0"><b>6.0 s</b><small>5.45 m deep</small></button><button type="button" data-t="7.6"><b>7.6 s</b><small>5.54 m deep</small></button></div>
+        <p class="beh-cap"><i>Grab red rod</i> on the <i>Coralita X127</i>: the rod sits below the robot, so the policy dives more than 0.8 meters in under 8 seconds to achieve success. Depth (see Fig. 1), known in standard marine-vehicle convention as “heave,” is included in the action space. On the <i>Coralita X127</i>, tasks were done at varying depths, making heave crucial for success.</p>
+      </div>
+
+      <div class="beh rv" id="beh-rec">
+        <p class="beh-h"><span>Behavior #2</span> Recovering from failure during night time turbulence</p>
+        <div class="beh-two">
+          <div class="beh-one">
+            <p class="rowlab">Moor on ladder — pushed off the pole, re-acquires it</p>
+            <div class="beh-vid"><video muted loop playsinline preload="none" poster="assets/paper/behaviors/recover-ladder.jpg" data-src="assets/paper/behaviors/recover-ladder.mp4"></video><span class="clock">0.0 s</span></div>
+            <div class="beh-chips"><button type="button" data-t="0.3"><b>aligned</b><small>0.3 s</small></button><button type="button" data-t="1.6"><b>knocked off</b><small>1.6 s</small></button><button type="button" data-t="4.0"><b>re-centres</b><small>4.0 s</small></button><button type="button" data-t="6.9"><b>moored</b><small>6.9 s</small></button></div>
+          </div>
+          <div class="beh-one">
+            <p class="rowlab">Grab red rod — misses, backs off, re-approaches</p>
+            <div class="beh-vid"><video muted loop playsinline preload="none" poster="assets/paper/behaviors/recover-grab.jpg" data-src="assets/paper/behaviors/recover-grab.mp4"></video><span class="clock">0.0 s</span></div>
+            <div class="beh-chips"><button type="button" data-t="0.2"><b>miss</b><small>0.2 s</small></button><button type="button" data-t="3.3"><b>backs off</b><small>3.3 s</small></button><button type="button" data-t="4.4"><b>re-approach</b><small>4.4 s</small></button><button type="button" data-t="5.9"><b>grasped</b><small>5.9 s</small></button></div>
+          </div>
+        </div>
+        <p class="beh-cap">ACT showed strong recovery trajectories under rough night-time currents at Manoel Island Marina; SmolVLA showed none. Robustness to turbulence is necessary for successful marine manipulation.</p>
+      </div>
     </article>
 
     <!-- ---------- V. Conclusions and Future Work ---------- -->
@@ -849,6 +882,6 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=3"></script>
+<script src="assets/paper/paper.js?v=4"></script>
 </body>
 </html>
