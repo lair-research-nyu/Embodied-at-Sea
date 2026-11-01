@@ -134,35 +134,91 @@
   addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(navUpdate); } }, { passive: true });
   navUpdate();
 
-  /* ---------- task tabs + flip cards ---------- */
-  var tabs = $$('.pp-tabs [role=tab]');
-  tabs.forEach(function (t) {
-    t.addEventListener('click', function () {
-      tabs.forEach(function (o) { o.setAttribute('aria-selected', o === t ? 'true' : 'false'); document.getElementById(o.getAttribute('data-tab')).hidden = o !== t; });
-      $$('#' + t.getAttribute('data-tab') + ' img[data-src]').forEach(load);
-      $$('#' + t.getAttribute('data-tab') + ' .task').forEach(function (c, i) {
-        if (reduce) return; c.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 450, delay: i * 60, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
-      });
-    });
-  });
+  /* ---------- task flip cards ---------- */
   var fine = window.matchMedia && matchMedia('(hover: hover) and (pointer: fine)').matches;
   $$('.task').forEach(function (c) {
     c.setAttribute('aria-pressed', 'false');
     var set = function (on) { c.classList.toggle('flip', on); c.setAttribute('aria-pressed', on ? 'true' : 'false'); };
-    c.addEventListener('click', function () { set(!c.classList.contains('flip')); });
+    c.addEventListener('click', function () { set(!c.classList.contains('flip')); c._was = c.classList.contains('flip'); });
     if (fine) {
       c.addEventListener('mouseenter', function () { c._was = c.classList.contains('flip'); set(!c._was); });
       c.addEventListener('mouseleave', function () { set(c._was); });
-      c.addEventListener('click', function () { c._was = c.classList.contains('flip'); });
     }
   });
-  var flipAll = $('.pp-flipall');
-  flipAll.addEventListener('click', function () {
-    var on = flipAll.getAttribute('aria-pressed') !== 'true';
-    flipAll.setAttribute('aria-pressed', on ? 'true' : 'false');
-    flipAll.textContent = on ? 'Show initial states' : 'Show goal states';
-    $$('.task').forEach(function (c, i) { setTimeout(function () { c.classList.toggle('flip', on); c.setAttribute('aria-pressed', on ? 'true' : 'false'); }, reduce ? 0 : i % 6 * 70); });
+  $$('.pp-flipall').forEach(function (btn) {
+    var grid = btn.parentElement.nextElementSibling;
+    btn.addEventListener('click', function () {
+      var on = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.textContent = on ? 'Show initial states' : 'Show goal states';
+      $$('.task', grid).forEach(function (c, i) {
+        setTimeout(function () { c.classList.toggle('flip', on); c._was = on; c.setAttribute('aria-pressed', on ? 'true' : 'false'); }, reduce ? 0 : i * 70);
+      });
+    });
   });
+
+  /* ---------- Fig. 3 rebuilt: donut draws itself ---------- */
+  (function () {
+    var fig = $('#fig3'); if (!fig) return;
+    var svg = $('svg.donut', fig), defs = $('defs', svg), g = $('.segs', svg), ns = 'http://www.w3.org/2000/svg';
+    var K = { green: ['Green rod', '#3E9B4F', '#1E5A2A'], red: ['Red rod', '#C8322F', '#6E1412'], white: ['White rod', '#F4F4F2', '#8A9BA3'],
+              moor: ['Moor on post', '#7FB8D6', '#1D5F82'], ring: ['Unhook ring', '#F3D36B', '#8A6D0B'] };
+    var D = [['green', 101, 161], ['red', 101, 153], ['white', 102, 151], ['moor', 125, 301], ['ring', 100, 321]];
+    var TOT = 1616, GAP = 5, R = 90, segs = [], at = 0;
+    function mk(tag, attrs, parent) { var e = document.createElementNS(ns, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); (parent || g).appendChild(e); return e; }
+    D.forEach(function (d) {
+      var k = d[0], c = K[k];
+      var pat = mk('pattern', { id: 'h-' + k, patternUnits: 'userSpaceOnUse', width: 6, height: 6, patternTransform: 'rotate(45 120 120)' }, defs);
+      mk('rect', { width: 6, height: 6, fill: c[1] }, pat); mk('line', { x1: 0, y1: 0, x2: 0, y2: 6, stroke: c[2], 'stroke-width': 1.6 }, pat);
+      [['control', d[1], c[1]], ['turbulent', d[2], 'url(#h-' + k + ')']].forEach(function (p) {
+        var len = p[1], start = at; at += len;
+        var circ = mk('circle', { cx: 120, cy: 120, r: R, pathLength: TOT, class: 'seg', stroke: p[2], 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -start });
+        circ.setAttribute('data-k', k);
+        circ.setAttribute('data-tip', '<b>' + c[0] + ' · ' + p[0] + '</b><br>' + len + ' episodes');
+        var edges = [];
+        if (k === 'white') [R - 23, R + 23].forEach(function (rr) {
+          edges.push(mk('circle', { cx: 120, cy: 120, r: rr, pathLength: TOT, fill: 'none', stroke: '#9AA5AB', 'stroke-width': .8, 'stroke-dasharray': '0 ' + TOT, 'stroke-dashoffset': -start, style: 'transition: stroke-dasharray .7s cubic-bezier(.3,.6,.2,1); pointer-events:none' }));
+        });
+        segs.push({ el: circ, edges: edges, len: len, k: k });
+      });
+    });
+    var ctr = $('.ctr-n', svg), lgs = $$('.donut-legend .lg', fig);
+    function draw() {
+      var t = reduce ? 0 : 180, sum = 0;
+      segs.forEach(function (s, i) {
+        setTimeout(function () {
+          var dash = (s.len - GAP) + ' ' + (TOT - s.len + GAP);
+          s.el.setAttribute('stroke-dasharray', dash); s.el.style.strokeDasharray = dash;
+          s.edges.forEach(function (e) { e.setAttribute('stroke-dasharray', dash); e.style.strokeDasharray = dash; });
+          sum += s.len; ctr.textContent = sum;
+          var lg = fig.querySelector('.lg[data-k="' + s.k + '"]'); if (lg) lg.classList.add('on');
+        }, i * t);
+      });
+      setTimeout(function () { lgs.forEach(function (l) { l.classList.add('on'); }); ctr.textContent = TOT; }, segs.length * t);
+    }
+    onReveal.push(function (e) { if (e === fig) draw(); });
+    if (!hasIO || reduce) draw();
+    function hl(k) { segs.forEach(function (s) { s.el.classList.toggle('dim', !!k && s.k !== k); s.el.classList.toggle('hi', s.k === k); }); }
+    $$('.lg[data-k]', fig).forEach(function (l) {
+      l.addEventListener('mouseenter', function () { hl(l.getAttribute('data-k')); });
+      l.addEventListener('mouseleave', function () { hl(null); });
+    });
+    segs.forEach(function (s) {
+      s.el.addEventListener('mouseenter', function () { hl(s.k); });
+      s.el.addEventListener('mouseleave', function () { hl(null); });
+    });
+  })();
+
+  /* ---------- Fig. 6 rebuilt: assembles when scrolled into view ---------- */
+  (function () {
+    var arch = $('.arch'); if (!arch) return;
+    if (hasIO && !reduce) {
+      var ao = new IntersectionObserver(function (es) {
+        es.forEach(function (e) { if (e.isIntersecting) { arch.classList.add('in'); ao.disconnect(); } });
+      }, { threshold: 0.25 });
+      ao.observe(arch);
+    } else arch.classList.add('in');
+  })();
 
   /* ---------- observation-space builder ---------- */
   var lv = $$('.obs-levels button');
@@ -173,6 +229,7 @@
       setTimeout(function () { s.classList.toggle('on', on); }, reduce ? 0 : (on ? i * 25 : 0));
     });
     $$('.obs-desc').forEach(function (p) { p.hidden = +p.getAttribute('data-l') !== l; });
+    $$('.arch .state span').forEach(function (s) { s.classList.toggle('on', +s.getAttribute('data-l') <= l); });
   }
   lv.forEach(function (b) { b.addEventListener('click', function () { setLevel(+b.getAttribute('data-level')); }); });
   setLevel(1);
@@ -296,6 +353,29 @@
     });
     svg.innerHTML = s;
   })();
+
+  /* ---------- citations: hover shows the reference, click jumps to it ---------- */
+  var refs = $('#refs');
+  $$('a.cite').forEach(function (a) {
+    var li = document.getElementById(a.getAttribute('href').slice(1));
+    if (li) a.setAttribute('data-tip', a.textContent + ' ' + li.innerHTML);
+    a.addEventListener('click', function (e) {
+      if (!li) return;
+      e.preventDefault(); hideTip();
+      refs.open = true;
+      li.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+      li.classList.add('flash'); setTimeout(function () { li.classList.remove('flash'); }, 1800);
+    });
+  });
+
+  /* ---------- copy BibTeX ---------- */
+  var copyBtn = $('.pp-bib .copy');
+  if (copyBtn) copyBtn.addEventListener('click', function () {
+    var txt = $('.pp-bib code').textContent;
+    var done = function () { copyBtn.textContent = 'Copied ✓'; setTimeout(function () { copyBtn.textContent = 'Copy BibTeX'; }, 1600); };
+    if (navigator.clipboard) navigator.clipboard.writeText(txt).then(done, function () {});
+    else { var r = document.createRange(); r.selectNodeContents($('.pp-bib code')); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); document.execCommand('copy'); done(); }
+  });
 
   /* ---------- figure lightbox ---------- */
   var lb = $('.pp-lightbox'), lbImg = $('img', lb), lbCap = $('p', lb);
