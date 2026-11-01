@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=8">
+<link rel="stylesheet" href="assets/paper/paper.css?v=9">
 </head>
 <body>
 
@@ -355,17 +355,16 @@
   </section>
 
   <section class="abstract">
-    <h2>Abstract <img class="rov-mini" src="assets/img/bluerov.png" width="120" height="88" alt=""></h2>
+    <h2>Abstract <img id="rov-home" class="rov-mini" src="assets/img/bluerov.png" width="120" height="88" alt=""></h2>
     <p>Behavior Cloning has demonstrated promising generalization capabilities for robotic manipulation in terrestrial environments. However, marine visual distortions and dynamic currents create a severe domain shift that remains a key bottleneck in adapting generalist architectures to underwater field manipulation. To address this, 1616 episodes of underwater manipulation data were collected in calm and turbulent waters and were used to train 14 generalist Vision-Language-Action (VLA) models (DynamicVLA) with varying proprioception observation configurations. Across three tasks on 1260 gradable on-hardware rollouts in a pool, 10 models outperformed the baseline, with the highest-performing model achieving a 93.3% overall success rate, including partial successes. Results are also introduced from a case study evaluating the performance of a single-task Action Chunking Transformer (ACT) and a generalist VLA (SmolVLA) policy for two tasks in marine archaeology and conservation: grasping and mooring. Experiments are performed on an ROV on and around the WWII wreck Coralita X127 and at Manoel Island Marina, Malta. Across 748 collected episodes and 508 gradable on-hardware rollouts, the ACT policy substantially outperformed SmolVLA (47.9% vs. 7.9% pooled success rate), earning a 66.7% success rate on the most successful task at the marine archaeological site. To enable further contributions to embodied intelligence in marine field robotics, the BLUEMBODIED KIT used to collect data, train models, and deploy policies on the ROV has been open sourced.</p>
   </section>
 
   <!-- ======================= THE PAPER, INTERACTIVE ======================= -->
   <section class="paper" id="paper" aria-label="The paper">
-    <div class="rov-lane" aria-hidden="true"><span class="spot a"></span><span class="spot b"></span><span class="rod"></span><img class="rov" src="assets/img/bluerov-240.webp" width="240" height="176" alt=""></div>
     <nav class="pp-chapters" aria-label="Paper sections">
       <a href="#p-intro">Can land-trained VLAs be adapted to the sea?</a>
       <a href="#p-data">Data collection (on and off the field)</a>
-      <a href="#p-models">Model Descriptions</a>
+      <a href="#p-models">Model Architectures</a>
       <a href="#p-pool">Pool Deployment Results</a>
       <a href="#p-marine">Marine Deployment Results</a>
       <a href="#p-concl">Conclusions</a>
@@ -442,7 +441,7 @@
 
 
       <h4 class="rv">1) Pool Deployment</h4>
-      <p class="rv">To investigate how BC-based policies perform underwater in a controlled environment, three task families were explored (see Fig. 2): <i>grab</i>, approaching an object and grasping it with the end-effector to simulate sampling a specimen, <i>moor</i>, approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure, and <i>remove</i>, approaching a ring on a post and unhooking it to simulate a rope line release procedure.</p>
+      <p class="rv">Three task families were explored (see Fig. 2) in both calm and turbulent waters (agitated by a human volunteer) in a pool.</p>
 
       <div class="pp-taskhead rv"><span class="pp-hint">Hover or tap a photo to flip between its initial state and its goal.</span><button class="pp-flipall" type="button" aria-pressed="false">Show goal states</button></div>
       <div class="pp-tasks five">
@@ -453,9 +452,13 @@
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/pool-ring-start.webp" alt="Remove ring from post, pool: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/pool-ring-goal.webp" alt="Remove ring from post, pool: goal" width="720" height="405"><span class="state"></span><b>Remove Ring from Post</b><small>Pool</small></button>
       </div>
       <p class="pp-cap rv"><b>Fig. 2. Pool Deployment: Experimental tasks evaluated in a controlled environment.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split (see Fig. 3) between calm and turbulent waters created by a human volunteer (see Fig. 5). Rod locations and color order were randomized between episodes. Post location stayed relatively the same, but initial robot and ring configurations varied between episodes as well.</p>
+      <ul class="pp-tasklist rv">
+        <li><b>Grab</b>: approaching an object and grasping it with the end-effector to simulate sampling a specimen.</li>
+        <li><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</li>
+        <li><b>Remove</b>: approaching a ring on a post and unhooking it to simulate a rope line release procedure.</li>
+      </ul>
 
-      <p class="rv">In total, 1616 human-teleoperated episodes were collected on these tasks (see Fig. 3), which are split between calm, turbulence free episodes (established as the “control”) and turbulent episodes created from a human volunteer manually agitating the water to create a sloshing, “wave” like motion.</p>
-
+      <p class="pp-flow rv">In total…</p>
       <figure class="pp-fig rv" id="fig3">
         <div class="donut-wrap">
           <svg class="donut" viewBox="0 0 240 240" role="img" aria-label="Donut chart of the 1616 pool episodes by task and condition. Grab the rod: green 101 control and 161 turbulent; red 101 and 153; white 102 and 151. Moor on post: 125 and 301. Unhook ring: 100 and 321.">
@@ -477,16 +480,20 @@
             <p class="lg cond"><i class="hatch"></i>Turbulent</p>
           </div>
         </div>
+        <p class="pp-flow end">…were collected.</p>
         <figcaption><b>Fig. 3. Pool Deployment: Dataset split.</b> Training data collected in the pool environment incorporates multi-modal observations and human-made turbulent waters. The dataset is broken down into two conditions: a control condition (calm waters) and a turbulent condition.</figcaption>
       </figure>
 
-      <figure class="pp-fig wide rv">
-        <img class="zoomable" data-src="assets/paper/fig/fig5-calm-vs-turbulent.webp" width="2200" height="554" alt="Fig. 5: mean attitude and IMU signals over all Grab the Red Rod episodes, calm vs turbulent.">
+      <p class="rv">Turbulence shows up directly in what the robot senses: its average roll, pitch and yaw barely change, but in turbulent water they swing much more. In a typical episode, roll varies about 1.9× as much as in calm water, and vertical acceleration about 2.7× as much (Fig. 5).</p>
+
+      <figure class="pp-fig rv" id="fig5">
+        <div class="f5" role="img" aria-label="Fig. 5: nine small charts of roll, pitch, yaw, their rates and linear accelerations over episode progress. Turbulent bands are wider than calm bands in eight of nine channels; the means stay close."></div>
+        <p class="pp-legend f5-legend"><span class="sw calm"></span>Control (calm): mean ± 1 std <span class="sw turb"></span>Turbulent: mean ± 1 std <span class="f5-note">×N = how much more a typical turbulent episode moves than a calm one</span></p>
         <figcaption><b>Fig. 5. Pool Deployment: calm vs. turbulent conditions.</b> Mean attitude and few choice IMU observations plotted over all <i>Grab the Red Rod</i> episodes (see Fig. 3). Since all models (except the baseline) observe roll, pitch, and yaw, these measurements illustrate how turbulence manifests in the observation space.</figcaption>
       </figure>
 
       <h4 class="rv">2) Marine Deployment</h4>
-      <p class="rv">To examine the performance of BC-based policies in real ocean conditions, two task families were explored (see Fig. 4): <i>grab</i>, approaching an object and grasping it with the end-effector, and <i>moor</i>, approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</p>
+      <p class="rv">Two task families were explored (see Fig. 4) in real ocean conditions.</p>
 
       <div class="pp-taskhead rv"><span class="pp-hint">Hover or tap a photo to flip between its initial state and its goal.</span><button class="pp-flipall" type="button" aria-pressed="false">Show goal states</button></div>
       <div class="pp-tasks six">
@@ -498,6 +505,10 @@
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/sea-moor-rope-start.webp" alt="Moor on rope, shipwreck: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/sea-moor-rope-goal.webp" alt="Moor on rope, shipwreck: goal" width="720" height="405"><span class="state"></span><b>Moor on Rope</b><small>Shipwreck</small></button>
       </div>
       <p class="pp-cap rv"><b>Fig. 4. Marine Deployment: Experimental tasks evaluated across different underwater environments.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split between calm (Control Condition) and turbulent waters. Data collection at the Marina and Coralita X127 shipwreck took place during both day and night, featuring varying disturbances (see Fig. 1).</p>
+      <ul class="pp-tasklist rv">
+        <li><b>Grab</b>: approaching an object and grasping it with the end-effector.</li>
+        <li><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</li>
+      </ul>
 
       <p class="rv">In total, 748 human-teleoperated episodes were collected across three sites, progressing from a preliminary controlled test pool set (79 episodes, which is excluded from the Pool Study) to the <i>Coralita X127</i> shipwreck (335 episodes total) and finally to Manoel Island Marina, Malta (334 episodes total). To improve dataset robustness, our collection pipeline includes recovery trajectories obtained by resampling directly from failure states. To make our policies more robust for field deployment, both data collection and testing rollouts occurred in the daytime and nighttime (see Fig. 4).</p>
     </article>
@@ -505,7 +516,7 @@
     <!-- ---------- III-B. Model Descriptions ---------- -->
     <article class="pp-chapter" id="p-models">
       <p class="pp-num rv">Section III-B</p>
-      <h3 class="rv">Model Descriptions</h3>
+      <h3 class="rv">Model Architectures</h3>
       <p class="rv">Unlike fixed-base manipulators, ROVs are continuously jostled by waves and currents across all six degrees of freedom, shifting the camera viewpoint and the vehicle’s pose relative to the target between consecutive actions. As a result, a stationary object to be manipulated in a world frame appears to move in the robot frame. In especially turbulent waters, free-floating manipulation objects tend to sway or move as well, adding another dimension of uncertainty to a policy's predicted trajectory. This turns an otherwise static task into a dynamic one that penalizes any policy too slow to react. As such, three different model architectures were explored, each of which has a promise of faster inference time, a characteristic necessary for dynamic environments. As well, new observation and action spaces are needed for underwater robots. Notably, the use of these observations and actions are novel within the VLA research space.</p>
 
       <h4 class="rv">1) Model Architectures</h4>
@@ -883,7 +894,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=4"></script>
-<script src="assets/paper/rov-scroll.js?v=1"></script>
+<script src="assets/paper/paper.js?v=5"></script>
+<script src="assets/paper/rov-journey.js?v=1"></script>
 </body>
 </html>
