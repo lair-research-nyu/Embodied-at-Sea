@@ -369,12 +369,12 @@ img.loaded { opacity: 1; transition: opacity .6s ease; }
 .f1-skill span, .f1-act span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: clamp(.85rem, 1.3vw, 1.1rem); white-space: nowrap; }
 .f1-pre { grid-column: 2; grid-row: 1; align-self: start; background: var(--g1); border-radius: 8px; padding: 8px; }
 .f1-sites { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.f1 .site { background: var(--g2); border-radius: 6px; padding: 6px; }
-.f1 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.f1 .tile { margin: 0; background: var(--g3); border-radius: 4px; padding: 4px 4px 3px; text-align: center; }
+.f1 .site { background: var(--g2); border-radius: 6px; padding: 6px; min-width: 0; }
+.f1 .tiles { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 5px; }
+.f1 .tile { margin: 0; background: var(--g3); border-radius: 4px; padding: 3px 3px 3px; text-align: center; min-width: 0; }
 .f1 .tile video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 3px; background: #0b2230; }
-.f1 .tile figcaption { font-size: clamp(.6rem, .85vw, .82rem); line-height: 1.25; margin-top: 4px; white-space: nowrap; }
-.f1 .sun { color: #e6a700; } .f1 .moon { color: #f2c94c; }
+.f1 .tile figcaption { font-size: clamp(.58rem, .8vw, .8rem); line-height: 1.25; margin-top: 4px; white-space: nowrap; letter-spacing: -.01em; }
+.f1 .sun { color: #d99a00; } .f1 .moon { color: #5b4a0e; }
 .f1-low { grid-column: 2; grid-row: 2; align-self: start; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; background: var(--g1); border-radius: 8px; padding: 8px; }
 .f1-obs, .f1-dis { border-radius: 6px; padding: 6px 8px 8px; background: var(--g2); }
 .f1-obs { background: var(--bl2); }
@@ -388,7 +388,7 @@ img.loaded { opacity: 1; transition: opacity .6s ease; }
 .f1-traj { background: var(--g1); border-radius: 8px; padding: 8px; }
 .f1-traj video { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; background: #0b2230; }
 .f1-pov { display: grid; grid-template-columns: 34px 1fr; gap: 8px; align-self: start; }
-.f1-pov .lbl { background: var(--g1); border-radius: 6px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-weight: 700; font-size: clamp(.75rem, 1.1vw, .95rem); }
+.f1-pov .lbl { background: var(--g1); border-radius: 6px; writing-mode: vertical-rl; transform: rotate(180deg); text-align: center; font-weight: 400; font-size: clamp(.68rem, .95vw, .85rem); white-space: nowrap; }
 .f1 .film {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 12px 6px; border-radius: 4px;
   background:
@@ -440,7 +440,7 @@ img.loaded { opacity: 1; transition: opacity .6s ease; }
 .f1-fig { margin: 8px 0 34px; }
 .f1-fig > figcaption { font-size: .86rem; line-height: 1.6; color: var(--muted); margin-top: 10px; }
 .f1-fig > figcaption b { color: var(--ink); }
-.f1 { grid-template-columns: 34px minmax(0, 54fr) 40px 34px minmax(0, 44fr); gap: 10px 8px; padding: 14px; }
+.f1 { grid-template-columns: 34px minmax(0, 60fr) 36px 34px minmax(0, 40fr); gap: 10px 8px; padding: 14px; }
 @media (max-width: 760px) { .f1 { grid-template-columns: 1fr; } }
 
 /* Fig. 1: the six actions out of the ACT column (as in the ICRA rebuttal video) */
@@ -489,3 +489,18 @@ svg.depth .mkl { font: 600 12px Inter, system-ui, sans-serif; fill: var(--ink); 
 svg.depth .head { stroke: var(--ink); stroke-width: 1; stroke-dasharray: 3 3; opacity: .45; }
 svg.depth .dot { fill: var(--act); stroke: #fff; stroke-width: 2.5; }
 @media (max-width: 700px) { .beh-grid, .beh-two { grid-template-columns: 1fr; } .beh-chips { grid-template-columns: repeat(2, 1fr); } }
+
+/* ---------- the margin BlueROV that carries a rod as you scroll ---------- */
+.rov-lane {
+  position: fixed; top: 0; height: 100vh; width: 150px; z-index: 5; pointer-events: none;
+  left: calc(50% + 500px + (50vw - 500px - 150px) / 2);
+  opacity: 0; transition: opacity .5s ease;
+}
+.rov-lane.on { opacity: 1; }
+.rov-lane .rov { position: absolute; left: 0; top: 0; width: 96px; height: auto; will-change: transform; filter: drop-shadow(0 6px 10px rgba(4,19,31,.18)); }
+.rov-lane .rod { position: absolute; left: 0; top: 0; width: 58px; height: 10px; border-radius: 5px; will-change: transform;
+  background: linear-gradient(180deg, #e2554f 0%, #c8322f 55%, #8f1f1c 100%); box-shadow: 0 3px 6px rgba(4,19,31,.18); }
+.rov-lane .spot { position: absolute; left: 50%; width: 70px; height: 14px; margin-left: -35px; border-radius: 50%; }
+.rov-lane .spot.a { top: calc(var(--startY, 24vh) + 4px); border: 1.5px dashed #9fb3bc; }
+.rov-lane .spot.b { top: calc(var(--dropY, 80vh) + 8px); background: radial-gradient(ellipse at center, #d9c9a3 0%, #e8dcc0 55%, transparent 72%); }
+@media (max-width: 1379px) { .rov-lane { display: none; } }
