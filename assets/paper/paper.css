@@ -714,3 +714,5 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 .dn-box .sun, .dn-box .moon { font-size: 1.35em; line-height: 1; vertical-align: -0.08em; }
 .dn-box .pp-label .sun, .dn-box .pp-label .moon { font-size: 1.6em; }
 .dn-box .pp-legend .sun, .dn-box .pp-legend .moon { margin-left: -4px; }
+/* table captions sit above their charts, as in the paper */
+.pp-cap + .pp-chart { margin-top: 10px; }
