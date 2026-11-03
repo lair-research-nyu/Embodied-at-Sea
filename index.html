@@ -367,7 +367,7 @@
       <a href="#p-models">Model Architectures</a>
       <a href="#p-pool">Pool Deployment Results</a>
       <a href="#p-marine">Marine Deployment Results</a>
-      <a href="#p-concl">Conclusions</a>
+      <a href="#p-concl">In Conclusion...</a>
       <a href="#p-cite">Citation</a>
       <span class="pp-progress" aria-hidden="true"></span>
     </nav>
@@ -681,7 +681,7 @@
         <div class="t2"></div>
         <p class="pp-legend"><span class="sw act"></span>ACT <span class="sw smol"></span>SmolVLA <span class="k ci"></span>95% CI <span class="f7-note">hover a bar for details</span></p>
       </div>
-      <p class="pp-cap rv"><b>Table II. Marine Deployment: Success rate by task and location.</b> ACT consistently outperforms SmolVLA, and Mooring is the best-performing task family for both architectures. Top: pooled across sites; bottom: each task and location, with the number of gradable rollouts (<i>n</i>).</p>
+      <p class="pp-cap rv"><b>Table II. Marine Deployment: Success rate by task and location.</b> ACT consistently outperforms SmolVLA, and Mooring is the best-performing task family for both architectures. Top: pooled across sites; bottom: each task and location, with the number of gradable rollouts (<i>n</i>) and 95% confidence interval.</p>
 
       <p class="rv">To test whether a single trained policy could generalize across physically distinct instances of the same task family, one fixed ACT checkpoint was evaluated on three mooring variants without any per-site fine-tuning: on a ladder at the Marina, on a tethered rope on the Shipwreck, and on a post on the Shipwreck (see Fig. 4). Success rates were 56.3% (n=206) on the ladder, 66.7% (n=21) on rope, and 36.8% (n=19) on the mooring post (Table II). The comparable success rates on the ladder and rope tasks suggest that the policy learned a site-agnostic mooring strategy rather than overfitting to the Marina ladder's specific visual features. The lower success rate observed for the post likely results from its less forgiving target geometry compared to the ladder and rope, even though both the rope and post exhibited greater occlusion from algae and marine overgrowth than the ladder.</p>
       <p class="rv">ACT consistently outperformed SmolVLA on every task family (Table II) pooled across sites: 37.6% versus 0.0% on <i>grab</i> and 55.7% versus 12.5% on <i>moor</i>. The gap is largest on the tasks with the most training data: at the Marina ladder, ACT reached 56.3% on mooring versus SmolVLA's 12.5%, and 42.9% versus 0.0% on <i>grab red rod</i>, where SmolVLA never succeeded. ACT's best <i>grab</i> result was <i>grab green rod</i> in the pool (63.6%), which is expected given the controlled environment.</p>
@@ -921,7 +921,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=11"></script>
+<script src="assets/paper/paper.js?v=12"></script>
 <script src="assets/paper/rov-journey.js?v=4"></script>
 </body>
 </html>

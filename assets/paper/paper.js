@@ -577,8 +577,7 @@
   /* ---------- Table II as a bar chart (pooled across sites, then by task and location) ---------- */
   (function () {
     var box = $('#chart-t2 .t2'); if (!box) return;
-    function wilson(k, n) { if (!n) return [0, 0]; var z = 1.96, p = k / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d; return [100 * (c - h), 100 * (c + h)]; }
-    function pool(rows) { var n = 0, k = 0; rows.forEach(function (r) { n += r[3]; k += Math.round(r[4] * r[3] / 100); }); var w = wilson(k, n); return [n, 100 * k / n, w[0], w[1]]; }
+    function pool(rows) { var n = 0, k = 0; rows.forEach(function (r) { n += r[3]; k += Math.round(r[4] * r[3] / 100); }); return [null, 100 * k / n, null, null]; }
     function pick(f) { return T2.filter(f); }
     var isAct = function (r) { return r[2] === 'ACT'; }, isGrab = function (r) { return /^Grab/.test(r[0]); };
     var groups = [
@@ -601,9 +600,10 @@
         var grp = el('div', 'grp'); grp.appendChild(el('b', '', g[0]));
         [['ACT', 'act', g[1]], ['SmolVLA', 'smol', g[2]]].forEach(function (p) {
           if (!p[2]) return;
-          var v = p[2], row = el('div', 'row');
-          row.innerHTML = '<span>' + p[0] + '</span><div class="track"><i class="w" style="left:' + v[2].toFixed(1) + '%;width:' + (v[3] - v[2]).toFixed(1) + '%"></i><div class="fill ' + p[1] + '" data-w="' + v[1] + '" style="transition-delay:' + (i * 60) + 'ms"></div><div class="num" data-at="' + Math.max(v[1], v[3]).toFixed(1) + '" style="transition-delay:' + (i * 60) + 'ms">' + fmt(v[1]) + '% <small>n = ' + v[0] + '</small></div></div>';
-          row.querySelector('.track').setAttribute('data-tip', '<b>' + p[0] + ' · ' + g[0] + '</b><br>' + fmt(v[1]) + '% success (n = ' + v[0] + ')<br>95% CI: ' + fmt(v[2]) + '–' + fmt(v[3]) + '%');
+          var v = p[2], row = el('div', 'row'), ci = v[2] != null;   // pooled rows: rate only, as in the paper
+          row.innerHTML = '<span>' + p[0] + '</span><div class="track">' + (ci ? '<i class="w" style="left:' + v[2].toFixed(1) + '%;width:' + (v[3] - v[2]).toFixed(1) + '%"></i>' : '') +
+            '<div class="fill ' + p[1] + '" data-w="' + v[1] + '" style="transition-delay:' + (i * 60) + 'ms"></div><div class="num" data-at="' + (ci ? Math.max(v[1], v[3]) : v[1]).toFixed(1) + '" style="transition-delay:' + (i * 60) + 'ms">' + fmt(v[1]) + '%' + (ci ? ' <small>n = ' + v[0] + '</small>' : '') + '</div></div>';
+          row.querySelector('.track').setAttribute('data-tip', '<b>' + p[0] + ' · ' + g[0] + '</b><br>' + fmt(v[1]) + '% success' + (ci ? ' (n = ' + v[0] + ')<br>95% CI: ' + fmt(v[2]) + '–' + fmt(v[3]) + '%' : ''));
           grp.appendChild(row); i++;
         });
         box.appendChild(grp);
