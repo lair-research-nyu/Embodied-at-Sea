@@ -688,3 +688,19 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 /* the obs-space picker highlights its model in the Table I chart */
 .bar-row.pick { background: var(--foam); border-radius: 6px; box-shadow: inset 3px 0 0 var(--tide); }
 .bar-row.flash { animation: t1flash 1.6s ease; border-radius: 6px; }
+/* Table II chart, compact: group name beside its bars, thinner bars, tighter spacing */
+#chart-t2 .t2 { gap: 5px; }
+#chart-t2 .t2-sec { margin: 8px 0 0 !important; }
+#chart-t2 .grp { display: grid; grid-template-columns: 13rem minmax(0, 1fr); align-items: center; column-gap: 8px; padding: 2px 0; border-bottom: 1px solid #eef2f4; }
+#chart-t2 .grp > b { grid-column: 1; grid-row: 1 / span 2; margin: 0; font-size: .8rem; font-weight: 600; }
+#chart-t2 .grp > .row { grid-column: 2; margin: 0; grid-template-columns: 4.2rem 1fr; }
+#chart-t2 .track { height: 17px; }
+#chart-t2 .fill { top: 3px; height: 11px; }
+#chart-t2 .w { top: 8px; }
+#chart-t2 .w::before, #chart-t2 .w::after { top: -3px; height: 8px; }
+#chart-t2 .num { top: 0; font-size: .76rem; }
+#chart-t2 .row > span { font-size: .74rem; }
+@media (max-width: 640px) {
+  #chart-t2 .grp { grid-template-columns: 1fr; }
+  #chart-t2 .grp > b, #chart-t2 .grp > .row { grid-column: 1; grid-row: auto; }
+}
