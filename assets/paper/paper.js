@@ -617,7 +617,7 @@
       box.appendChild(grp);
     });
     function go() { $$('#chart-night .fill').forEach(function (f) { var w = f.getAttribute('data-w') + '%'; f.style.width = w; f.nextElementSibling.style.left = w; }); }
-    onReveal.push(function (e) { if (e.id === 'chart-night') go(); });
+    onReveal.push(function (e) { if (e.id === 'chart-night' || (e.contains && e.contains(box))) go(); });   // the box around it is what reveals
     if (!hasIO || reduce) go();
   })();
 
