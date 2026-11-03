@@ -437,7 +437,7 @@
       'This is <a href="#t1-row-' + n + '" class="obs-go">model #' + n + ' in Table I</a>: <b>' + d.obs + (n === 1 ? ' (baseline)' : '') + '</b>, ' +
       fmt(d.allp) + '% overall success incl. partial, ' + fmt(d.lat) + ' ms latency.' +
       (n === 3 ? ' <span class="obs-note">Model #2 uses the same inputs but was trained on calm-water episodes only.</span>' : '');
-    $$('#table-1 tbody tr').forEach(function (tr) { tr.classList.toggle('pick', tr.id === 't1-row-' + n); });
+    $$('#chart-pool .bar-row').forEach(function (tr) { tr.classList.toggle('pick', tr.id === 't1-row-' + n); });
   }
   obBtns.forEach(function (b) { b.addEventListener('click', function () { toggle(+b.getAttribute('data-b')); }); });
   winBtns.forEach(function (b) { b.addEventListener('click', function () { win = b.getAttribute('data-w'); renderObs(); }); });
@@ -457,6 +457,7 @@
     var r = el('div', 'bar-row' + (d.n === 1 ? ' base' : ''));
     r.innerHTML = '<span class="lab"><i>#' + d.n + '</i>' + d.obs + (d.n === 1 ? ' †' : '') + '</span><span class="track"><span class="fill"></span><span class="err"></span><span class="val"></span></span>';
     r.setAttribute('data-tip', '');
+    r.id = 't1-row-' + d.n;
     barsBox.appendChild(r); rows[d.n] = r;
   });
   var ref = el('div', 'refline'); barsBox.appendChild(ref);
@@ -506,19 +507,6 @@
   drawBars();
   if (!hasIO || reduce) { shown = true; drawBars(); }
 
-  /* ---------- Table I: full table ---------- */
-  (function () {
-    var t = $('#table-1');
-    var head = '<thead><tr><th class="sticky"></th><th></th><th></th><th colspan="4">Grab the rod</th><th>Moor on Post</th><th>Remove Ring</th><th colspan="2">Overall</th><th>Latency</th></tr>' +
-      '<tr><th class="sticky">#</th><th class="l">Observation Space</th><th>Obs.<br>Dim.</th><th>succ.</th><th>part.</th><th>%</th><th>%<br>w/ part.</th><th>%</th><th>%</th><th>%</th><th>%<br>w/ part.</th><th>(ms)</th></tr></thead>';
-    var body = T1.map(function (d) {
-      var boldAll = d.n !== 1 && d.allp > BASE.allp, boldLat = d.n !== 1 && d.lat < BASE.lat;
-      return '<tr id="t1-row-' + d.n + '"' + (d.n === 3 ? ' class="shade"' : '') + '><td class="sticky">#' + d.n + '</td><td class="l">' + d.obs + (d.n === 1 ? '<sup>†</sup>' : '') + '</td><td>' + d.dim + '</td><td>' + d.succ + '</td><td>' + d.part +
-        '</td><td>' + fmt(d.grab) + '</td><td>' + fmt(d.grabp) + '</td><td>' + fmt(d.moor) + '</td><td>' + fmt(d.ring) + '</td><td>' + fmt(d.all) +
-        '</td><td>' + fmt(d.allp) + (boldAll ? ' <span class="tri">▲</span>' : '') + '</td><td>' + fmt(d.lat) + ' ± ' + fmt(d.sd) + (boldLat ? ' <span class="tri">▲</span>' : '') + '</td></tr>';
-    }).join('');
-    t.insertAdjacentHTML('beforeend', head + '<tbody>' + body + '</tbody>');
-  })();
 
   /* ---------- Fig. 7: models ranked by time to completion (log x), rows fade in ---------- */
   (function () {

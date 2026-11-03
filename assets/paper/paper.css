@@ -685,3 +685,6 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 .pp-table .tri { color: var(--bar); font-size: .7em; }
 .f8-card { display: flex; flex-direction: column; justify-content: flex-end; }
 #chart-t2 .w { background: rgba(4,19,31,.45); }
+/* the obs-space picker highlights its model in the Table I chart */
+.bar-row.pick { background: var(--foam); border-radius: 6px; box-shadow: inset 3px 0 0 var(--tide); }
+.bar-row.flash { animation: t1flash 1.6s ease; border-radius: 6px; }

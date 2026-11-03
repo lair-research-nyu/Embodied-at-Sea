@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=22">
+<link rel="stylesheet" href="assets/paper/paper.css?v=23">
 </head>
 <body>
 
@@ -629,7 +629,7 @@
       <h3 class="rv">Pool Deployment Results</h3>
       <div class="pp-chart rv" id="chart-pool">
         <div class="pp-chart-head">
-          <p class="pp-label">Table I, as a chart — choose a measure</p>
+          <p class="pp-label">Table I — choose a measure</p>
           <div class="seg" role="radiogroup" aria-label="Measure">
             <button role="radio" aria-checked="true" data-m="allp">Overall incl. partial</button>
             <button role="radio" aria-checked="false" data-m="all">Overall</button>
@@ -644,12 +644,7 @@
         <p class="pp-legend"><span class="sw base"></span>Baseline (images only) <span class="sw dash"></span>Baseline level <span class="sw best"></span>Beats the baseline</p>
       </div>
 
-      <div class="pp-table-wrap rv">
-        <table class="pp-table" id="table-1">
-          <caption><b>Table I. Pool Deployment: Success rates and forward-pass latency of multi-task models.</b> A success for the <i>Grab the rod</i> task implies grabbing the right color rod, while a <i>partial</i> is when the model grabs a rod of the wrong color. Including partial successes and across 90 total gradable on-hardware rollouts (30 rollouts per task), 10 different DynamicVLA models outperformed the baseline. Latency is the time to produce one 20-step action chunk (mean over all models: 107.4 ± 11.4 ms). Four models run faster than the baseline despite a larger observation space.</caption>
-        </table>
-        <p class="pp-foot">† Baseline: no proprioception. ▲: better than the baseline. Obs. Dims. exclude Δ tokens.</p>
-      </div>
+      <p class="pp-cap rv"><b>Table I. Pool Deployment: Success rates and forward-pass latency of multi-task models.</b> A success for the <i>Grab the rod</i> task implies grabbing the right color rod, while a <i>partial</i> is when the model grabs a rod of the wrong color. Including partial successes and across 90 total gradable on-hardware rollouts (30 rollouts per task), 10 different DynamicVLA models outperformed the baseline. Latency is the time to produce one 20-step action chunk (mean over all models: 107.4 ± 11.4 ms). Four models run faster than the baseline despite a larger observation space. † Baseline: no proprioception. ▲: better than the baseline.</p>
 
       <figure class="pp-fig wide rv" id="fig7">
         <div class="f7" role="img" aria-label="Fig. 7: models ranked by median time to completion on successful rollouts; attitude + IMU + thruster PWM is fastest at 6.9 s, the images-only baseline slowest at 16.1 s."></div>
@@ -920,7 +915,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=12"></script>
+<script src="assets/paper/paper.js?v=13"></script>
 <script src="assets/paper/rov-journey.js?v=4"></script>
 </body>
 </html>
