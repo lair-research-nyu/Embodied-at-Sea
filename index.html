@@ -627,8 +627,6 @@
     <article class="pp-chapter" id="p-pool">
       <p class="pp-num rv">Section IV-B</p>
       <h3 class="rv">Pool Deployment Results</h3>
-      <p class="rv">Overall, ten models beat the visual-only baseline when partial successes are included, (see Table I). The highest performer in both overall task success and forward pass latency, i.e. ATTITUDE trained on both control and turbulent pool episodes, achieved a 93.3% success rate including partial successes, 17.7 percentage points higher than its runner-up, ATTITUDE + IMU + PWM + Δ Tokens, at 75.6%. ATTITUDE also has a mean forward pass latency of 95.2 milliseconds, 3.5 milliseconds faster than its runner-up, ATTITUDE + IMU + PWM (see Table I). ATTITUDE, however, is not the fastest model in terms of successful task time to completion: ATTITUDE + IMU + PWM outperformed ATTITUDE by 0.4 s by a pooled task average.</p>
-
       <div class="pp-chart rv" id="chart-pool">
         <div class="pp-chart-head">
           <p class="pp-label">Table I, as a chart — choose a measure</p>
@@ -664,6 +662,8 @@
         <p class="pp-legend f8-legend"><span>0</span><span class="f8-bar"></span><span>8</span> rollouts (of 10) · outlined = the colour asked for · hover a cell for the count</p>
         <figcaption><b>Fig. 8. Pool Deployment: Rod color confusion per multi-task model.</b> Rows: color asked for in text prompt; columns: color grabbed during rollout. Perceptive confusion exists strongly in every single multi-task model, and no model stood out to be perceptually more accurate than the other. The most common confusion is between red and green rods. † Baseline: no proprioception of any kind.</figcaption>
       </figure>
+
+      <p class="rv">Overall, ten models beat the visual-only baseline when partial successes are included, (see Table I). The highest performer in both overall task success and forward pass latency, i.e. ATTITUDE trained on both control and turbulent pool episodes, achieved a 93.3% success rate including partial successes, 17.7 percentage points higher than its runner-up, ATTITUDE + IMU + PWM + Δ Tokens, at 75.6%. ATTITUDE also has a mean forward pass latency of 95.2 milliseconds, 3.5 milliseconds faster than its runner-up, ATTITUDE + IMU + PWM (see Table I). ATTITUDE, however, is not the fastest model in terms of successful task time to completion: ATTITUDE + IMU + PWM outperformed ATTITUDE by 0.4 s by a pooled task average.</p>
 
       <p class="rv">More proprioception observations did not necessarily lead to better performance: for calm-water manipulation, a smaller observation space provided a better balance between prediction speed and task success, while larger observation spaces, specifically with the addition of IMU and PWM observations, led to faster overall task completion. Similarly, a 4 second Δ token window enabled better performance than other window lengths for a controlled environment.</p>
 
