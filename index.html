@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=15">
+<link rel="stylesheet" href="assets/paper/paper.css?v=16">
 </head>
 <body>
 
@@ -561,31 +561,31 @@
     </div>
     <figcaption><b>Fig. 6. Modified DynamicVLA Architecture.</b> The policy outputs a six-dimensional action at each step: four motion commands and two tool commands. The motion commands are sent as MAVLink <code>MANUAL_CONTROL</code> messages to the BlueROV2's onboard ArduSub autopilot, which converts them into individual thrust commands for its six thrusters. The policy therefore drives the robot through the same interface used to collect the teleoperated demonstrations it was trained on. Image modified from <a class="cite" href="#ref-22">[22]</a>.</figcaption>
 
-    <div class="pp-obs">
-      <p class="pp-label">Pool observation space — pick a block <span>(the state lines in Fig. 6 follow your choice)</span></p>
-      <div class="obs-levels" role="radiogroup" aria-label="Observation space">
-        <button role="radio" aria-checked="true" data-level="1"><b>ATTITUDE</b><span>3 dims</span></button>
-        <button role="radio" aria-checked="false" data-level="2"><b>+ IMU</b><span>13 dims</span></button>
-        <button role="radio" aria-checked="false" data-level="3"><b>+ THRUSTER PWM</b><span>19 dims</span></button>
-      </div>
-      <div class="obs-chips" aria-live="polite">
-        <span data-l="1" title="roll (rad)">φ roll</span><span data-l="1" title="pitch (rad)">θ pitch</span><span data-l="1" title="yaw (rad)">ψ yaw</span>
-        <span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>x</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>y</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>z</sub></span>
-        <span data-l="2" title="roll speed (rad/s)">ω<sub>x</sub></span><span data-l="2" title="pitch speed (rad/s)">ω<sub>y</sub></span><span data-l="2" title="yaw speed (rad/s)">ω<sub>z</sub></span>
-        <span data-l="2" title="climb rate (m/s)">v<sub>z</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>x</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>y</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>z</sub></span>
-        <span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>1</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>2</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>3</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>4</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>5</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>6</sub></span>
-      </div>
-      <p class="obs-desc" data-l="1">The ATTITUDE block consists of roll (φ), pitch (θ), and yaw (ψ) (rad), forming a 3-dimensional observation space.</p>
-      <p class="obs-desc" data-l="2" hidden>The IMU block adds ten channels: body-frame linear accelerations a<sub>x</sub>, a<sub>y</sub>, and a<sub>z</sub> (m/s²) from raw IMU readings; EKF-fused angular rates ω<sub>x</sub> (<i>rollspeed</i>), ω<sub>y</sub> (<i>pitchspeed</i>), and ω<sub>z</sub> (<i>yawspeed</i>) (rad/s) from ATTITUDE; vertical velocity v<sub>z</sub> (<i>climb</i>) (m/s) from VFR HUD; and the three vibration measurements vib<sub>x</sub>, vib<sub>y</sub>, and vib<sub>z</sub> (m/s²) from VIBRATION. Combined with the ATTITUDE block, this forms a 13-dimensional observation space.</p>
-      <p class="obs-desc" data-l="3" hidden>The THRUSTER PWM block adds six commanded thruster outputs u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub> from the raw server output (µs), with a neutral value of 1500 µs. Combined with the ATTITUDE and IMU blocks, this forms a 19-dimensional observation space.</p>
-    </div>
     </figure>
 
     <article class="pp-chapter" id="p-models-2">
       <h4 class="rv">1) Observation Spaces</h4>
+      <div class="pp-obs">
+        <p class="pp-label">Pool observation space — pick a block <span>(the state lines in Fig. 6 follow your choice)</span></p>
+        <div class="obs-levels" role="radiogroup" aria-label="Observation space">
+          <button role="radio" aria-checked="true" data-level="1"><b>ATTITUDE</b><span>3 dims</span></button>
+          <button role="radio" aria-checked="false" data-level="2"><b>+ IMU</b><span>13 dims</span></button>
+          <button role="radio" aria-checked="false" data-level="3"><b>+ THRUSTER PWM</b><span>19 dims</span></button>
+        </div>
+        <div class="obs-chips" aria-live="polite">
+          <span data-l="1" title="roll (rad)">φ roll</span><span data-l="1" title="pitch (rad)">θ pitch</span><span data-l="1" title="yaw (rad)">ψ yaw</span>
+          <span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>x</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>y</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>z</sub></span>
+          <span data-l="2" title="roll speed (rad/s)">ω<sub>x</sub></span><span data-l="2" title="pitch speed (rad/s)">ω<sub>y</sub></span><span data-l="2" title="yaw speed (rad/s)">ω<sub>z</sub></span>
+          <span data-l="2" title="climb rate (m/s)">v<sub>z</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>x</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>y</sub></span><span data-l="2" title="vibration (m/s²)">vib<sub>z</sub></span>
+          <span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>1</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>2</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>3</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>4</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>5</sub></span><span data-l="3" title="thruster PWM (µs), neutral 1500">u<sub>6</sub></span>
+        </div>
+        <p class="obs-desc" data-l="1">The ATTITUDE block consists of roll (φ), pitch (θ), and yaw (ψ) (rad), forming a 3-dimensional observation space.</p>
+        <p class="obs-desc" data-l="2" hidden>The IMU block adds ten channels: body-frame linear accelerations a<sub>x</sub>, a<sub>y</sub>, and a<sub>z</sub> (m/s²) from raw IMU readings; EKF-fused angular rates ω<sub>x</sub> (<i>rollspeed</i>), ω<sub>y</sub> (<i>pitchspeed</i>), and ω<sub>z</sub> (<i>yawspeed</i>) (rad/s) from ATTITUDE; vertical velocity v<sub>z</sub> (<i>climb</i>) (m/s) from VFR HUD; and the three vibration measurements vib<sub>x</sub>, vib<sub>y</sub>, and vib<sub>z</sub> (m/s²) from VIBRATION. Combined with the ATTITUDE block, this forms a 13-dimensional observation space.</p>
+        <p class="obs-desc" data-l="3" hidden>The THRUSTER PWM block adds six commanded thruster outputs u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub> from the raw server output (µs), with a neutral value of 1500 µs. Combined with the ATTITUDE and IMU blocks, this forms a 19-dimensional observation space.</p>
+      </div>
       <p class="rv">While most aspects of the model architectures do not differ from those published in <a class="cite" href="#ref-2">[2]</a>, <a class="cite" href="#ref-21">[21]</a>, <a class="cite" href="#ref-22">[22]</a>, the observation spaces and even video data content differ greatly.</p>
       <p class="rv">For the two model architectures trained for ocean deployment, a six-dimensional observational space was used that includes: roll, pitch, yaw, depth, depth set-point, and the depth controller's output, plus RGB video (see Fig. 1).</p>
-      <p class="rv">For the DynamicVLA models trained for in-lab pool deployments, a greater observation space was considered. At each control step during an episode of data, the ROV reports a 19-channel telemetry row over MAVLink at 50Hz, from which the maximal observation space is <span class="vec">o<sub>t</sub> = [φ, θ, ψ, a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>, ω<sub>x</sub>, ω<sub>y</sub>, ω<sub>z</sub>, v<sub>z</sub>, vib<sub>x</sub>, vib<sub>y</sub>, vib<sub>z</sub>, u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub>]<sup>T</sup></span>, where each block is described in the picker under Fig. 6. From these observations different combinations are selected to evaluate their effect on policy performance.</p>
+      <p class="rv">For the DynamicVLA models trained for in-lab pool deployments, a greater observation space was considered. At each control step during an episode of data, the ROV reports a 19-channel telemetry row over MAVLink at 50Hz, from which the maximal observation space is <span class="vec">o<sub>t</sub> = [φ, θ, ψ, a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>, ω<sub>x</sub>, ω<sub>y</sub>, ω<sub>z</sub>, v<sub>z</sub>, vib<sub>x</sub>, vib<sub>y</sub>, vib<sub>z</sub>, u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub>]<sup>T</sup></span>, where each block is described in the picker above. From these observations different combinations are selected to evaluate their effect on policy performance.</p>
       <p class="rv">To investigate how turbulence affects VLA performance, a 3-dim disturbance channel, raw Δ<sub>x,y,z</sub>, is derived alongside the 19-dim observation space. At each timestep, the ROV's expected acceleration was estimated from its orientation and thruster commands. The difference between this expected acceleration and the measured acceleration was treated as the environmental disturbance:</p>
       <div class="pp-eq rv" role="math" aria-label="a of t equals G orient of t plus Phi u of t plus Delta of t">
         <span class="t" data-tip="a(t) = [aₓ, a_y, a_z]: measured linear acceleration.">a(t)</span> =

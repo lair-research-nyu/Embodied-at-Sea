@@ -578,3 +578,8 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 .paper .pp-models { margin: 4px 0 24px; padding-left: 22px; }
 .paper .pp-models li { margin: 0 0 10px; line-height: 1.65; }
 .paper .pp-models li b { color: var(--tide); }
+/* Fig. 6 now sits in the text column, same width as Figs. 2 and 4 */
+.arch-fig { width: auto; margin: 34px 0 40px; }
+.arch-fig figcaption { max-width: none; }
+/* the observation-space picker now lives under "1) Observation Spaces" */
+#p-models-2 .pp-obs { margin: 6px 0 22px; }
