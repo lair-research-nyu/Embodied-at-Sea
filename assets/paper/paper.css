@@ -720,3 +720,6 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 #fig5 .f5-legend { justify-content: center; text-align: center; margin: 12px auto 0 !important; }
 /* the emerging-behaviors statement styled like the driving question, with a lightbulb in the badge */
 .paper .pp-big.bulb::before { content: "💡"; font: 1.1rem/38px system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; background: var(--accent); }
+/* ablation goal styled like the driving question, with a target in the badge; extra top room for the yellow rod */
+.paper .pp-big.target::before { content: "🎯"; font: 1.1rem/38px system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.paper #ablation-goal { margin: 72px auto 44px; padding-top: 44px; }

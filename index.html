@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=28">
+<link rel="stylesheet" href="assets/paper/paper.css?v=29">
 </head>
 <body>
 
@@ -610,7 +610,7 @@
       </ul>
       <p class="rv">However, a single frame of Δ carries no turbulence history. Because ocean disturbances are low-frequency and periodic, turbulence only becomes legible over a window of frames. Rather than feed this window in as raw floats, the window is then tokenized with the FAST tokenizer <a class="cite" href="#ref-29">[29]</a>. This gives the policy a compressed representation of the various frequency components of the perturbations.</p>
       <p class="rv">14 total DynamicVLA models (see Fig. 6) were trained on the pool data with a variety of observation space combinations (see Table I), with the smallest observation space being zero (the baseline model) and the largest space being 22 observation space dims. + 39 dims. for Δ tokens. Δ token windows were also varied, from 1.2 seconds to 6.0 seconds.</p>
-      <p class="pp-callout rv" id="ablation-goal">The goal of this ablation study is to investigate what telemetry observations best train a VLA built solely on terrestrial data to succeed underwater.</p>
+      <p class="pp-big target rv" id="ablation-goal">The goal of this ablation study is to investigate what telemetry observations best train a VLA built solely on terrestrial data to succeed underwater.</p>
 
       <h4 class="rv">2) Action Spaces</h4>
       <div class="pp-actions6 rv">
