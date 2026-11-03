@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=12">
+<link rel="stylesheet" href="assets/paper/paper.css?v=13">
 </head>
 <body>
 
@@ -511,7 +511,7 @@
         <li class="rv"><span>2</span><span class="tx"><b>Moor</b>: approaching a stationary post or rope and latching on with the end-effector to simulate a docking procedure.</span></li>
       </ol>
 
-      <p class="rv">In total, 748 human-teleoperated episodes were collected across three sites, progressing from a preliminary controlled test pool set (79 episodes, which is excluded from the Pool Study) to the <i>Coralita X127</i> shipwreck (335 episodes total) and finally to Manoel Island Marina, Malta (334 episodes total). To improve dataset robustness, our collection pipeline includes recovery trajectories obtained by resampling directly from failure states. To make our policies more robust for field deployment, both data collection and testing rollouts occurred in the daytime and nighttime (see Fig. 4).</p>
+      <p class="rv">In total, 748 human-teleoperated episodes were collected across three sites, progressing from a preliminary controlled test pool set (79 episodes, which is excluded from the Pool Study) to the <i>Coralita X127</i> shipwreck (335 episodes total) and finally to Manoel Island Marina, Malta (334 episodes total). To improve dataset robustness, our collection pipeline includes recovery trajectories obtained by resampling directly from failure states. To make our policies more robust for field deployment, both data collection and testing rollouts occurred in the daytime and night time (see Fig. 4).</p>
     </article>
 
     <!-- ---------- III-B. Model Descriptions ---------- -->
@@ -681,7 +681,7 @@
           <p class="pp-label">ACT success, day → night</p>
           <svg class="slope" viewBox="0 0 360 260" role="img" aria-label="Moor on ladder fell from 63.9% by day to 49.5% at night; grab red rod fell from 42.4% to 26.2%."></svg>
         </div>
-        <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The <i>moor on ladder</i> success rate fell from 63.9% (n=97) in the daytime to 49.5% (n=109) at night, and the <i>grab red rod</i> success rate fell from 42.4% (n=66) to 26.2% (n=84) respectively. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of nighttime.</p>
+        <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The <i>moor on ladder</i> success rate fell from 63.9% (n=97) in the daytime to 49.5% (n=109) at night, and the <i>grab red rod</i> success rate fell from 42.4% (n=66) to 26.2% (n=84) respectively. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of night time.</p>
       </div>
 
       <!-- Emerging behaviors (from the IROS ROSE workshop poster) -->
