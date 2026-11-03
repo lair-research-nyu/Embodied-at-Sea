@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=24">
+<link rel="stylesheet" href="assets/paper/paper.css?v=25">
 </head>
 <body>
 
@@ -682,19 +682,17 @@
       <p class="rv">ACT consistently outperformed SmolVLA on every task family (Table II) pooled across sites: 37.6% versus 0.0% on <i>grab</i> and 55.7% versus 12.5% on <i>moor</i>. The gap is largest on the tasks with the most training data: at the Marina ladder, ACT reached 56.3% on mooring versus SmolVLA's 12.5%, and 42.9% versus 0.0% on <i>grab red rod</i>, where SmolVLA never succeeded. ACT's best <i>grab</i> result was <i>grab green rod</i> in the pool (63.6%), which is expected given the controlled environment.</p>
 
       <p class="rv">When pooled across all tasks and locations, ACT succeeded on 47.9% of rollouts and demonstrated incredible recovery trajectories during trials, versus 7.9% for SmolVLA which demonstrated no recovery capabilities. ACT produces short, temporally coherent action chunks that are replanned frequently, keeping execution close to closed-loop. This appears to grant comparative robustness to disturbances that are largely absent from the terrestrial data SmolVLA's backbone was pretrained on. SmolVLA, a substantially heavier model, both replans more slowly and was trained on far less task-specific underwater data than our ACT model, so the performance gap likely reflects inference latency and data quantity rather than a fundamental architectural ceiling.</p>
-      <p class="rv">The inclusion of “dive” in the action space enabled both models to perform tasks at various points on the shipwreck (along the sloping deck and at various points against the hull along the port side), by allowing the ROV to adjust its depth during execution. Sensitivity to depth results in emerging behaviors like recovery maneuvers and greater initial approach precision.</p>
-
-      <div class="pp-split">
-        <div class="pp-chart rv" id="chart-night">
-          <p class="pp-label">ACT success, day vs. night</p>
+      <div class="pp-split dn-box rv">
+        <div class="pp-chart" id="chart-night">
+          <p class="pp-label">ACT success, <span class="sun">☀</span> day vs. <span class="moon">☾</span> night</p>
           <div class="dn" role="img" aria-label="Moor on ladder fell from 63.9% by day to 49.5% at night; grab red rod fell from 42.4% to 26.2%."></div>
-          <p class="pp-legend"><span class="sw day"></span>Day <span class="sw night"></span>Night</p>
+          <p class="pp-legend"><span class="sw day"></span><span class="sun">☀</span> Day <span class="sw night"></span><span class="moon">☾</span> Night</p>
         </div>
         <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of night time.</p>
       </div>
 
       <!-- Emerging behaviors (from the IROS ROSE workshop poster) -->
-      <h4 class="rv" id="p-behaviors">Emerging behaviors 💡</h4>
+      <p class="pp-callout rv" id="p-behaviors">By including “Dive” as part of the observation space, the sensitivity to depth results in emerging behaviors like recovery maneuvers and greater initial approach precision. 💡</p>
 
       <div class="beh rv" id="beh-dive">
         <p class="beh-h"><span>Behavior #1</span> Diving to the target</p>
@@ -916,7 +914,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=14"></script>
+<script src="assets/paper/paper.js?v=15"></script>
 <script src="assets/paper/rov-journey.js?v=4"></script>
 </body>
 </html>

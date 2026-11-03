@@ -608,7 +608,7 @@
     var box = $('#chart-night .dn'); if (!box) return;
     NIGHT.forEach(function (d, gi) {
       var grp = el('div', 'grp'); grp.appendChild(el('b', '', d[0]));
-      [['Day', 'day', d[1], d[2]], ['Night', 'night', d[3], d[4]]].forEach(function (p, k) {
+      [['<span class="sun">☀</span> Day', 'day', d[1], d[2]], ['<span class="moon">☾</span> Night', 'night', d[3], d[4]]].forEach(function (p, k) {
         var row = el('div', 'row');
         row.innerHTML = '<span>' + p[0] + '</span><div class="track"><div class="fill ' + p[1] + '" data-w="' + p[2] + '" style="transition-delay:' + ((gi * 2 + k) * 90) + 'ms"></div><div class="num" style="transition-delay:' + ((gi * 2 + k) * 90) + 'ms">' + fmt(p[2]) + '% <small>n = ' + p[3] + '</small></div></div>';
         row.querySelector('.track').setAttribute('data-tip', '<b>' + d[0] + ' · ' + p[0] + '</b><br>' + fmt(p[2]) + '% success (n = ' + p[3] + ')');

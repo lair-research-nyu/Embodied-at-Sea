@@ -704,3 +704,13 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
   #chart-t2 .grp { grid-template-columns: 1fr; }
   #chart-t2 .grp > b, #chart-t2 .grp > .row { grid-column: 1; grid-row: auto; }
 }
+/* day vs night: chart and its paragraph in one box, with the pull figure's sun and moon */
+.pp-split.dn-box { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; margin: 26px 0; }
+.dn-box #chart-night { border: 0; padding: 0; margin: 0; background: none; }
+.dn-box > p { margin: 0 !important; }
+.dn-box .sun { color: #d99a00; } .dn-box .moon { color: #5b4a0e; }
+#chart-night .row > span { white-space: nowrap; }
+#p-behaviors { scroll-margin-top: 64px; }
+.dn-box .sun, .dn-box .moon { font-size: 1.35em; line-height: 1; vertical-align: -0.08em; }
+.dn-box .pp-label .sun, .dn-box .pp-label .moon { font-size: 1.6em; }
+.dn-box .pp-legend .sun, .dn-box .pp-legend .moon { margin-left: -4px; }
