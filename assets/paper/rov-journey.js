@@ -3,7 +3,7 @@
    the rod down on the "Model Architectures" heading. Then it swims on, picks up the yellow rod resting on top of
    the ablation-goal sentence, and sets that one down on the "Pool Deployment Results" heading. There it swaps it for
    the green rod lying beside it, picks up fish again after "Marine Deployment Results", gets a lightbulb over its
-   head at "Emerging behaviors", leaves the green rod on "Conclusions and Future Work", and swims away. Positions are a function of scroll, so scrolling up
+   head at "Emerging behaviors", leaves the green rod on "In Conclusion...", and swims away. Positions are a function of scroll, so scrolling up
    plays it backwards. Wide-ish screens only; elsewhere the icon simply stays beside "Abstract". */
 (function () {
   'use strict';
@@ -124,7 +124,7 @@
       W = big; dropped = dropped2 = true; carry3 = true;
       q = route(c, E.y + 260, F.y - 150, { x: G.x, y: G.y - gB }, { x: F.x, y: F.y - gB - 40 }, lane); x = q.x; y = q.y;
       if (Math.abs(x - lane) < 1) x += still ? 0 : Math.min(10, margin / 2 - big / 2 - 4) * Math.sin(c / 90);
-    } else if (c <= F.y) {                                        // lower it after "Conclusions and Future Work"
+    } else if (c <= F.y) {                                        // lower it after "In Conclusion..."
       W = big; dropped = dropped2 = true; carry3 = true; x = F.x; y = lerp(F.y - gB - 40, F.y - gB, ease((c - (F.y - 150)) / 150));
     } else {                                                      // let go and swim away off the right edge
       gone = ease((c - F.y) / 450);
@@ -159,7 +159,7 @@
       place(rod2, yx - 29, yy - 10, ' rotate(' + ya.toFixed(2) + 'deg)');
     }
 
-    // green rod: beside the yellow drop spot -> under the ROV -> on Conclusions and Future Work
+    // green rod: beside the yellow drop spot -> under the ROV -> on "In Conclusion..."
     if (rod3) {
       var gx, gy, ga = -2;
       if (carry3) { gx = x; gy = y + grip; ga = tilt * 0.6 - 3; }

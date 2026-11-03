@@ -37,7 +37,7 @@
     grabp: { label: 'Grab the rod incl. partial (%)', max: 100, unit: '%' },
     moor: { label: 'Moor on Post (%)', max: 100, unit: '%' },
     ring: { label: 'Remove Ring (%)', max: 100, unit: '%' },
-    lat: { label: 'Latency per 20-step action chunk (ms) — lower is better', max: 145, unit: ' ms', low: true }
+    lat: { label: 'Latency per 20-step action chunk (ms)', max: 145, unit: ' ms', low: true }
   };
   // task, location, policy, n, SR, CI low, CI high, shaded
   var T2 = [
@@ -515,59 +515,121 @@
       var boldAll = d.n !== 1 && d.allp > BASE.allp, boldLat = d.n !== 1 && d.lat < BASE.lat;
       return '<tr id="t1-row-' + d.n + '"' + (d.n === 3 ? ' class="shade"' : '') + '><td class="sticky">#' + d.n + '</td><td class="l">' + d.obs + (d.n === 1 ? '<sup>†</sup>' : '') + '</td><td>' + d.dim + '</td><td>' + d.succ + '</td><td>' + d.part +
         '</td><td>' + fmt(d.grab) + '</td><td>' + fmt(d.grabp) + '</td><td>' + fmt(d.moor) + '</td><td>' + fmt(d.ring) + '</td><td>' + fmt(d.all) +
-        '</td><td>' + (boldAll ? '<b>' + fmt(d.allp) + '</b>' : fmt(d.allp)) + '</td><td>' + (boldLat ? '<b>' + fmt(d.lat) + ' ± ' + fmt(d.sd) + '</b>' : fmt(d.lat) + ' ± ' + fmt(d.sd)) + '</td></tr>';
+        '</td><td>' + fmt(d.allp) + (boldAll ? ' <span class="tri">▲</span>' : '') + '</td><td>' + fmt(d.lat) + ' ± ' + fmt(d.sd) + (boldLat ? ' <span class="tri">▲</span>' : '') + '</td></tr>';
     }).join('');
     t.insertAdjacentHTML('beforeend', head + '<tbody>' + body + '</tbody>');
   })();
 
-  /* ---------- ACT vs SmolVLA ---------- */
+  /* ---------- Fig. 7: models ranked by time to completion (log x), rows fade in ---------- */
   (function () {
-    var box = $('#chart-vs .vs');
-    VS.forEach(function (g) {
-      var grp = el('div', 'grp'); grp.appendChild(el('b', '', g[0]));
-      [['ACT', 'act', g[1]], ['SmolVLA', 'smol', g[2]]].forEach(function (p) {
-        var row = el('div', 'row', '<span>' + p[0] + '</span><div class="track"><div class="fill ' + p[1] + '" data-w="' + p[2] + '"></div><div class="num">' + fmt(p[2]) + '%</div></div>');
-        row.querySelector('.track').setAttribute('data-tip', '<b>' + p[0] + '</b> · ' + g[0] + ': ' + fmt(p[2]) + '% success');
+    var box = $('#fig7 .f7'); if (!box) return;
+    // paper #, median, CI low, CI high, every successful rollout (s)
+    var F7 = [[12,6.92,5.5,7.38,[4.02,4.42,4.46,4.52,4.58,4.66,4.82,4.96,5.0,5.12,5.26,5.36,5.4,5.4,5.46,5.48,5.5,5.72,5.86,5.86,6.24,6.54,6.92,6.96,7.24,7.26,7.34,7.38,7.38,7.4,7.42,7.44,7.72,7.96,8.4,8.62,8.8,13.12,13.88,15.74,23.8,33.6,34.38,43.06,46.5]],[13,7.19,7.0,9.06,[5.06,5.18,5.44,5.62,5.74,6.08,6.1,6.18,6.18,6.2,6.22,6.26,6.38,6.52,6.78,6.8,6.82,6.96,6.96,7.0,7.04,7.08,7.1,7.1,7.12,7.16,7.22,7.28,7.36,7.46,7.76,8.12,8.6,9.18,9.52,9.78,10.02,10.66,11.2,11.6,12.08,13.06,16.26,16.62,16.78,16.92,17.92,18.78,19.1,38.48,38.86,39.32]],[3,7.3,6.76,8.02,[3.78,3.84,3.9,3.94,4.1,4.28,4.4,4.46,4.82,5.06,5.3,5.38,5.58,5.58,5.6,5.74,5.94,6.08,6.08,6.4,6.5,6.58,6.7,6.7,6.76,6.78,6.88,6.92,6.96,7.02,7.14,7.14,7.3,7.42,7.44,7.46,7.68,7.74,8.0,8.0,8.02,8.04,8.1,8.38,8.42,8.42,8.46,10.9,11.98,12.0,12.06,12.74,13.72,16.98,19.2,19.56,21.5,23.76,24.52,28.88,30.3,35.92,37.5,45.92,46.38]],[14,7.98,7.3,8.98,[4.66,4.88,5.18,5.38,5.38,5.64,5.82,6.44,6.62,6.84,6.92,6.94,7.04,7.04,7.16,7.26,7.3,7.36,7.46,7.54,7.58,7.82,7.86,7.98,8.18,8.24,8.38,8.4,8.7,8.98,9.56,9.74,10.42,12.56,13.02,14.36,14.7,16.0,16.42,16.48,16.84,21.74,24.28,24.48,25.06,29.14,56.7]],[2,9.6,7.8,14.4,[4.06,4.54,4.64,4.92,5.16,5.2,5.24,6.64,6.66,6.8,7.12,7.14,7.2,7.22,7.26,7.38,7.42,7.5,7.8,7.88,8.42,8.64,8.76,8.86,8.88,10.32,11.22,11.4,11.66,12.78,13.64,14.4,14.48,14.76,14.86,14.96,17.84,18.02,18.18,18.9,19.72,20.54,21.46,22.28,23.2,24.18,27.5,37.9,77.7,133.44]],[9,9.85,8.91,11.52,[4.5,4.56,4.9,5.28,5.36,5.44,5.62,6.22,6.52,6.94,7.0,7.24,7.46,7.92,8.02,8.2,8.56,8.68,8.76,9.06,9.08,9.24,9.3,9.72,9.72,9.74,9.96,10.28,10.76,10.88,11.22,11.42,11.46,11.58,11.7,11.96,12.62,12.68,12.68,13.18,13.96,14.08,14.12,14.24,14.36,15.06,18.6,25.92,31.26,33.72,34.26,39.3]],[5,10.34,7.62,15.8,[4.6,5.42,5.68,6.1,6.26,6.26,6.48,6.56,6.66,7.02,7.02,7.04,7.06,7.14,7.3,7.38,7.56,7.62,8.14,8.16,8.24,9.04,9.54,9.82,10.34,10.64,10.84,11.86,11.96,13.12,14.9,15.8,15.96,16.14,17.06,17.12,17.74,19.86,20.04,21.16,22.56,23.36,23.6,24.38,29.78,29.84,36.8,42.66,79.58]],[10,10.39,7.68,15.14,[4.88,5.24,5.24,5.56,5.8,6.02,6.04,6.12,6.16,6.36,6.64,6.72,6.86,7.5,7.52,7.52,7.68,7.76,8.22,8.84,9.06,9.12,9.98,10.8,11.08,11.36,12.12,12.6,14.28,15.84,16.0,17.46,19.08,19.68,20.26,21.26,21.34,22.34,23.08,24.88,25.72,28.6,29.34,36.66,43.54,115.06]],[8,12.28,10.62,20.3,[3.86,4.54,6.76,6.84,7.22,7.32,7.32,7.56,7.76,7.98,8.5,8.72,9.62,10.08,10.1,10.62,10.78,11.16,11.38,11.8,12.28,12.28,13.92,15.06,15.12,19.38,19.46,20.3,20.56,21.5,22.38,24.76,25.74,28.52,28.76,31.0,31.46,39.48,45.68,47.52,56.52,71.84,74.24]],[6,12.66,9.06,15.22,[4.52,4.86,5.08,5.72,6.32,6.4,6.76,6.9,7.14,7.16,7.2,7.34,7.46,7.66,7.86,8.24,8.74,9.06,10.02,10.28,10.96,11.46,11.54,12.16,12.66,12.98,13.02,14.42,15.1,15.2,15.2,15.22,15.26,15.96,16.08,16.18,16.22,16.34,16.92,17.0,17.28,17.36,17.72,19.28,19.4,19.88,19.92,30.24,46.32]],[4,13.2,10.54,14.38,[4.26,4.64,5.2,5.3,5.9,6.0,6.1,6.1,6.34,6.62,6.7,7.52,7.7,10.32,10.54,11.2,11.36,11.38,12.02,12.06,13.2,13.3,13.46,13.86,13.88,13.98,14.38,14.56,14.62,15.2,15.44,16.48,16.68,16.9,17.46,18.58,19.0,22.16,25.94,36.44,57.2]],[7,13.23,10.37,17.38,[4.88,5.42,6.06,6.66,7.68,8.06,8.72,8.94,9.46,9.58,11.16,11.56,11.76,12.82,12.96,13.5,13.86,14.84,15.62,16.06,18.7,19.02,19.02,19.32,19.6,21.28,22.04,23.04,35.16,55.02]],[11,13.92,7.78,18.48,[5.26,5.7,6.26,6.3,6.32,6.54,6.78,7.04,7.12,7.16,7.42,7.5,7.56,7.74,7.78,7.92,8.62,8.96,9.8,13.5,13.92,14.96,15.0,16.96,17.3,18.24,18.48,19.74,20.02,22.26,22.68,25.54,27.38,31.54,32.9,33.84,34.76,42.04,42.16,81.12,177.58]],[1,16.05,13.68,20.0,[5.32,5.68,5.86,6.22,6.32,6.86,7.76,7.9,8.38,10.2,10.4,12.2,12.92,13.48,13.68,13.96,14.14,15.46,15.54,15.9,15.96,16.14,17.36,17.72,17.8,19.02,19.28,20.72,22.24,22.44,24.06,27.24,27.64,31.68,32.4,36.5,39.78,49.88,52.12,58.04,60.3,112.24]]];
+    var L0 = Math.log(3.5), L1 = Math.log(200), X = function (v) { return (Math.log(v) - L0) / (L1 - L0) * 100; };
+    var TICKS = [5, 10, 20, 50, 100, 200], name = {};
+    T1.forEach(function (d) { name[d.n] = d.obs; });
+    var grid = TICKS.map(function (t) { return '<i class="g" style="left:' + X(t).toFixed(2) + '%"></i>'; }).join('');
+    F7.forEach(function (r, i) {
+      var base = r[0] === 1, seed = r[0] * 9301;
+      var rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+      var dots = r[4].map(function (v, k) {
+        return '<i class="d" style="left:' + X(v).toFixed(2) + '%;top:' + (22 + rnd() * 56).toFixed(1) + '%;transition-delay:' + (i * 70 + 300 + k * 6) + 'ms"></i>';
+      }).join('');
+      var row = el('div', 'f7-row' + (base ? ' base' : '') + (i === 0 ? ' top' : ''));
+      row.style.setProperty('--i', i);
+      row.setAttribute('data-tip', '<b>#' + r[0] + ' · ' + name[r[0]] + '</b><br>Median ' + fmt(r[1]) + ' s (95% CI ' + fmt(r[2]) + '–' + fmt(r[3]) + ' s)<br>' + r[4].length + ' successful rollouts');
+      row.innerHTML = '<span class="lab">' + name[r[0]] + (base ? '<sup>†</sup>' : '') + '</span><span class="med">' + (Math.round(r[1] * 10 + 1e-6) / 10).toFixed(1) + ' s</span>' +
+        '<span class="plot">' + grid + dots + '<i class="ci" style="left:' + X(r[2]).toFixed(2) + '%;width:' + (X(r[3]) - X(r[2])).toFixed(2) + '%"></i><i class="dia" style="left:' + X(r[1]).toFixed(2) + '%"></i></span>';
+      box.appendChild(row);
+    });
+    var ax = el('div', 'f7-axis', '<span></span><span></span><span class="plot">' + TICKS.map(function (t) { return '<b style="left:' + X(t).toFixed(2) + '%">' + t + '</b>'; }).join('') + '<em>time to completion (s)</em></span>');
+    box.appendChild(ax);
+  })();
+
+  /* ---------- Fig. 8: colour confusion per model, cells fill in ---------- */
+  (function () {
+    var box = $('#fig8 .f8'); if (!box) return;
+    // per model #1..#14: rows asked green/red/white, columns grabbed green/red/white/none
+    var CM = [[1,4,1,4,3,4,1,2,2,1,3,4],[0,2,1,7,1,3,1,5,0,3,1,6],[2,8,0,0,1,5,3,1,4,3,3,0],[2,2,2,4,1,4,4,1,2,3,2,3],[2,1,1,6,0,2,3,5,2,1,2,5],[1,3,4,2,2,5,2,1,4,1,5,0],[0,5,1,4,2,2,4,2,3,3,3,1],[4,3,1,2,3,3,3,1,1,4,2,3],[6,1,1,2,4,1,2,3,2,2,3,3],[2,2,3,3,0,6,1,3,2,1,4,3],[4,2,1,3,2,3,0,5,5,3,2,0],[4,1,2,3,0,4,2,4,3,1,3,3],[2,4,2,2,3,3,1,3,6,0,4,0],[4,3,2,1,3,2,1,4,2,4,4,0]];
+    var VIR = [[68,1,84],[72,40,120],[62,74,137],[49,104,142],[38,130,142],[31,158,137],[53,183,121],[109,205,89],[180,222,44],[253,231,37]];
+    function vir(v) {
+      var t = Math.max(0, Math.min(1, v / 8)) * (VIR.length - 1), a = Math.floor(t), b = Math.min(VIR.length - 1, a + 1), f = t - a;
+      return 'rgb(' + [0, 1, 2].map(function (k) { return Math.round(VIR[a][k] + (VIR[b][k] - VIR[a][k]) * f); }).join(',') + ')';
+    }
+    var ROW = ['G', 'R', 'W'], COL = ['G', 'R', 'W', 'none'], FULL = { G: 'green', R: 'red', W: 'white', none: 'none' };
+    T1.forEach(function (d, m) {
+      var card = el('div', 'f8-card'); card.style.setProperty('--m', m);
+      var h = '<p class="f8-t">' + d.obs + (d.n === 1 ? '<sup>†</sup>' : '') + '</p><div class="f8-m"><span></span>' + COL.map(function (c) { return '<span class="ch">' + c + '</span>'; }).join('');
+      ROW.forEach(function (rn, ri) {
+        h += '<span class="rh">' + rn + '</span>';
+        COL.forEach(function (cn, ci) {
+          var v = CM[m][ri * 4 + ci];
+          h += '<span class="c' + (ri === ci ? ' diag' : '') + '" style="background:' + vir(v) + ';--k:' + (ri * 4 + ci) + '" data-tip="<b>' + d.obs.replace(/"/g, '&quot;') + '</b><br>asked ' + FULL[rn] + ', grabbed ' + FULL[cn] + ': ' + v + ' of 10"></span>';
+        });
+      });
+      card.innerHTML = h + '</div>';
+      box.appendChild(card);
+    });
+    var bar = $('#fig8 .f8-bar');
+    if (bar) bar.style.background = 'linear-gradient(90deg,' + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(function (v) { return vir(v); }).join(',') + ')';
+  })();
+
+  /* ---------- Table II as a bar chart (pooled across sites, then by task and location) ---------- */
+  (function () {
+    var box = $('#chart-t2 .t2'); if (!box) return;
+    function wilson(k, n) { if (!n) return [0, 0]; var z = 1.96, p = k / n, d = 1 + z * z / n, c = (p + z * z / (2 * n)) / d, h = z * Math.sqrt(p * (1 - p) / n + z * z / (4 * n * n)) / d; return [100 * (c - h), 100 * (c + h)]; }
+    function pool(rows) { var n = 0, k = 0; rows.forEach(function (r) { n += r[3]; k += Math.round(r[4] * r[3] / 100); }); var w = wilson(k, n); return [n, 100 * k / n, w[0], w[1]]; }
+    function pick(f) { return T2.filter(f); }
+    var isAct = function (r) { return r[2] === 'ACT'; }, isGrab = function (r) { return /^Grab/.test(r[0]); };
+    var groups = [
+      ['Pooled across sites', [
+        ['All tasks', pool(pick(isAct)), pool(pick(function (r) { return !isAct(r); }))],
+        ['Grab', pool(pick(function (r) { return isAct(r) && isGrab(r); })), pool(pick(function (r) { return !isAct(r) && isGrab(r); }))],
+        ['Moor', pool(pick(function (r) { return isAct(r) && !isGrab(r); })), pool(pick(function (r) { return !isAct(r) && !isGrab(r); }))]
+      ]],
+      ['By task and location', []]
+    ];
+    T2.forEach(function (r) {
+      var key = r[0] + ' · ' + r[1], g = groups[1][1].filter(function (x) { return x[0] === key; })[0];
+      if (!g) { g = [key, null, null]; groups[1][1].push(g); }
+      g[isAct(r) ? 1 : 2] = [r[3], r[4], r[5], r[6]];
+    });
+    var i = 0;
+    groups.forEach(function (G) {
+      box.appendChild(el('p', 't2-sec', G[0]));
+      G[1].forEach(function (g) {
+        var grp = el('div', 'grp'); grp.appendChild(el('b', '', g[0]));
+        [['ACT', 'act', g[1]], ['SmolVLA', 'smol', g[2]]].forEach(function (p) {
+          if (!p[2]) return;
+          var v = p[2], row = el('div', 'row');
+          row.innerHTML = '<span>' + p[0] + '</span><div class="track"><i class="w" style="left:' + v[2].toFixed(1) + '%;width:' + (v[3] - v[2]).toFixed(1) + '%"></i><div class="fill ' + p[1] + '" data-w="' + v[1] + '" style="transition-delay:' + (i * 60) + 'ms"></div><div class="num" data-at="' + Math.max(v[1], v[3]).toFixed(1) + '" style="transition-delay:' + (i * 60) + 'ms">' + fmt(v[1]) + '% <small>n = ' + v[0] + '</small></div></div>';
+          row.querySelector('.track').setAttribute('data-tip', '<b>' + p[0] + ' · ' + g[0] + '</b><br>' + fmt(v[1]) + '% success (n = ' + v[0] + ')<br>95% CI: ' + fmt(v[2]) + '–' + fmt(v[3]) + '%');
+          grp.appendChild(row); i++;
+        });
+        box.appendChild(grp);
+      });
+    });
+    function go() { $$('#chart-t2 .fill').forEach(function (f) { f.style.width = f.getAttribute('data-w') + '%'; var n = f.nextElementSibling; n.style.left = n.getAttribute('data-at') + '%'; }); $('#chart-t2').classList.add('go'); }
+    onReveal.push(function (e) { if (e.id === 'chart-t2') go(); });
+    if (!hasIO || reduce) go();
+  })();
+
+  /* ---------- day vs night bars ---------- */
+  (function () {
+    var box = $('#chart-night .dn'); if (!box) return;
+    NIGHT.forEach(function (d, gi) {
+      var grp = el('div', 'grp'); grp.appendChild(el('b', '', d[0]));
+      [['Day', 'day', d[1], d[2]], ['Night', 'night', d[3], d[4]]].forEach(function (p, k) {
+        var row = el('div', 'row');
+        row.innerHTML = '<span>' + p[0] + '</span><div class="track"><div class="fill ' + p[1] + '" data-w="' + p[2] + '" style="transition-delay:' + ((gi * 2 + k) * 90) + 'ms"></div><div class="num" style="transition-delay:' + ((gi * 2 + k) * 90) + 'ms">' + fmt(p[2]) + '% <small>n = ' + p[3] + '</small></div></div>';
+        row.querySelector('.track').setAttribute('data-tip', '<b>' + d[0] + ' · ' + p[0] + '</b><br>' + fmt(p[2]) + '% success (n = ' + p[3] + ')');
         grp.appendChild(row);
       });
       box.appendChild(grp);
     });
-    function go() { $$('#chart-vs .fill').forEach(function (f) { var w = f.getAttribute('data-w') + '%'; f.style.width = w; f.nextElementSibling.style.left = w; }); }
-    onReveal.push(function (e) { if (e.id === 'chart-vs') go(); });
+    function go() { $$('#chart-night .fill').forEach(function (f) { var w = f.getAttribute('data-w') + '%'; f.style.width = w; f.nextElementSibling.style.left = w; }); }
+    onReveal.push(function (e) { if (e.id === 'chart-night') go(); });
     if (!hasIO || reduce) go();
-  })();
-
-  /* ---------- Table II with SR bars + 95% CI ---------- */
-  (function () {
-    var t = $('#table-2');
-    var rowsHtml = T2.map(function (r) {
-      var c = r[2] === 'ACT' ? 'act' : 'smol', col = r[2] === 'ACT' ? 'var(--act)' : 'var(--smol)';
-      var tipTxt = '<b>' + r[0] + ' · ' + r[1] + '</b><br>' + r[2] + ': ' + fmt(r[4]) + '% success (n = ' + r[3] + ')<br>95% CI: ' + fmt(r[5]) + '–' + fmt(r[6]) + '%';
-      return '<tr' + (r[7] ? ' class="shade"' : '') + '><td class="l">' + r[0] + '</td><td class="l">' + r[1] + '</td><td class="l"><span class="pol" style="--c:' + col + '">' + r[2] + '</span></td><td>' + r[3] +
-        '</td><td>' + (r[8] ? '<b>' + fmt(r[4]) + '</b>' : fmt(r[4])) + '</td><td>[' + fmt(r[5]) + ', ' + fmt(r[6]) + ']</td>' +
-        '<td class="l"><span class="ci" data-tip="' + tipTxt.replace(/"/g, '&quot;') + '"><span class="fill ' + c + '" data-w="' + r[4] + '"></span><span class="w" style="left:' + r[5] + '%;width:' + (r[6] - r[5]) + '%"></span></span></td></tr>';
-    }).join('');
-    t.insertAdjacentHTML('beforeend', '<thead><tr><th class="l">Task</th><th class="l">Location</th><th class="l">Policy</th><th><i>n</i></th><th>SR (%)</th><th>95% CI</th><th class="l">SR and 95% CI (0–100%)</th></tr></thead><tbody>' + rowsHtml + '</tbody>');
-    function go() { $$('#table-2 .ci .fill').forEach(function (f) { f.style.width = f.getAttribute('data-w') + '%'; }); }
-    onReveal.push(function (e) { if (e.contains && e.contains(t)) go(); });
-    if (!hasIO || reduce) go();
-  })();
-
-  /* ---------- day -> night slope chart ---------- */
-  (function () {
-    var svg = $('#chart-night svg'), ns = 'http://www.w3.org/2000/svg';
-    var y = function (v) { return 220 - v / 80 * 190; }, X0 = 120, X1 = 250;
-    var s = '<line class="ax" x1="' + X0 + '" y1="24" x2="' + X0 + '" y2="224"/><line class="ax" x1="' + X1 + '" y1="24" x2="' + X1 + '" y2="224"/>' +
-      '<text x="' + X0 + '" y="248" text-anchor="middle" class="muted">Day</text><text x="' + X1 + '" y="248" text-anchor="middle" class="muted">Night</text>';
-    NIGHT.forEach(function (d) {
-      var tipA = '<b>' + d[0] + '</b><br>Day: ' + fmt(d[1]) + '% (n = ' + d[2] + ')<br>Night: ' + fmt(d[3]) + '% (n = ' + d[4] + ')';
-      s += '<g data-tip="' + tipA.replace(/"/g, '&quot;') + '"><path d="M' + X0 + ' ' + y(d[1]) + ' L' + X1 + ' ' + y(d[3]) + '"/>' +
-        '<circle cx="' + X0 + '" cy="' + y(d[1]) + '" r="6"/><circle cx="' + X1 + '" cy="' + y(d[3]) + '" r="6"/>' +
-        '<text x="' + (X0 - 12) + '" y="' + (y(d[1]) + 4) + '" text-anchor="end">' + fmt(d[1]) + '%</text>' +
-        '<text x="' + (X1 + 12) + '" y="' + (y(d[3]) + 4) + '">' + fmt(d[3]) + '%</text>' +
-        '<text x="' + (X0 - 12) + '" y="' + (y(d[1]) - 12) + '" text-anchor="end" class="muted">' + d[0] + '</text></g>';
-    });
-    svg.innerHTML = s;
   })();
 
   /* ---------- citations: hover shows the reference, click jumps to it ---------- */

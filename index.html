@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=21">
+<link rel="stylesheet" href="assets/paper/paper.css?v=22">
 </head>
 <body>
 
@@ -610,7 +610,7 @@
       </ul>
       <p class="rv">However, a single frame of Δ carries no turbulence history. Because ocean disturbances are low-frequency and periodic, turbulence only becomes legible over a window of frames. Rather than feed this window in as raw floats, the window is then tokenized with the FAST tokenizer <a class="cite" href="#ref-29">[29]</a>. This gives the policy a compressed representation of the various frequency components of the perturbations.</p>
       <p class="rv">14 total DynamicVLA models (see Fig. 6) were trained on the pool data with a variety of observation space combinations (see Table I), with the smallest observation space being zero (the baseline model) and the largest space being 22 observation space dims. + 39 dims. for Δ tokens. Δ token windows were also varied, from 1.2 seconds to 6.0 seconds.</p>
-      <p class="pp-callout rv" id="ablation-goal">The goal of this ablation study is to investigate what telemetry observations best train DynamicVLA (a VLA built solely on terrestrial data) to succeed underwater.</p>
+      <p class="pp-callout rv" id="ablation-goal">The goal of this ablation study is to investigate what telemetry observations best train a VLA built solely on terrestrial data to succeed underwater.</p>
 
       <h4 class="rv">2) Action Spaces</h4>
       <div class="pp-actions6 rv">
@@ -650,59 +650,56 @@
         <table class="pp-table" id="table-1">
           <caption><b>Table I. Pool Deployment: Success rates and forward-pass latency of multi-task models.</b> A success for the <i>Grab the rod</i> task implies grabbing the right color rod, while a <i>partial</i> is when the model grabs a rod of the wrong color. Including partial successes and across 90 total gradable on-hardware rollouts (30 rollouts per task), 10 different DynamicVLA models outperformed the baseline. Latency is the time to produce one 20-step action chunk (mean over all models: 107.4 ± 11.4 ms). Four models run faster than the baseline despite a larger observation space.</caption>
         </table>
-        <p class="pp-foot">† Baseline: no proprioception. <b>Bold</b>: better than the baseline. Obs. Dims. exclude Δ tokens.</p>
+        <p class="pp-foot">† Baseline: no proprioception. ▲: better than the baseline. Obs. Dims. exclude Δ tokens.</p>
       </div>
+
+      <figure class="pp-fig wide rv" id="fig7">
+        <div class="f7" role="img" aria-label="Fig. 7: models ranked by median time to completion on successful rollouts; attitude + IMU + thruster PWM is fastest at 6.9 s, the images-only baseline slowest at 16.1 s."></div>
+        <p class="pp-legend f7-legend"><span class="k dot"></span>one rollout <span class="k dia"></span>median <span class="k ci"></span>95% CI <span class="f7-note">time to completion, log scale; hover a row for details</span></p>
+        <figcaption><b>Fig. 7. Pool Deployment: Multi-task models ranked.</b> The median time to completion was calculated for each model over the successful rollouts (a subset of the 90 total). All models outperformed the baseline in speediness of a successful task completion. † Baseline: no proprioception of any kind.</figcaption>
+      </figure>
 
       <p class="rv">More proprioception observations did not necessarily lead to better performance: for calm-water manipulation, a smaller observation space provided a better balance between prediction speed and task success, while larger observation spaces, specifically with the addition of IMU and PWM observations, led to faster overall task completion. Similarly, a 4 second Δ token window enabled better performance than other window lengths for a controlled environment.</p>
 
-      <figure class="pp-fig wide rv">
-        <img class="zoomable" data-src="assets/paper/fig/fig7-speed-ranked.webp" width="2200" height="742" alt="Fig. 7: models ranked by median time to completion on successful rollouts; attitude + IMU + thruster PWM is fastest at 6.9 s, the images-only baseline slowest at 16.1 s.">
-        <figcaption><b>Fig. 7. Pool Deployment: Multi-task models ranked.</b> The median time to completion was calculated for each model over the successful rollouts (a subset of the 90 total). All models outperformed the baseline in speediness of a successful task completion. † Baseline: no proprioception of any kind.</figcaption>
+
+      <figure class="pp-fig wide rv" id="fig8">
+        <div class="f8" role="img" aria-label="Fig. 8: 14 small confusion matrices of rod colour asked for versus colour grabbed, one per model."></div>
+        <p class="pp-legend f8-legend"><span>0</span><span class="f8-bar"></span><span>8</span> rollouts (of 10) · outlined = the colour asked for · hover a cell for the count</p>
+        <figcaption><b>Fig. 8. Pool Deployment: Rod color confusion per multi-task model.</b> Rows: color asked for in text prompt; columns: color grabbed during rollout. Perceptive confusion exists strongly in every single multi-task model, and no model stood out to be perceptually more accurate than the other. The most common confusion is between red and green rods. <i>None</i> implies that the episode was failed, and hence, no rods were grabbed. † Baseline: no proprioception of any kind.</figcaption>
       </figure>
 
       <p class="rv">There is also found no apparent relationship between manipulation success and color confusion, which can imply that differences in manipulation success is not due to the differences in perception between models, but the observations fed into the models directly. This visual confusion in underwater policies is aligned with what was found in <a class="cite" href="#ref-3">[3]</a>, which visual occlusion, warping, and light dissipation can degrade VLA perception underwater. While this can be said about how DynamicVLA performs in our pool in calm waters, limitations of utilizing the pool includes the depth, size, and lack of realistic currents in the pool testing environments.</p>
 
-      <figure class="pp-fig wide rv">
-        <img class="zoomable" data-src="assets/paper/fig/fig8-colour-confusion.webp" width="2200" height="666" alt="Fig. 8: 14 small confusion matrices of rod colour asked for versus colour grabbed, one per model.">
-        <figcaption><b>Fig. 8. Pool Deployment: Rod color confusion per multi-task model.</b> Rows: color asked for in text prompt; columns: color grabbed during rollout. Perceptive confusion exists strongly in every single multi-task model, and no model stood out to be perceptually more accurate than the other. The most common confusion is between red and green rods. <i>None</i> implies that the episode was failed, and hence, no rods were grabbed. † Baseline: no proprioception of any kind.</figcaption>
-      </figure>
     </article>
 
     <!-- ---------- IV-C. Marine Deployment Results ---------- -->
     <article class="pp-chapter" id="p-marine">
       <p class="pp-num rv">Section IV-C</p>
       <h3 class="rv">Marine Deployment Results</h3>
-      <p class="rv">Our results of the method described in Fig. 1 can be summarized by Table II, which reports success by task and location over 508 gradable autonomous policy rollouts.</p>
-
-      <div class="pp-table-wrap rv">
-        <table class="pp-table" id="table-2">
-          <caption><b>Table II. Marine Deployment: Success rate by task and location.</b> ACT consistently outperforms SmolVLA, and Mooring is the best-performing task family for both architectures.</caption>
-        </table>
-        <p class="pp-foot">Bars show success rate (SR); whiskers show the 95% confidence interval. Hover a bar for details.</p>
+      <div class="pp-chart rv" id="chart-t2">
+        <p class="pp-label">Table II, as a chart — success rate by task and location</p>
+        <div class="t2"></div>
+        <p class="pp-legend"><span class="sw act"></span>ACT <span class="sw smol"></span>SmolVLA <span class="k ci"></span>95% CI <span class="f7-note">hover a bar for details</span></p>
       </div>
+      <p class="pp-cap rv"><b>Table II. Marine Deployment: Success rate by task and location.</b> ACT consistently outperforms SmolVLA, and Mooring is the best-performing task family for both architectures. Top: pooled across sites; bottom: each task and location, with the number of gradable rollouts (<i>n</i>).</p>
 
       <p class="rv">To test whether a single trained policy could generalize across physically distinct instances of the same task family, one fixed ACT checkpoint was evaluated on three mooring variants without any per-site fine-tuning: on a ladder at the Marina, on a tethered rope on the Shipwreck, and on a post on the Shipwreck (see Fig. 4). Success rates were 56.3% (n=206) on the ladder, 66.7% (n=21) on rope, and 36.8% (n=19) on the mooring post (Table II). The comparable success rates on the ladder and rope tasks suggest that the policy learned a site-agnostic mooring strategy rather than overfitting to the Marina ladder's specific visual features. The lower success rate observed for the post likely results from its less forgiving target geometry compared to the ladder and rope, even though both the rope and post exhibited greater occlusion from algae and marine overgrowth than the ladder.</p>
       <p class="rv">ACT consistently outperformed SmolVLA on every task family (Table II) pooled across sites: 37.6% versus 0.0% on <i>grab</i> and 55.7% versus 12.5% on <i>moor</i>. The gap is largest on the tasks with the most training data: at the Marina ladder, ACT reached 56.3% on mooring versus SmolVLA's 12.5%, and 42.9% versus 0.0% on <i>grab red rod</i>, where SmolVLA never succeeded. ACT's best <i>grab</i> result was <i>grab green rod</i> in the pool (63.6%), which is expected given the controlled environment.</p>
-
-      <div class="pp-chart rv" id="chart-vs">
-        <p class="pp-label">ACT vs. SmolVLA, success rate pooled across sites</p>
-        <div class="vs"></div>
-        <p class="pp-legend"><span class="sw act"></span>ACT <span class="sw smol"></span>SmolVLA</p>
-      </div>
 
       <p class="rv">When pooled across all tasks and locations, ACT succeeded on 47.9% of rollouts and demonstrated incredible recovery trajectories during trials, versus 7.9% for SmolVLA which demonstrated no recovery capabilities. ACT produces short, temporally coherent action chunks that are replanned frequently, keeping execution close to closed-loop. This appears to grant comparative robustness to disturbances that are largely absent from the terrestrial data SmolVLA's backbone was pretrained on. SmolVLA, a substantially heavier model, both replans more slowly and was trained on far less task-specific underwater data than our ACT model, so the performance gap likely reflects inference latency and data quantity rather than a fundamental architectural ceiling.</p>
       <p class="rv">The inclusion of “dive” in the action space enabled both models to perform tasks at various points on the shipwreck (along the sloping deck and at various points against the hull along the port side), by allowing the ROV to adjust its depth during execution. Sensitivity to depth results in emerging behaviors like recovery maneuvers and greater initial approach precision.</p>
 
       <div class="pp-split">
         <div class="pp-chart rv" id="chart-night">
-          <p class="pp-label">ACT success, day → night</p>
-          <svg class="slope" viewBox="0 0 360 260" role="img" aria-label="Moor on ladder fell from 63.9% by day to 49.5% at night; grab red rod fell from 42.4% to 26.2%."></svg>
+          <p class="pp-label">ACT success, day vs. night</p>
+          <div class="dn" role="img" aria-label="Moor on ladder fell from 63.9% by day to 49.5% at night; grab red rod fell from 42.4% to 26.2%."></div>
+          <p class="pp-legend"><span class="sw day"></span>Day <span class="sw night"></span>Night</p>
         </div>
-        <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The <i>moor on ladder</i> success rate fell from 63.9% (n=97) in the daytime to 49.5% (n=109) at night, and the <i>grab red rod</i> success rate fell from 42.4% (n=66) to 26.2% (n=84) respectively. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of night time.</p>
+        <p class="rv">Both tasks evaluated across daylight variations show a consistent performance drop at night. The drop was larger for grasping, which is consistent with the grasping trajectories being less forgiving to disturbances: unlike mooring, which tolerates vertical error since the ROV can latch anywhere along the ladder or post, grasping the small, swaying rod leaves little margin for error, especially with the reduced contrast and noise of night time.</p>
       </div>
 
       <!-- Emerging behaviors (from the IROS ROSE workshop poster) -->
-      <h4 class="rv" id="p-behaviors">Emerging behaviors</h4>
+      <h4 class="rv" id="p-behaviors">Emerging behaviors 💡</h4>
 
       <div class="beh rv" id="beh-dive">
         <p class="beh-h"><span>Behavior #1</span> Diving to the target</p>
@@ -735,12 +732,11 @@
       </div>
     </article>
 
-    <!-- ---------- V. Conclusions and Future Work ---------- -->
+    <!-- ---------- V. In Conclusion ---------- -->
     <article class="pp-chapter" id="p-concl">
       <p class="pp-num rv">Section V</p>
-      <h3 class="rv">Conclusions and Future Work</h3>
+      <h3 class="rv">In Conclusion...</h3>
       <p class="rv">This work demonstrates the applicability of VLAs and related models to underwater robot tasks. Results from both pool and marine deployments demonstrate that choices in model architecture and observation space matter when adapting ROVs to VLAs, and VLAs to underwater environments. By experimenting with novel action spaces like depth, models like ACT were able to successfully execute tasks in marine archaeological sites. Observation spaces in multi-task models, such as the addition of Δ tokens or the simplicity of ATTITUDE, can encourage emerging underwater behaviors like speediness, success rates, or forward pass latency speed. The inclusion of an expanded observation space, therefore, enabled better results than the baseline, despite a backbone trained on terrestrial data alone. This suggests that <mark>what we give a policy to observe can be just as important as the model itself</mark>, and that an underwater backbone is not necessary for multi-task VLA success. Together, these results suggest that effective underwater VLA deployment depends not only on the choice of model, but on how the model's action and observation spaces are adapted to the physical environment.</p>
-      <p class="rv">The following is recommended for future work: Expanding the <span class="sc">BluEmbodied Kit</span> repository to include training scripts for a broader set of single and multi-task BC architectures, evaluating said architectures to determine which ones find themselves robust to marine environments, collecting additional trials across <i>Coralita X127</i> and other wrecks, evaluating longer-horizon tasks such as tether untangling, and progressively extending deployments to greater depths. In addition, investigating domain generalization (whether data collected on land by terrestrial robotics can be successfully mixed with underwater data for underwater VLA training, and vice versa) is a crucial challenge to confront the difficulty of collecting real world underwater data. An investigation of the application of VLAs in untethered AUVs would also be an interesting challenge which can yield beneficial results for the underwater field robotics community. Together, these directions will move the robotics community toward the broader goal of enabling robust, generalizable, and increasingly autonomous embodied intelligence for real-world underwater robotics.</p>
     </article>
 
     <!-- ---------- Citation + references ---------- -->
@@ -925,7 +921,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=10"></script>
+<script src="assets/paper/paper.js?v=11"></script>
 <script src="assets/paper/rov-journey.js?v=4"></script>
 </body>
 </html>
