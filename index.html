@@ -659,14 +659,13 @@
         <figcaption><b>Fig. 7. Pool Deployment: Multi-task models ranked.</b> The median time to completion was calculated for each model over the successful rollouts (a subset of the 90 total). All models outperformed the baseline in speediness of a successful task completion. † Baseline: no proprioception of any kind.</figcaption>
       </figure>
 
-      <p class="rv">More proprioception observations did not necessarily lead to better performance: for calm-water manipulation, a smaller observation space provided a better balance between prediction speed and task success, while larger observation spaces, specifically with the addition of IMU and PWM observations, led to faster overall task completion. Similarly, a 4 second Δ token window enabled better performance than other window lengths for a controlled environment.</p>
-
-
       <figure class="pp-fig wide rv" id="fig8">
         <div class="f8" role="img" aria-label="Fig. 8: 14 small confusion matrices of rod colour asked for versus colour grabbed, one per model."></div>
         <p class="pp-legend f8-legend"><span>0</span><span class="f8-bar"></span><span>8</span> rollouts (of 10) · outlined = the colour asked for · hover a cell for the count</p>
         <figcaption><b>Fig. 8. Pool Deployment: Rod color confusion per multi-task model.</b> Rows: color asked for in text prompt; columns: color grabbed during rollout. Perceptive confusion exists strongly in every single multi-task model, and no model stood out to be perceptually more accurate than the other. The most common confusion is between red and green rods. <i>None</i> implies that the episode was failed, and hence, no rods were grabbed. † Baseline: no proprioception of any kind.</figcaption>
       </figure>
+
+      <p class="rv">More proprioception observations did not necessarily lead to better performance: for calm-water manipulation, a smaller observation space provided a better balance between prediction speed and task success, while larger observation spaces, specifically with the addition of IMU and PWM observations, led to faster overall task completion. Similarly, a 4 second Δ token window enabled better performance than other window lengths for a controlled environment.</p>
 
       <p class="rv">There is also found no apparent relationship between manipulation success and color confusion, which can imply that differences in manipulation success is not due to the differences in perception between models, but the observations fed into the models directly. This visual confusion in underwater policies is aligned with what was found in <a class="cite" href="#ref-3">[3]</a>, which visual occlusion, warping, and light dissipation can degrade VLA perception underwater. While this can be said about how DynamicVLA performs in our pool in calm waters, limitations of utilizing the pool includes the depth, size, and lack of realistic currents in the pool testing environments.</p>
 
