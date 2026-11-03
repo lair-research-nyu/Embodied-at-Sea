@@ -570,3 +570,7 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 #fig5 > figcaption, #fig5 .f5-legend { max-width: 620px; margin-left: auto; margin-right: auto; }
 /* Fig. 3 sits directly on the page: no white panel or outline */
 #fig3 .f3-row { background: none; border: 0; padding: 4px 0; }
+/* Fig. 9: night vs day at the Marina, two photos side by side */
+#fig9 .f9 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+#fig9 .f9 img { width: 100%; height: auto; border-radius: 8px; display: block; }
+@media (max-width: 560px) { #fig9 .f9 { grid-template-columns: 1fr; } }
