@@ -599,3 +599,6 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 .pp-table tbody tr.pick td.sticky { box-shadow: inset 3px 0 0 var(--tide); }
 @keyframes t1flash { 0%, 60% { background: #ffe9a8; } 100% { background: var(--foam); } }
 .pp-table tbody tr.flash td { animation: t1flash 1.6s ease; }
+/* the ablation-goal sentence: same look as the turbulence lead-in, with room above for the yellow rod */
+.paper #ablation-goal { margin: 72px 0 28px; }
+.rj-rod.yellow { background: linear-gradient(180deg, #f6d36b 0%, #e9b824 55%, #a98213 100%); }
