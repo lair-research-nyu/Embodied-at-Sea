@@ -354,10 +354,9 @@
         return 'M' + up.join('L') + 'L' + dn.join('L') + 'Z';
       }
       function line(k) { return 'M' + F.x.map(function (x, j) { return xs(x).toFixed(1) + ',' + ys(P[k].mu[j]).toFixed(1); }).join('L'); }
-      var sig = P.p < 0.05;
       var cell = el('div', 'f5-cell');
       cell.style.setProperty('--d', (i * 0.12) + 's');
-      cell.innerHTML = '<p class="f5-t">' + P.label + ' <span>(' + P.unit + ')</span><b class="' + (sig ? '' : 'ns') + '">×' + P.ratio.toFixed(1) + (sig ? '' : ' n.s.') + '</b></p>' +
+      cell.innerHTML = '<p class="f5-t">' + P.label + ' <span>(' + P.unit + ')</span><b>×' + P.ratio.toFixed(1) + '</b></p>' +
         '<svg viewBox="0 0 200 128"><defs><clipPath id="f5c' + i + '"><rect class="wipe" x="' + X0 + '" y="0" width="' + (X1 - X0 + 2) + '" height="128"/></clipPath></defs>' +
         '<line class="ax" x1="' + X0 + '" x2="' + X1 + '" y1="' + ys(0) + '" y2="' + ys(0) + '"/>' +
         [tick, -tick].map(function (t) { return '<line class="gr" x1="' + X0 + '" x2="' + X1 + '" y1="' + ys(t) + '" y2="' + ys(t) + '"/><text class="tk" x="' + (X0 - 4) + '" y="' + (ys(t) + 3) + '" text-anchor="end">' + fmt(t) + '</text>'; }).join('') +
@@ -374,7 +373,7 @@
         guide.setAttribute('x1', xs(F.x[j])); guide.setAttribute('x2', xs(F.x[j]));
         showTip('<b>' + P.label + '</b> at ' + Math.round(F.x[j]) + '% of the episode<br>Calm: ' + fmt(P.calm.mu[j]) + ' ± ' + fmt(P.calm.sd[j]) + ' ' + P.unit +
           '<br>Turbulent: ' + fmt(P.turb.mu[j]) + ' ± ' + fmt(P.turb.sd[j]) + ' ' + P.unit +
-          '<br>Typical turbulent episode moves ×' + P.ratio.toFixed(2) + (sig ? '' : ' (not significant)'), e.clientX, e.clientY);
+          '<br>Typical turbulent episode moves ×' + P.ratio.toFixed(2), e.clientX, e.clientY);
       });
       svg.addEventListener('pointerleave', function () { guide.setAttribute('x1', -9); guide.setAttribute('x2', -9); hideTip(); });
     });
