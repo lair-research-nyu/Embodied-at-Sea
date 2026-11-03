@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=19">
+<link rel="stylesheet" href="assets/paper/paper.css?v=20">
 </head>
 <body>
 
@@ -614,14 +614,13 @@
 
       <h4 class="rv">2) Action Spaces</h4>
       <div class="pp-actions6 rv">
-        <div><b>v<sub>x</sub>, v<sub>y</sub></b><span>Horizontal velocity commands along the body frame <i>x</i> and <i>y</i> axes</span></div>
-        <div><b>ω<sub>z</sub></b><span>Yaw rate</span></div>
-        <div class="hl"><b>z<sub>ref</sub></b><span>Vertical altitude setpoint, tracked by a closed-loop PID controller for stable depth-following (defined as a <i>dive</i> action)</span></div>
-        <div><b>c<sub>tilt</sub></b><span>Camera tilt toggle command</span></div>
-        <div><b>e<sub>ref</sub></b><span>End-effector setpoint</span></div>
+        <div class="hl dive"><em class="nm">dive (heave)</em><b>z<sub>ref</sub></b><span>Vertical altitude setpoint, tracked by a closed-loop PID controller for stable depth-following (defined as a <i>dive</i> action)</span></div>
+        <div><em class="nm">surge, sway</em><b>v<sub>x</sub>, v<sub>y</sub></b><span>Horizontal velocity commands along the body frame <i>x</i> and <i>y</i> axes</span></div>
+        <div><em class="nm">yaw</em><b>ω<sub>z</sub></b><span>Yaw rate</span></div>
+        <div><em class="nm">camera tilt</em><b>c<sub>tilt</sub></b><span>Camera tilt toggle command</span></div>
+        <div><em class="nm">gripper</em><b>e<sub>ref</sub></b><span>End-effector setpoint</span></div>
       </div>
-      <p class="rv">The stable controller compares the depth setpoint z<sub>ref</sub> with the depth read by the on-board ROV pressure-based depth sensor (a BAR30) to establish <i>dive</i>.</p>
-      <p class="rv">For pool deployments, the <i>dive</i> action was rendered dormant as the pool is shallow, and all pool tasks were performed at equivalent depths. For ocean deployments, the “dive” action was active as opposed to dormant. Unlike a pool where the water is shallow, <i>Coralita X127</i> is anywhere between 8 meters and 25 meters in depth, and both <i>grab</i> and <i>moor</i> were performed on an incline and at varying depths.</p>
+      <p class="rv">The stable controller compares the depth setpoint z<sub>ref</sub> with the depth read by the on-board ROV pressure-based depth sensor (a BAR30) to establish <i>dive</i>. For pool deployments, the <i>dive</i> action was rendered dormant as the pool is shallow, and all pool tasks were performed at equivalent depths. For ocean deployments, the “dive” action was active as opposed to dormant. Unlike a pool where the water is shallow, <i>Coralita X127</i> is anywhere between 8 meters and 25 meters in depth, and both <i>grab</i> and <i>moor</i> were performed on an incline and at varying depths.</p>
     </article>
 
     <!-- ---------- IV-B. Pool Deployment Results ---------- -->

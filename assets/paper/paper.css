@@ -602,3 +602,14 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 /* the ablation-goal sentence: same look as the turbulence lead-in, with room above for the yellow rod */
 .paper #ablation-goal { margin: 72px 0 28px; }
 .rj-rod.yellow { background: linear-gradient(180deg, #f6d36b 0%, #e9b824 55%, #a98213 100%); }
+/* Action Spaces: common names (as in Fig. 6) on each box; dive first, with an arrow down to its paragraph */
+.pp-actions6 em.nm { display: inline-block; font-style: normal; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--tide); background: var(--foam); border: 1px solid #b7dbe3; border-radius: 999px; padding: 1px 8px; margin-bottom: 6px; }
+.pp-actions6 div.hl em.nm { background: #fff; }
+.pp-actions6 { margin-bottom: 38px; }
+.pp-actions6 div.dive { position: relative; }
+.pp-actions6 div.dive::after { content: ""; position: absolute; left: 50%; top: 100%; width: 2px; height: 27px; margin-left: -1px; background: var(--accent); }
+.pp-actions6 div.dive::before {
+  content: ""; position: absolute; left: 50%; top: calc(100% + 26px); transform: translateX(-50%);
+  border: 6px solid transparent; border-top: 8px solid var(--accent); border-bottom: 0;
+}
+@media (max-width: 760px) { .pp-actions6 { margin-bottom: 20px; } .pp-actions6 div.dive::before, .pp-actions6 div.dive::after { display: none; } }
