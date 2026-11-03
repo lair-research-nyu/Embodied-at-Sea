@@ -566,3 +566,19 @@
   lb.addEventListener('click', closeLb);
   addEventListener('keydown', function (e) { if (e.key === 'Escape' && !lb.hidden) closeLb(); });
 })();
+
+/* Fig. 6: lay the diagram out at the width it used to have (up to 1400px, the full window),
+   then scale the whole thing down to fit the text column, so the arrangement stays the same. */
+(function () {
+  var fig = document.getElementById('fig6'), arch = fig && fig.querySelector('.arch');
+  if (!arch) return;
+  function fit() {
+    arch.style.zoom = ''; arch.style.width = '';
+    var col = fig.clientWidth, base = Math.min(1400, window.innerWidth - 32);
+    if (window.innerWidth <= 760 || base <= col) return;   // phones keep their stacked layout
+    arch.style.width = base + 'px';
+    arch.style.zoom = (col / base).toFixed(4);
+  }
+  fit();
+  addEventListener('resize', fit);
+})();
