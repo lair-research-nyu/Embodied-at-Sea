@@ -35,6 +35,7 @@
     allp: { label: 'Overall success incl. partial (%)', max: 100, unit: '%' },
     all: { label: 'Overall success (%)', max: 100, unit: '%' },
     grabp: { label: 'Grab the rod incl. partial (%)', max: 100, unit: '%' },
+    grab: { label: 'Grab the rod, successes only — no partials (%)', max: 100, unit: '%' },
     moor: { label: 'Moor on Post (%)', max: 100, unit: '%' },
     ring: { label: 'Remove Ring (%)', max: 100, unit: '%' },
     lat: { label: 'Latency per 20-step action chunk (ms)', max: 145, unit: ' ms', low: true }
