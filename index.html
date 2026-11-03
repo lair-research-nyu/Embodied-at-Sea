@@ -376,7 +376,6 @@
 
     <!-- ---------- I. Introduction ---------- -->
     <article class="pp-chapter" id="p-intro">
-      <p class="pp-num rv">Section I</p>
       <h3 class="rv">Can land-trained VLAs be adapted to the sea?</h3>
       <figure class="f1-fig" id="fig1">
         <div class="f1" aria-label="Fig. 1, rebuilt with live video">
@@ -438,7 +437,6 @@
 
     <!-- ---------- III-A. Data Collection ---------- -->
     <article class="pp-chapter" id="p-data">
-      <p class="pp-num rv">Section III-A</p>
       <h3 class="rv">Data collection (on and off the field)</h3>
 
       <h4 class="rv">1) Pool Deployment</h4>
@@ -451,7 +449,7 @@
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/pool-moor-start.webp" alt="Moor on post, pool: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/pool-moor-goal.webp" alt="Moor on post, pool: goal" width="720" height="405"><span class="state"></span><b>Moor on Post</b><small>Pool</small></button>
         <button class="task rv" type="button"><img data-src="assets/paper/tasks/pool-ring-start.webp" alt="Remove ring from post, pool: initial state" width="720" height="405"><img class="goal" data-src="assets/paper/tasks/pool-ring-goal.webp" alt="Remove ring from post, pool: goal" width="720" height="405"><span class="state"></span><b>Remove Ring from Post</b><small>Pool</small></button>
       </div>
-      <p class="pp-cap rv"><b>Fig. 2. Pool Deployment: Experimental tasks evaluated in a controlled environment.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split (see Fig. 3) between calm and turbulent waters created by a human volunteer (see Fig. 5). Rod locations and color order were randomized between episodes. Post location stayed relatively the same, but initial robot and ring configurations varied between episodes as well.</p>
+      <p class="pp-cap rv"><b>Fig. 2. Pool Deployment: Experimental tasks evaluated in a controlled environment.</b> Data collection in the Pool (Control Environment) was fully illuminated with a split (see Fig. 3) between calm and turbulent waters created by a human volunteer. Rod locations and color order were randomized between episodes. Post location stayed relatively the same, but initial robot and ring configurations varied between episodes as well.</p>
       <p class="rv">Three task families were explored (see Fig. 2) in both calm and turbulent waters (agitated by a human volunteer) in a pool.</p>
       <ol class="pp-contrib pp-tasks-boxed">
         <li class="rv"><span>1</span><span class="tx"><b>Grab</b>: approaching an object and grasping it with the end-effector to simulate sampling a specimen.</span></li>
@@ -526,7 +524,6 @@
 
     <!-- ---------- III-B. Model Descriptions ---------- -->
     <article class="pp-chapter" id="p-models">
-      <p class="pp-num rv">Section III-B</p>
       <h3 class="rv">Model Architectures</h3>
       <p class="rv">Unlike fixed-base manipulators, ROVs are continuously jostled by waves and currents across all six degrees of freedom, shifting the camera viewpoint and the vehicle’s pose relative to the target between consecutive actions. As a result, a stationary object to be manipulated in a world frame appears to move in the robot frame. In especially turbulent waters, free-floating manipulation objects tend to sway or move as well, adding another dimension of uncertainty to a policy's predicted trajectory. This turns an otherwise static task into a dynamic one that penalizes any policy too slow to react. As such, three model architectures promising fast inference were explored, paired with observation and action spaces uniquely tailored to underwater robots:</p>
       <ul class="pp-models rv">
@@ -611,7 +608,7 @@
         <li><b>Δ(t)</b>: estimated environmental disturbance.</li>
       </ul>
       <p class="rv">However, a single frame of Δ carries no turbulence history. Because ocean disturbances are low-frequency and periodic, turbulence only becomes legible over a window of frames. Rather than feed this window in as raw floats, the window is then tokenized with the FAST tokenizer <a class="cite" href="#ref-29">[29]</a>. This gives the policy a compressed representation of the various frequency components of the perturbations.</p>
-      <p class="rv">14 total DynamicVLA models (see Fig. 6) were trained on the pool data with a variety of observation space combinations (see Table I), with the smallest observation space being zero (the baseline model) and the largest space being 22 observation space dims. + 39 dims. for Δ tokens. Δ token windows were also varied, from 1.2 seconds to 6.0 seconds.</p>
+      <p class="rv">14 total DynamicVLA models (see Fig. 6) were trained on the pool data with a variety of observation space combinations (see Table I), with the smallest observation space being zero (the baseline model) and the largest space being 22 observation dims, plus 39 dims for Δ tokens. Δ token windows were also varied, from 1.2 seconds to 6.0 seconds.</p>
       <p class="pp-big target rv" id="ablation-goal">The goal of this ablation study is to investigate what telemetry observations best train a VLA built solely on terrestrial data to succeed underwater.</p>
 
       <h4 class="rv">2) Action Spaces</h4>
@@ -627,7 +624,6 @@
 
     <!-- ---------- IV-B. Pool Deployment Results ---------- -->
     <article class="pp-chapter" id="p-pool">
-      <p class="pp-num rv">Section IV-B</p>
       <h3 class="rv">Pool Deployment Results</h3>
       <p class="pp-cap rv"><b>Table I. Pool Deployment: Success rates and forward-pass latency of multi-task models.</b> A success for the <i>Grab the rod</i> task implies grabbing the right color rod, while a <i>partial</i> is when the model grabs a rod of the wrong color. Including partial successes and across 90 total gradable on-hardware rollouts (30 rollouts per task), 10 different DynamicVLA models outperformed the baseline. Latency is the time to produce one 20-step action chunk (mean over all models: 107.4 ± 11.4 ms). Four models run faster than the baseline despite a larger observation space. † Baseline: no proprioception. ▲: better than the baseline.</p>
 
@@ -661,22 +657,21 @@
         <figcaption><b>Fig. 8. Pool Deployment: Rod color confusion per multi-task model.</b> Rows: color asked for in text prompt; columns: color grabbed during rollout. Perceptive confusion exists strongly in every single multi-task model, and no model stood out to be perceptually more accurate than the other. The most common confusion is between red and green rods. † Baseline: no proprioception of any kind.</figcaption>
       </figure>
 
-      <p class="rv">Overall, ten models beat the visual-only baseline when partial successes are included, (see Table I). The highest performer in both overall task success and forward pass latency, i.e. ATTITUDE trained on both control and turbulent pool episodes, achieved a 93.3% success rate including partial successes, 17.7 percentage points higher than its runner-up, ATTITUDE + IMU + PWM + Δ Tokens, at 75.6%. ATTITUDE also has a mean forward pass latency of 95.2 milliseconds, 3.5 milliseconds faster than its runner-up, ATTITUDE + IMU + PWM (see Table I). ATTITUDE, however, is not the fastest model in terms of successful task time to completion: ATTITUDE + IMU + PWM outperformed ATTITUDE by 0.4 s by a pooled task average.</p>
+      <p class="rv">Overall, ten models beat the visual-only baseline when partial successes are included (see Table I). The highest performer in both overall task success and forward pass latency, i.e. ATTITUDE trained on both control and turbulent pool episodes, achieved a 93.3% success rate including partial successes, 17.7 percentage points higher than its runner-up, ATTITUDE + IMU + PWM + Δ Tokens, at 75.6%. ATTITUDE also has a mean forward pass latency of 95.2 milliseconds, 3.5 milliseconds faster than its runner-up, ATTITUDE + IMU + PWM (see Table I). ATTITUDE, however, is not the fastest model in terms of successful task time to completion: ATTITUDE + IMU + PWM outperformed ATTITUDE by 0.4 s by a pooled task average.</p>
 
       <p class="rv">More proprioception observations did not necessarily lead to better performance: for calm-water manipulation, a smaller observation space provided a better balance between prediction speed and task success, while larger observation spaces, specifically with the addition of IMU and PWM observations, led to faster overall task completion. Similarly, a 4 second Δ token window enabled better performance than other window lengths for a controlled environment.</p>
 
-      <p class="rv">There is also found no apparent relationship between manipulation success and color confusion, which can imply that differences in manipulation success is not due to the differences in perception between models, but the observations fed into the models directly. This visual confusion in underwater policies is aligned with what was found in <a class="cite" href="#ref-3">[3]</a>, which visual occlusion, warping, and light dissipation can degrade VLA perception underwater. While this can be said about how DynamicVLA performs in our pool in calm waters, limitations of utilizing the pool includes the depth, size, and lack of realistic currents in the pool testing environments.</p>
+      <p class="rv">No apparent relationship was found between manipulation success and color confusion, which can imply that differences in manipulation success are not due to differences in perception between models, but to the observations fed into the models directly. This visual confusion in underwater policies is aligned with what was found in <a class="cite" href="#ref-3">[3]</a>, where visual occlusion, warping, and light dissipation were shown to degrade VLA perception underwater. While this can be said about how DynamicVLA performs in our pool in calm waters, limitations of utilizing the pool include the depth, size, and lack of realistic currents in the pool testing environments.</p>
 
     </article>
 
     <!-- ---------- IV-C. Marine Deployment Results ---------- -->
     <article class="pp-chapter" id="p-marine">
-      <p class="pp-num rv">Section IV-C</p>
       <h3 class="rv">Marine Deployment Results</h3>
       <p class="pp-cap rv"><b>Table II. Marine Deployment: Success rate by task and location.</b> ACT consistently outperforms SmolVLA, and Mooring is the best-performing task family for both architectures. Top: pooled across sites; bottom: each task and location, with the number of gradable rollouts (<i>n</i>) and 95% confidence interval.</p>
 
       <div class="pp-chart rv" id="chart-t2">
-        <p class="pp-label">Table II, as a chart — success rate by task and location</p>
+        <p class="pp-label">Table II — success rate by task and location</p>
         <div class="t2"></div>
         <p class="pp-legend"><span class="sw act"></span>ACT <span class="sw smol"></span>SmolVLA <span class="k ci"></span>95% CI <span class="f7-note">hover a bar for details</span></p>
       </div>
@@ -728,7 +723,6 @@
 
     <!-- ---------- V. In Conclusion ---------- -->
     <article class="pp-chapter" id="p-concl">
-      <p class="pp-num rv">Section V</p>
       <h3 class="rv">In Conclusion...</h3>
       <p class="rv">This work demonstrates the applicability of VLAs and related models to underwater robot tasks. Results from both pool and marine deployments demonstrate that choices in model architecture and observation space matter when adapting ROVs to VLAs, and VLAs to underwater environments. By experimenting with novel action spaces like depth, models like ACT were able to successfully execute tasks in marine archaeological sites. Observation spaces in multi-task models, such as the addition of Δ tokens or the simplicity of ATTITUDE, can encourage emerging underwater behaviors like speediness, success rates, or forward pass latency speed. The inclusion of an expanded observation space, therefore, enabled better results than the baseline, despite a backbone trained on terrestrial data alone. This suggests that <mark>what we give a policy to observe can be just as important as the model itself</mark>, and that an underwater backbone is not necessary for multi-task VLA success. Together, these results suggest that effective underwater VLA deployment depends not only on the choice of model, but on how the model's action and observation spaces are adapted to the physical environment.</p>
     </article>
