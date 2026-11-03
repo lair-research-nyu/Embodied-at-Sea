@@ -716,3 +716,5 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 .dn-box .pp-legend .sun, .dn-box .pp-legend .moon { margin-left: -4px; }
 /* table captions sit above their charts, as in the paper */
 .pp-cap + .pp-chart { margin-top: 10px; }
+/* Fig. 5 legend centred under the figure */
+#fig5 .f5-legend { justify-content: center; text-align: center; margin: 12px auto 0 !important; }
