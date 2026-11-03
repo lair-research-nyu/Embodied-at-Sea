@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=17">
+<link rel="stylesheet" href="assets/paper/paper.css?v=18">
 </head>
 <body>
 
@@ -566,14 +566,15 @@
     <article class="pp-chapter" id="p-models-2">
       <h4 class="rv">1) Observation Spaces</h4>
       <div class="pp-obs">
-        <p class="pp-label">Pool observation space — pick a block <span>(the state lines in Fig. 6 follow your choice)</span></p>
-        <div class="obs-levels" role="radiogroup" aria-label="Observation space">
-          <button role="radio" aria-checked="true" data-level="1"><b>ATTITUDE</b><span>3 dims</span></button>
-          <button role="radio" aria-checked="false" data-level="2"><b>+ IMU</b><span>13 dims</span></button>
-          <button role="radio" aria-checked="false" data-level="3"><b>+ THRUSTER PWM</b><span>19 dims</span></button>
-          <button role="radio" aria-checked="false" data-level="4"><b>+ RAW Δ</b><span>22 dims</span></button>
-          <button role="radio" aria-checked="false" data-level="5"><b>+ Δ TOKENS</b><span>22 + 39 dims</span></button>
+        <p class="pp-label">Pool observation space — turn blocks on or off <span>(the state lines in Fig. 6 and the matching model in Table I follow your choice)</span></p>
+        <div class="obs-levels" role="group" aria-label="Observation blocks">
+          <button type="button" aria-pressed="true" data-b="1"><b>ATTITUDE</b><span>3 dims</span></button>
+          <button type="button" aria-pressed="false" data-b="2"><b>+ IMU</b><span>+10 dims</span></button>
+          <button type="button" aria-pressed="false" data-b="3"><b>+ THRUSTER PWM</b><span>+6 dims</span></button>
+          <button type="button" aria-pressed="false" data-b="4"><b>+ RAW Δ</b><span>+3 dims</span></button>
+          <button type="button" aria-pressed="false" data-b="5"><b>+ Δ TOKENS</b><span>+39 dims</span></button>
         </div>
+        <div class="obs-win" hidden><span>Δ token window:</span><button type="button" data-w="1.2">1.2 s</button><button type="button" data-w="2.0">2.0 s</button><button type="button" data-w="4.0" aria-pressed="true">4.0 s</button><button type="button" data-w="6.0">6.0 s</button></div>
         <div class="obs-chips" aria-live="polite">
           <span data-l="1" title="roll (rad)">φ roll</span><span data-l="1" title="pitch (rad)">θ pitch</span><span data-l="1" title="yaw (rad)">ψ yaw</span>
           <span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>x</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>y</sub></span><span data-l="2" title="body-frame linear acceleration (m/s²)">a<sub>z</sub></span>
@@ -583,15 +584,16 @@
           <span data-l="4" title="raw disturbance (m/s²)">Δ<sub>x</sub></span><span data-l="4" title="raw disturbance (m/s²)">Δ<sub>y</sub></span><span data-l="4" title="raw disturbance (m/s²)">Δ<sub>z</sub></span>
           <span data-l="5" class="tok" title="Δ FAST token">t<sub>1</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>2</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>3</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>4</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>5</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>6</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>7</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>8</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>9</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>10</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>11</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>12</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>13</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>14</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>15</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>16</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>17</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>18</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>19</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>20</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>21</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>22</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>23</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>24</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>25</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>26</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>27</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>28</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>29</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>30</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>31</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>32</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>33</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>34</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>35</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>36</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>37</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>38</sub></span><span data-l="5" class="tok" title="Δ FAST token">t<sub>39</sub></span>
         </div>
-        <p class="obs-desc" data-l="1">The ATTITUDE block consists of roll (φ), pitch (θ), and yaw (ψ) (rad), forming a 3-dimensional observation space.</p>
-        <p class="obs-desc" data-l="2" hidden>The IMU block adds ten channels: body-frame linear accelerations a<sub>x</sub>, a<sub>y</sub>, and a<sub>z</sub> (m/s²) from raw IMU readings; EKF-fused angular rates ω<sub>x</sub> (<i>rollspeed</i>), ω<sub>y</sub> (<i>pitchspeed</i>), and ω<sub>z</sub> (<i>yawspeed</i>) (rad/s) from ATTITUDE; vertical velocity v<sub>z</sub> (<i>climb</i>) (m/s) from VFR HUD; and the three vibration measurements vib<sub>x</sub>, vib<sub>y</sub>, and vib<sub>z</sub> (m/s²) from VIBRATION. Combined with the ATTITUDE block, this forms a 13-dimensional observation space.</p>
-        <p class="obs-desc" data-l="3" hidden>The THRUSTER PWM block adds six commanded thruster outputs u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub> from the raw server output (µs), with a neutral value of 1500 µs. Combined with the ATTITUDE and IMU blocks, this forms a 19-dimensional observation space.</p>
-        <p class="obs-desc" data-l="4" hidden>The RAW Δ block adds the estimated environmental disturbance Δ<sub>x</sub>, Δ<sub>y</sub>, and Δ<sub>z</sub> (m/s²), derived from the 19 channels as described below. Combined with the ATTITUDE, IMU, and THRUSTER PWM blocks, this forms a 22-dimensional observation space.</p>
-        <p class="obs-desc" data-l="5" hidden>The Δ TOKENS block adds 39 FAST tokens that compress a recent window of Δ (window lengths from 1.2 to 6.0 seconds). Combined with the 22 dims above, this adds 39 dims to the observation space.</p>
+        <p class="obs-desc" data-l="1">The ATTITUDE block consists of roll (φ), pitch (θ), and yaw (ψ) (rad).</p>
+        <p class="obs-desc" data-l="2" hidden>The IMU block adds ten channels: body-frame linear accelerations a<sub>x</sub>, a<sub>y</sub>, and a<sub>z</sub> (m/s²) from raw IMU readings; EKF-fused angular rates ω<sub>x</sub> (<i>rollspeed</i>), ω<sub>y</sub> (<i>pitchspeed</i>), and ω<sub>z</sub> (<i>yawspeed</i>) (rad/s) from ATTITUDE; vertical velocity v<sub>z</sub> (<i>climb</i>) (m/s) from VFR HUD; and the three vibration measurements vib<sub>x</sub>, vib<sub>y</sub>, and vib<sub>z</sub> (m/s²) from VIBRATION.</p>
+        <p class="obs-desc" data-l="3" hidden>The THRUSTER PWM block adds six commanded thruster outputs u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub> from the raw server output (µs), with a neutral value of 1500 µs.</p>
+        <p class="obs-desc" data-l="4" hidden>The RAW Δ block adds the estimated environmental disturbance Δ<sub>x</sub>, Δ<sub>y</sub>, and Δ<sub>z</sub> (m/s²), derived from the telemetry as described below.</p>
+        <p class="obs-desc" data-l="5" hidden>The Δ TOKENS block adds 39 FAST tokens that compress a recent window of Δ (window lengths from 1.2 to 6.0 seconds).</p>
+        <p class="obs-model" aria-live="polite"></p>
       </div>
-      <p class="rv">While most aspects of the model architectures do not differ from those published in <a class="cite" href="#ref-2">[2]</a>, <a class="cite" href="#ref-21">[21]</a>, <a class="cite" href="#ref-22">[22]</a>, the observation spaces and even video data content differ greatly.</p>
+      <p class="rv">While most aspects of the model architectures do not differ from those published in <a class="cite" href="#ref-2">[2]</a>, <a class="cite" href="#ref-21">[21]</a>, <a class="cite" href="#ref-22">[22]</a>, the observation spaces and video data content differ greatly and are new to the VLA research space.</p>
       <p class="rv">For the two model architectures trained for ocean deployment, a six-dimensional observational space was used that includes: roll, pitch, yaw, depth, depth set-point, and the depth controller's output, plus RGB video (see Fig. 1).</p>
-      <p class="rv">For the DynamicVLA models trained for in-lab pool deployments, a greater observation space was considered. At each control step during an episode of data, the ROV reports a 19-channel telemetry row over MAVLink at 50Hz, from which the maximal observation space is <span class="vec">o<sub>t</sub> = [φ, θ, ψ, a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>, ω<sub>x</sub>, ω<sub>y</sub>, ω<sub>z</sub>, v<sub>z</sub>, vib<sub>x</sub>, vib<sub>y</sub>, vib<sub>z</sub>, u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub>]<sup>T</sup></span>, where each block is described in the picker above. From these observations different combinations are selected to evaluate their effect on policy performance.</p>
+      <p class="rv">For the DynamicVLA models trained for in-lab pool deployments, a greater observation space was considered. At each control step during an episode of data, the ROV reports a 19-channel telemetry row over MAVLink at 50Hz, from which the maximal observation space is <span class="vec">o<sub>t</sub> = [φ, θ, ψ, a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>, ω<sub>x</sub>, ω<sub>y</sub>, ω<sub>z</sub>, v<sub>z</sub>, vib<sub>x</sub>, vib<sub>y</sub>, vib<sub>z</sub>, u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub>]<sup>T</sup></span>. From these observations different combinations are selected to evaluate their effect on policy performance.</p>
       <p class="rv">To investigate how turbulence affects VLA performance, a 3-dim disturbance channel, raw Δ<sub>x,y,z</sub>, is derived alongside the 19-dim observation space. At each timestep, the ROV's expected acceleration was estimated from its orientation and thruster commands. The difference between this expected acceleration and the measured acceleration was treated as the environmental disturbance:</p>
       <div class="pp-eq rv" role="math" aria-label="a of t equals G orient of t plus Phi u of t plus Delta of t">
         <span class="t" data-tip="a(t) = [aₓ, a_y, a_z]: measured linear acceleration.">a(t)</span> =
@@ -923,7 +925,7 @@
     document.addEventListener('visibilitychange', function () { if (!document.hidden) kick(); });
   })();
 </script>
-<script src="assets/paper/paper.js?v=9"></script>
+<script src="assets/paper/paper.js?v=10"></script>
 <script src="assets/paper/rov-journey.js?v=2"></script>
 </body>
 </html>

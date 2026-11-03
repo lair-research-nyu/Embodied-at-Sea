@@ -393,19 +393,62 @@
     } else arch.classList.add('in');
   })();
 
-  /* ---------- observation-space builder ---------- */
-  var lv = $$('.obs-levels button');
-  function setLevel(l) {
-    lv.forEach(function (b) { b.setAttribute('aria-checked', +b.getAttribute('data-level') === l ? 'true' : 'false'); });
-    $$('.obs-chips span').forEach(function (s, i) {
-      var on = +s.getAttribute('data-l') <= l;
-      setTimeout(function () { s.classList.toggle('on', on); }, reduce ? 0 : (on ? i * 25 : 0));
-    });
-    $$('.obs-desc').forEach(function (p) { p.hidden = +p.getAttribute('data-l') !== l; });
-    $$('.arch .state span').forEach(function (s) { s.classList.toggle('on', +s.getAttribute('data-l') <= l); });
+  /* ---------- observation-space builder: blocks on/off -> matching Table I model ---------- */
+  // blocks: 1 attitude, 2 IMU, 3 thruster PWM, 4 raw Δ, 5 Δ tokens. Only combinations that were trained are reachable:
+  // IMU needs attitude, PWM needs IMU, Δ needs attitude, and raw Δ / Δ tokens are one or the other.
+  var ob = { 1: true, 2: false, 3: false, 4: false, 5: false }, win = '4.0', lastB = 1;
+  var obBtns = $$('.obs-levels button[data-b]'), winBox = $('.obs-win'), winBtns = $$('.obs-win button');
+  var DIMS = { 1: 3, 2: 10, 3: 6, 4: 3 };
+  function pickModel() {
+    if (!ob[1]) return 1;
+    if (!ob[2]) return ob[4] ? 8 : ob[5] ? { '1.2': 4, '2.0': 5, '4.0': 6, '6.0': 7 }[win] : 3;
+    if (!ob[3]) return ob[4] ? 11 : ob[5] ? 10 : 9;
+    return ob[4] ? 14 : ob[5] ? 13 : 12;
   }
-  lv.forEach(function (b) { b.addEventListener('click', function () { setLevel(+b.getAttribute('data-level')); }); });
-  setLevel(1);
+  function toggle(bn) {
+    var on = !ob[bn];
+    ob[bn] = on;
+    if (on) {
+      if (bn >= 2) ob[1] = true;
+      if (bn === 3) ob[2] = true;
+      if (bn === 4) ob[5] = false;
+      if (bn === 5) ob[4] = false;
+    } else {
+      if (bn === 1) { ob[2] = ob[3] = ob[4] = ob[5] = false; }
+      if (bn === 2) ob[3] = false;
+    }
+    lastB = on ? bn : 0;
+    renderObs();
+  }
+  function renderObs() {
+    obBtns.forEach(function (b) { b.setAttribute('aria-pressed', ob[+b.getAttribute('data-b')] ? 'true' : 'false'); });
+    $$('.obs-chips span').forEach(function (sp, i) {
+      var on = !!ob[+sp.getAttribute('data-l')];
+      setTimeout(function () { sp.classList.toggle('on', on); }, reduce ? 0 : (on ? Math.min(i, 40) * 15 : 0));
+    });
+    var shown = lastB && ob[lastB] ? lastB : ([5, 4, 3, 2, 1].filter(function (k) { return ob[k]; })[0] || 0);
+    $$('.obs-desc').forEach(function (pp) { pp.hidden = +pp.getAttribute('data-l') !== shown; });
+    $$('.arch .state span').forEach(function (sp) { sp.classList.toggle('on', !!ob[+sp.getAttribute('data-l')]); });
+    winBox.hidden = !(ob[5] && !ob[2]);
+    winBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-w') === win ? 'true' : 'false'); });
+    var n = pickModel(), d = T1.filter(function (r) { return r.n === n; })[0];
+    var dim = [1, 2, 3, 4].reduce(function (t, k) { return t + (ob[k] ? DIMS[k] : 0); }, 0);
+    $('.obs-model').innerHTML = '<span class="obs-dims">' + dim + ' dims' + (ob[5] ? ' + 39 Δ tokens' : '') + '</span>' +
+      'This is <a href="#t1-row-' + n + '" class="obs-go">model #' + n + ' in Table I</a>: <b>' + d.obs + (n === 1 ? ' (baseline)' : '') + '</b>, ' +
+      fmt(d.allp) + '% overall success incl. partial, ' + fmt(d.lat) + ' ms latency.' +
+      (n === 3 ? ' <span class="obs-note">Model #2 uses the same inputs but was trained on calm-water episodes only.</span>' : '');
+    $$('#table-1 tbody tr').forEach(function (tr) { tr.classList.toggle('pick', tr.id === 't1-row-' + n); });
+  }
+  obBtns.forEach(function (b) { b.addEventListener('click', function () { toggle(+b.getAttribute('data-b')); }); });
+  winBtns.forEach(function (b) { b.addEventListener('click', function () { win = b.getAttribute('data-w'); renderObs(); }); });
+  document.addEventListener('click', function (e) {
+    var go = e.target.closest && e.target.closest('.obs-go'); if (!go) return;
+    e.preventDefault();
+    var tr = document.getElementById(go.getAttribute('href').slice(1)); if (!tr) return;
+    tr.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+    tr.classList.remove('flash'); void tr.offsetWidth; tr.classList.add('flash');
+  });
+  setTimeout(renderObs, 0);   // after Table I has been built below
 
   /* ---------- Table I: bar chart ---------- */
   var chart = $('#chart-pool'), barsBox = $('.bars', chart), sortBox = $('.sort input', chart), metric = 'allp';
@@ -470,7 +513,7 @@
       '<tr><th class="sticky">#</th><th class="l">Observation Space</th><th>Obs.<br>Dim.</th><th>succ.</th><th>part.</th><th>%</th><th>%<br>w/ part.</th><th>%</th><th>%</th><th>%</th><th>%<br>w/ part.</th><th>(ms)</th></tr></thead>';
     var body = T1.map(function (d) {
       var boldAll = d.n !== 1 && d.allp > BASE.allp, boldLat = d.n !== 1 && d.lat < BASE.lat;
-      return '<tr' + (d.n === 3 ? ' class="shade"' : '') + '><td class="sticky">#' + d.n + '</td><td class="l">' + d.obs + (d.n === 1 ? '<sup>†</sup>' : '') + '</td><td>' + d.dim + '</td><td>' + d.succ + '</td><td>' + d.part +
+      return '<tr id="t1-row-' + d.n + '"' + (d.n === 3 ? ' class="shade"' : '') + '><td class="sticky">#' + d.n + '</td><td class="l">' + d.obs + (d.n === 1 ? '<sup>†</sup>' : '') + '</td><td>' + d.dim + '</td><td>' + d.succ + '</td><td>' + d.part +
         '</td><td>' + fmt(d.grab) + '</td><td>' + fmt(d.grabp) + '</td><td>' + fmt(d.moor) + '</td><td>' + fmt(d.ring) + '</td><td>' + fmt(d.all) +
         '</td><td>' + (boldAll ? '<b>' + fmt(d.allp) + '</b>' : fmt(d.allp)) + '</td><td>' + (boldLat ? '<b>' + fmt(d.lat) + ' ± ' + fmt(d.sd) + '</b>' : fmt(d.lat) + ' ± ' + fmt(d.sd)) + '</td></tr>';
     }).join('');

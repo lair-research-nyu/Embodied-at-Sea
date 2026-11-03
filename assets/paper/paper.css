@@ -82,7 +82,7 @@ img.loaded { opacity: 1; transition: opacity .6s ease; }
 /* task flip cards */
 .pp-taskhead { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; margin: 22px 0 12px; }
 .pp-hint { font-size: .82rem; color: var(--muted); }
-.pp-flipall, .seg button, .obs-levels button {
+.pp-flipall, .seg button, .obs-levels button, .obs-win button {
   font: inherit; font-size: .88rem; cursor: pointer; padding: 8px 14px; border-radius: 999px;
   border: 1px solid var(--line); background: #fff; color: var(--ink); transition: background .2s, color .2s, border-color .2s;
 }
@@ -585,3 +585,17 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 #p-models-2 .pp-obs { margin: 6px 0 22px; }
 /* Δ token chips: 39 of them, so keep them compact */
 .obs-chips span.tok { padding: 3px 5px; font-size: .72rem; }
+/* obs picker: blocks are on/off toggles; live link to the matching Table I model */
+.obs-levels button[aria-pressed=true] { background: var(--tide); border-color: var(--tide); color: #fff; }
+.obs-levels button[aria-pressed=true] span { color: rgba(255,255,255,.8); }
+.obs-win { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: -4px 0 12px; font-size: .82rem; color: var(--muted); }
+.obs-win button { padding: 3px 10px; font-size: .8rem; border-radius: 999px; }
+.obs-win button[aria-pressed=true] { background: var(--tide); border-color: var(--tide); color: #fff; }
+.obs-model { margin: 12px 0 0 !important; padding: 10px 12px; border-radius: 10px; background: var(--foam); border: 1px solid #b7dbe3; font-size: .9rem; line-height: 1.55; color: var(--ink); }
+.obs-model .obs-dims { float: right; margin-left: 10px; font-size: .78rem; color: var(--tide); font-weight: 600; }
+.obs-model .obs-note { display: block; color: var(--muted); font-size: .82rem; margin-top: 2px; }
+.obs-model a { color: var(--tide); font-weight: 600; }
+.pp-table tbody tr.pick td, .pp-table tbody tr.pick td.sticky { background: var(--foam); }
+.pp-table tbody tr.pick td.sticky { box-shadow: inset 3px 0 0 var(--tide); }
+@keyframes t1flash { 0%, 60% { background: #ffe9a8; } 100% { background: var(--foam); } }
+.pp-table tbody tr.flash td { animation: t1flash 1.6s ease; }
