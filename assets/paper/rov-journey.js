@@ -1,7 +1,9 @@
 /* The BlueROV beside "Abstract" swims down the page as you scroll: it picks up the red rod resting on the
    "Data collection" heading, picks up a few fish once it passes the Malta (marine deployment) part, and sets
    the rod down on the "Model Architectures" heading. Then it swims on, picks up the yellow rod resting on top of
-   the ablation-goal sentence, and sets that one down on the "Pool Deployment Results" heading. Positions are a function of scroll, so scrolling up
+   the ablation-goal sentence, and sets that one down on the "Pool Deployment Results" heading. There it swaps it for
+   the green rod lying beside it, picks up fish again after "Marine Deployment Results", gets a lightbulb over its
+   head at "Emerging behaviors", leaves the green rod on "Conclusions and Future Work", and swims away. Positions are a function of scroll, so scrolling up
    plays it backwards. Wide-ish screens only; elsewhere the icon simply stays beside "Abstract". */
 (function () {
   'use strict';
@@ -12,6 +14,9 @@
   var col = document.getElementById('paper');
   var goal = document.getElementById('ablation-goal');
   var hPool = document.querySelector('#p-pool h3');
+  var hMarineRes = document.querySelector('#p-marine h3');
+  var hBehav = document.getElementById('p-behaviors');
+  var hConcl = document.querySelector('#p-concl h3');
   if (!home || !hData || !hModel || !col) return;
 
   var still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -24,6 +29,8 @@
   var rov = mk('img', 'rj-rov'); rov.src = 'assets/img/bluerov-240.webp'; rov.alt = '';
   var rod = mk('div', 'rj-rod');
   var rod2 = (goal && hPool) ? mk('div', 'rj-rod yellow') : null;
+  var rod3 = (rod2 && hMarineRes && hBehav && hConcl) ? mk('div', 'rj-rod green') : null;
+  var bulb = rod3 ? mk('span', 'rj-bulb', '💡') : null;
   var FISH = ['🐟', '🐠', '🐡'];
   var fish = FISH.map(function (f, i) { var e = mk('span', 'rj-fish', f); return { el: e, x: 0, y: 0, k: i }; });
 
@@ -73,6 +80,9 @@
     var big = clamp(margin - 24, 46, 78), small = hb.w, W, grip;   // ROV width; rod hangs under the ROV
     var x, y, carry = false, dropped = false, carry2 = false, dropped2 = false, q;
     var Y = rod2 ? restAbove(goal) : null, E = rod2 ? restOn(hPool) : null;
+    var G = rod3 ? { x: E.x + 78, y: E.y } : null;                 // green rod, lying beside the yellow drop spot
+    var F = rod3 ? restOn(hConcl) : null, MR = rod3 ? box(hMarineRes).y : 0, BH = rod3 ? box(hBehav).y : 0;
+    var carry3 = false, dropped3 = false, gone = 0;
     var gB = 0.34 * big, leg1 = R.y - 150, leg2 = D.y - 150;
     var D2 = { x: D.x + 60, y: D.y - gB - 46 };                   // where it hovers after the first drop
 
@@ -102,9 +112,24 @@
       if (Math.abs(x - lane) < 1) x += still ? 0 : Math.min(10, margin / 2 - big / 2 - 4) * Math.sin(c / 90);
     } else if (c <= E.y) {                                        // lower it after "Pool Deployment Results"
       W = big; dropped = true; carry2 = true; x = E.x; y = lerp(E.y - gB - 40, E.y - gB, ease((c - (E.y - 150)) / 150));
-    } else {                                                      // let go and hover just above-right of it
+    } else if (!rod3) {                                           // (no green leg) let go and hover above-right
       var w3 = ease((c - E.y) / 200);
       W = big; dropped = true; dropped2 = true; x = lerp(E.x, E.x + 60, w3); y = lerp(E.y - gB, E.y - gB - 46, w3);
+    } else if (c <= E.y + 140) {                                  // let go of the yellow rod, shift over the green one
+      var w4 = ease((c - E.y) / 140);
+      W = big; dropped = dropped2 = true; x = lerp(E.x, G.x, w4); y = lerp(E.y - gB, G.y - gB - 30, w4);
+    } else if (c <= E.y + 260) {                                  // settle onto the green rod
+      W = big; dropped = dropped2 = true; x = G.x; y = lerp(G.y - gB - 30, G.y - gB, ease((c - E.y - 140) / 120));
+    } else if (c <= F.y - 150) {                                  // carry it down the margin
+      W = big; dropped = dropped2 = true; carry3 = true;
+      q = route(c, E.y + 260, F.y - 150, { x: G.x, y: G.y - gB }, { x: F.x, y: F.y - gB - 40 }, lane); x = q.x; y = q.y;
+      if (Math.abs(x - lane) < 1) x += still ? 0 : Math.min(10, margin / 2 - big / 2 - 4) * Math.sin(c / 90);
+    } else if (c <= F.y) {                                        // lower it after "Conclusions and Future Work"
+      W = big; dropped = dropped2 = true; carry3 = true; x = F.x; y = lerp(F.y - gB - 40, F.y - gB, ease((c - (F.y - 150)) / 150));
+    } else {                                                      // let go and swim away off the right edge
+      gone = ease((c - F.y) / 450);
+      W = big; dropped = dropped2 = dropped3 = true;
+      x = lerp(F.x, pc.x + pc.w + margin - W / 2, gone); y = lerp(F.y - gB, F.y - gB - 140, gone);
     }
     grip = 0.34 * W;
     if (c > A.y) y += still ? 0 : 3 * Math.sin(t * 1.6);          // hovering
@@ -114,6 +139,8 @@
     rov.style.width = W.toFixed(1) + 'px';
     var rh = W * 176 / 240;
     place(rov, x - W / 2, y - rh / 2, ' rotate(' + tilt.toFixed(2) + 'deg)');
+    var vis = 1 - clamp((gone - 0.55) / 0.45, 0, 1);              // fades out over the last part of swimming away
+    rov.style.opacity = vis.toFixed(2);
     home.style.visibility = 'hidden';                              // the flying copy stands in for it
 
     // rod: on Data collection -> under the ROV -> on Model Architectures
@@ -132,12 +159,28 @@
       place(rod2, yx - 29, yy - 10, ' rotate(' + ya.toFixed(2) + 'deg)');
     }
 
+    // green rod: beside the yellow drop spot -> under the ROV -> on Conclusions and Future Work
+    if (rod3) {
+      var gx, gy, ga = -2;
+      if (carry3) { gx = x; gy = y + grip; ga = tilt * 0.6 - 3; }
+      else if (dropped3) { gx = F.x; gy = F.y; }
+      else { gx = G.x; gy = G.y; }
+      place(rod3, gx - 29, gy - 10, ' rotate(' + ga.toFixed(2) + 'deg)');
+      // lightbulb over its head from "Emerging behaviors" on
+      var bOn = clamp((c - BH) / 120, 0, 1) * vis;
+      bulb.style.opacity = bOn.toFixed(2);
+      place(bulb, x - 11, y - rh / 2 - 30 + (still ? 0 : 2 * Math.sin(t * 2.4)), ' scale(' + (0.6 + 0.4 * bOn).toFixed(2) + ')');
+    }
+
     // fish join once the ROV is past the Malta section, and drift off after the drop
-    var fishOn = c > M && c < D.y + 600;
-    var fade = clamp((c - M) / 200, 0, 1) * clamp((D.y + 600 - c) / 250, 0, 1);
+    // ...and again once it passes "Marine Deployment Results", until it swims away
+    var fishOn = (c > M && c < D.y + 600) || (rod3 && c > MR);
+    var fade = Math.max(clamp((c - M) / 200, 0, 1) * clamp((D.y + 600 - c) / 250, 0, 1),
+                        rod3 ? clamp((c - MR) / 200, 0, 1) * vis : 0);
+    var lift = rod3 && c > BH ? 26 : 0;                            // make room for the lightbulb
     fish.forEach(function (f, i) {
       var spread = Math.max(0, margin / 2 - 16), inLane = Math.abs(x - lane) < spread + 1;
-      var tx = (inLane ? lane : x) + clamp((i - 1) * 16 + (still ? 0 : 8 * Math.sin(t * 1.3 + i * 2)), -spread, spread), ty = y - 48 - 30 * i + (still ? 0 : 6 * Math.sin(t * 1.9 + i));
+      var tx = (inLane ? lane : x) + clamp((i - 1) * 16 + (still ? 0 : 8 * Math.sin(t * 1.3 + i * 2)), -spread, spread), ty = y - 48 - lift - 30 * i + (still ? 0 : 6 * Math.sin(t * 1.9 + i));
       if (!f.init || !fishOn) { f.x = tx; f.y = ty; f.init = true; }
       var k = still ? 1 : 0.06 + 0.02 * i;                         // each fish lags a little more
       var px = f.x; f.x += (tx - f.x) * k; f.y += (ty - f.y) * k;

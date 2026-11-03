@@ -496,8 +496,8 @@ svg.depth .dot { fill: var(--act); stroke: #fff; stroke-width: 2.5; }
 .pp-tasklist li::marker { color: var(--accent); }
 
 /* ---------- the BlueROV's journey: Abstract -> rod on Data collection -> Model Architectures ---------- */
-.rj-rov, .rj-rod, .rj-fish { position: absolute; left: 0; top: 0; z-index: 15; pointer-events: none; display: none; will-change: transform; }
-html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
+.rj-rov, .rj-rod, .rj-fish, .rj-bulb { position: absolute; left: 0; top: 0; z-index: 15; pointer-events: none; display: none; will-change: transform; }
+html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb { display: block; }
 .rj-rov { height: auto; filter: drop-shadow(0 6px 10px rgba(4,19,31,.18)); }
 .rj-rod { width: 58px; height: 10px; border-radius: 5px; background: linear-gradient(180deg, #e2554f 0%, #c8322f 55%, #8f1f1c 100%); box-shadow: 0 3px 6px rgba(4,19,31,.18); }
 .rj-fish { font-size: 22px; line-height: 1; opacity: 0; transition: opacity .3s; }
@@ -613,3 +613,6 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
   border: 6px solid transparent; border-top: 8px solid var(--accent); border-bottom: 0;
 }
 @media (max-width: 760px) { .pp-actions6 { margin-bottom: 20px; } .pp-actions6 div.dive::before, .pp-actions6 div.dive::after { display: none; } }
+/* green rod (Pool Results -> Conclusions) and the lightbulb from "Emerging behaviors" on */
+.rj-rod.green { background: linear-gradient(180deg, #7fd38a 0%, #3fa64f 55%, #276b31 100%); }
+.rj-bulb { font-size: 22px; line-height: 1; opacity: 0; filter: drop-shadow(0 0 6px rgba(255, 214, 90, .9)); }
