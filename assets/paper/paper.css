@@ -718,3 +718,5 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish, html.rj-on .rj-bulb
 .pp-cap + .pp-chart { margin-top: 10px; }
 /* Fig. 5 legend centred under the figure */
 #fig5 .f5-legend { justify-content: center; text-align: center; margin: 12px auto 0 !important; }
+/* the emerging-behaviors statement styled like the driving question, with a lightbulb in the badge */
+.paper .pp-big.bulb::before { content: "💡"; font: 1.1rem/38px system-ui, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; background: var(--accent); }
