@@ -574,3 +574,7 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 #fig9 .f9 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 #fig9 .f9 img { width: 100%; height: auto; border-radius: 8px; display: block; }
 @media (max-width: 560px) { #fig9 .f9 { grid-template-columns: 1fr; } }
+/* the three model architectures, bulleted under the Section III-B intro */
+.paper .pp-models { margin: 4px 0 24px; padding-left: 22px; }
+.paper .pp-models li { margin: 0 0 10px; line-height: 1.65; }
+.paper .pp-models li b { color: var(--tide); }

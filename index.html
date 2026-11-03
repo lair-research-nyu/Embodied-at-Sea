@@ -280,7 +280,7 @@
   }
   footer a { color: inherit; }
 </style>
-<link rel="stylesheet" href="assets/paper/paper.css?v=14">
+<link rel="stylesheet" href="assets/paper/paper.css?v=15">
 </head>
 <body>
 
@@ -526,11 +526,12 @@
     <article class="pp-chapter" id="p-models">
       <p class="pp-num rv">Section III-B</p>
       <h3 class="rv">Model Architectures</h3>
-      <p class="rv">Unlike fixed-base manipulators, ROVs are continuously jostled by waves and currents across all six degrees of freedom, shifting the camera viewpoint and the vehicle’s pose relative to the target between consecutive actions. As a result, a stationary object to be manipulated in a world frame appears to move in the robot frame. In especially turbulent waters, free-floating manipulation objects tend to sway or move as well, adding another dimension of uncertainty to a policy's predicted trajectory. This turns an otherwise static task into a dynamic one that penalizes any policy too slow to react. As such, three different model architectures were explored, each of which has a promise of faster inference time, a characteristic necessary for dynamic environments. As well, new observation and action spaces are needed for underwater robots. Notably, the use of these observations and actions are novel within the VLA research space.</p>
-
-      <h4 class="rv">1) Model Architectures</h4>
-      <p class="rv">The three model architectures explored for this work include ACT <a class="cite" href="#ref-2">[2]</a>, SmolVLA <a class="cite" href="#ref-21">[21]</a>, and DynamicVLA <a class="cite" href="#ref-22">[22]</a>. Chronologically, ocean deployments occurred before the pool deployments, and all models trained for the ocean were trained on site to reflect realistic field situations. Specifically, one ACT and one SmolVLA policy per task family (from the data set collected) were trained and evaluated on-hardware in the ocean. ACT and SmolVLA were chosen for their ease of use, with ACT being faster to train on site versus SmolVLA.</p>
-      <p class="rv">For in-lab pool experiments, where a more thorough exploration and ablation studies could be performed, the model architecture DynamicVLA <a class="cite" href="#ref-22">[22]</a> was chosen due to its low computational overhead and reactivity to target object motion and environmental disturbances. Fig. 6 illustrates the DynamicVLA architecture, but with a different observation space and action space.</p>
+      <p class="rv">Unlike fixed-base manipulators, ROVs are continuously jostled by waves and currents across all six degrees of freedom, shifting the camera viewpoint and the vehicle’s pose relative to the target between consecutive actions. As a result, a stationary object to be manipulated in a world frame appears to move in the robot frame. In especially turbulent waters, free-floating manipulation objects tend to sway or move as well, adding another dimension of uncertainty to a policy's predicted trajectory. This turns an otherwise static task into a dynamic one that penalizes any policy too slow to react. As such, three different model architectures, each of which has a promise of faster inference time (a characteristic necessary for dynamic environments), were explored alongside new observation and action spaces needed for underwater robots, the use of which is novel within the VLA research space:</p>
+      <ul class="pp-models rv">
+        <li><b>ACT</b> <a class="cite" href="#ref-2">[2]</a>: one ACT policy per task family (from the data set collected) was trained on site, to reflect realistic field situations, and evaluated on-hardware in the ocean. ACT was chosen for its ease of use, and was faster to train on site than SmolVLA.</li>
+        <li><b>SmolVLA</b> <a class="cite" href="#ref-21">[21]</a>: one SmolVLA policy per task family (from the data set collected) was likewise trained on site and evaluated on-hardware in the ocean. SmolVLA was also chosen for its ease of use.</li>
+        <li><b>DynamicVLA</b> <a class="cite" href="#ref-22">[22]</a>: used for in-lab pool experiments, where a more thorough exploration and ablation studies could be performed. DynamicVLA was chosen due to its low computational overhead and reactivity to target object motion and environmental disturbances. Fig. 6 illustrates the DynamicVLA architecture, but with a different observation space and action space.</li>
+      </ul>
     </article>
 
     <!-- Fig. 6 breaks out of the text column to span the page -->
@@ -581,7 +582,7 @@
     </figure>
 
     <article class="pp-chapter" id="p-models-2">
-      <h4 class="rv">2) Observation Spaces</h4>
+      <h4 class="rv">1) Observation Spaces</h4>
       <p class="rv">While most aspects of the model architectures do not differ from those published in <a class="cite" href="#ref-2">[2]</a>, <a class="cite" href="#ref-21">[21]</a>, <a class="cite" href="#ref-22">[22]</a>, the observation spaces and even video data content differ greatly.</p>
       <p class="rv">For the two model architectures trained for ocean deployment, a six-dimensional observational space was used that includes: roll, pitch, yaw, depth, depth set-point, and the depth controller's output, plus RGB video (see Fig. 1).</p>
       <p class="rv">For the DynamicVLA models trained for in-lab pool deployments, a greater observation space was considered. At each control step during an episode of data, the ROV reports a 19-channel telemetry row over MAVLink at 50Hz, from which the maximal observation space is <span class="vec">o<sub>t</sub> = [φ, θ, ψ, a<sub>x</sub>, a<sub>y</sub>, a<sub>z</sub>, ω<sub>x</sub>, ω<sub>y</sub>, ω<sub>z</sub>, v<sub>z</sub>, vib<sub>x</sub>, vib<sub>y</sub>, vib<sub>z</sub>, u<sub>1</sub>, u<sub>2</sub>, u<sub>3</sub>, u<sub>4</sub>, u<sub>5</sub>, u<sub>6</sub>]<sup>T</sup></span>, where each block is described in the picker under Fig. 6. From these observations different combinations are selected to evaluate their effect on policy performance.</p>
@@ -602,7 +603,7 @@
       <p class="rv">However, a single frame of Δ carries no turbulence history. Because ocean disturbances are low-frequency and periodic, turbulence only becomes legible over a window of frames. Rather than feed this window in as raw floats, the window is then tokenized with the FAST tokenizer <a class="cite" href="#ref-29">[29]</a>. This gives the policy a compressed representation of the various frequency components of the perturbations.</p>
       <p class="rv">14 total DynamicVLA models (see Fig. 6) were trained on the pool data with a variety of observation space combinations (see Table I), with the smallest observation space being zero (the baseline model) and the largest space being 22 observation space dims. + 39 dims. for Δ tokens. Δ token windows were also varied, from 1.2 seconds to 6.0 seconds. The goal of this ablation study is to investigate what telemetry observations best train DynamicVLA (a VLA built solely on terrestrial data) to succeed underwater.</p>
 
-      <h4 class="rv">3) Action Spaces</h4>
+      <h4 class="rv">2) Action Spaces</h4>
       <div class="pp-actions6 rv">
         <div><b>v<sub>x</sub>, v<sub>y</sub></b><span>Horizontal velocity commands along the body frame <i>x</i> and <i>y</i> axes</span></div>
         <div><b>ω<sub>z</sub></b><span>Yaw rate</span></div>
