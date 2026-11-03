@@ -583,3 +583,5 @@ html.rj-on .rj-rov, html.rj-on .rj-rod, html.rj-on .rj-fish { display: block; }
 .arch-fig figcaption { max-width: none; }
 /* the observation-space picker now lives under "1) Observation Spaces" */
 #p-models-2 .pp-obs { margin: 6px 0 22px; }
+/* Δ token chips: 39 of them, so keep them compact */
+.obs-chips span.tok { padding: 3px 5px; font-size: .72rem; }
